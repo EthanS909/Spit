@@ -1,0 +1,125 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="CardImages\10_of_clubs.png" />
+    <None Remove="CardImages\10_of_diamonds.png" />
+    <None Remove="CardImages\10_of_hearts.png" />
+    <None Remove="CardImages\10_of_spades.png" />
+    <None Remove="CardImages\11_of_clubs.png" />
+    <None Remove="CardImages\11_of_diamonds.png" />
+    <None Remove="CardImages\11_of_hearts.png" />
+    <None Remove="CardImages\11_of_spades.png" />
+    <None Remove="CardImages\12_of_clubs.png" />
+    <None Remove="CardImages\12_of_diamonds.png" />
+    <None Remove="CardImages\12_of_hearts.png" />
+    <None Remove="CardImages\12_of_spades.png" />
+    <None Remove="CardImages\13_of_clubs.png" />
+    <None Remove="CardImages\13_of_diamonds.png" />
+    <None Remove="CardImages\13_of_hearts.png" />
+    <None Remove="CardImages\13_of_spades.png" />
+    <None Remove="CardImages\1_of_clubs.png" />
+    <None Remove="CardImages\1_of_diamonds.png" />
+    <None Remove="CardImages\1_of_hearts.png" />
+    <None Remove="CardImages\1_of_spades.png" />
+    <None Remove="CardImages\2_of_clubs.png" />
+    <None Remove="CardImages\2_of_diamonds.png" />
+    <None Remove="CardImages\2_of_hearts.png" />
+    <None Remove="CardImages\2_of_spades.png" />
+    <None Remove="CardImages\3_of_clubs.png" />
+    <None Remove="CardImages\3_of_diamonds.png" />
+    <None Remove="CardImages\3_of_hearts.png" />
+    <None Remove="CardImages\3_of_spades.png" />
+    <None Remove="CardImages\4_of_clubs.png" />
+    <None Remove="CardImages\4_of_diamonds.png" />
+    <None Remove="CardImages\4_of_hearts.png" />
+    <None Remove="CardImages\4_of_spades.png" />
+    <None Remove="CardImages\5_of_clubs.png" />
+    <None Remove="CardImages\5_of_diamonds.png" />
+    <None Remove="CardImages\5_of_hearts.png" />
+    <None Remove="CardImages\5_of_spades.png" />
+    <None Remove="CardImages\6_of_clubs.png" />
+    <None Remove="CardImages\6_of_diamonds.png" />
+    <None Remove="CardImages\6_of_hearts.png" />
+    <None Remove="CardImages\6_of_spades.png" />
+    <None Remove="CardImages\7_of_clubs.png" />
+    <None Remove="CardImages\7_of_diamonds.png" />
+    <None Remove="CardImages\7_of_hearts.png" />
+    <None Remove="CardImages\7_of_spades.png" />
+    <None Remove="CardImages\8_of_clubs.png" />
+    <None Remove="CardImages\8_of_diamonds.png" />
+    <None Remove="CardImages\8_of_hearts.png" />
+    <None Remove="CardImages\8_of_spades.png" />
+    <None Remove="CardImages\9_of_clubs.png" />
+    <None Remove="CardImages\9_of_diamonds.png" />
+    <None Remove="CardImages\9_of_hearts.png" />
+    <None Remove="CardImages\9_of_spades.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="EntityFramework" Version="6.4.4" />
+    <PackageReference Include="System.Data.SQLite" Version="1.0.117" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="CardImages\10_of_clubs.png" />
+    <Resource Include="CardImages\10_of_diamonds.png" />
+    <Resource Include="CardImages\10_of_hearts.png" />
+    <Resource Include="CardImages\10_of_spades.png" />
+    <Resource Include="CardImages\11_of_clubs.png" />
+    <Resource Include="CardImages\11_of_diamonds.png" />
+    <Resource Include="CardImages\11_of_hearts.png" />
+    <Resource Include="CardImages\11_of_spades.png" />
+    <Resource Include="CardImages\12_of_clubs.png" />
+    <Resource Include="CardImages\12_of_diamonds.png" />
+    <Resource Include="CardImages\12_of_hearts.png" />
+    <Resource Include="CardImages\12_of_spades.png" />
+    <Resource Include="CardImages\13_of_clubs.png" />
+    <Resource Include="CardImages\13_of_diamonds.png" />
+    <Resource Include="CardImages\13_of_hearts.png" />
+    <Resource Include="CardImages\13_of_spades.png" />
+    <Resource Include="CardImages\1_of_clubs.png" />
+    <Resource Include="CardImages\1_of_diamonds.png" />
+    <Resource Include="CardImages\1_of_hearts.png" />
+    <Resource Include="CardImages\1_of_spades.png" />
+    <Resource Include="CardImages\2_of_clubs.png" />
+    <Resource Include="CardImages\2_of_diamonds.png" />
+    <Resource Include="CardImages\2_of_hearts.png" />
+    <Resource Include="CardImages\2_of_spades.png" />
+    <Resource Include="CardImages\3_of_clubs.png" />
+    <Resource Include="CardImages\3_of_diamonds.png" />
+    <Resource Include="CardImages\3_of_hearts.png" />
+    <Resource Include="CardImages\3_of_spades.png" />
+    <Resource Include="CardImages\4_of_clubs.png" />
+    <Resource Include="CardImages\4_of_diamonds.png" />
+    <Resource Include="CardImages\4_of_hearts.png" />
+    <Resource Include="CardImages\4_of_spades.png" />
+    <Resource Include="CardImages\5_of_clubs.png" />
+    <Resource Include="CardImages\5_of_diamonds.png" />
+    <Resource Include="CardImages\5_of_hearts.png" />
+    <Resource Include="CardImages\5_of_spades.png" />
+    <Resource Include="CardImages\6_of_clubs.png" />
+    <Resource Include="CardImages\6_of_diamonds.png" />
+    <Resource Include="CardImages\6_of_hearts.png" />
+    <Resource Include="CardImages\6_of_spades.png" />
+    <Resource Include="CardImages\7_of_clubs.png" />
+    <Resource Include="CardImages\7_of_diamonds.png" />
+    <Resource Include="CardImages\7_of_hearts.png" />
+    <Resource Include="CardImages\7_of_spades.png" />
+    <Resource Include="CardImages\8_of_clubs.png" />
+    <Resource Include="CardImages\8_of_diamonds.png" />
+    <Resource Include="CardImages\8_of_hearts.png" />
+    <Resource Include="CardImages\8_of_spades.png" />
+    <Resource Include="CardImages\9_of_clubs.png" />
+    <Resource Include="CardImages\9_of_diamonds.png" />
+    <Resource Include="CardImages\9_of_hearts.png" />
+    <Resource Include="CardImages\9_of_spades.png" />
+  </ItemGroup>
+
+</Project>

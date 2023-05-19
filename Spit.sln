@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33213.308
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spit", "Spit\Spit.csproj", "{B9CD621D-F34F-4E77-9D65-3D08DF4C3D16}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B9CD621D-F34F-4E77-9D65-3D08DF4C3D16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9CD621D-F34F-4E77-9D65-3D08DF4C3D16}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9CD621D-F34F-4E77-9D65-3D08DF4C3D16}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9CD621D-F34F-4E77-9D65-3D08DF4C3D16}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B75BBC8C-C2BE-41BE-B5E5-CE963C277E66}
+	EndGlobalSection
+EndGlobal
