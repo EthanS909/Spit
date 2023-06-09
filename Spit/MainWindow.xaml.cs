@@ -27,30 +27,23 @@ namespace Spit
 
         private Database database = new Database();
 
-        Game spit = new Game(1);
+        Game spit = new Game();
 
         public MainWindow()
         {
             InitializeComponent();
             AI_Difficulty.Text = "Reaction Time: " + reactionTime[difficultyCount] + "ms\r\nLooks Ahead " + movesAhead[difficultyCount] + " Moves";
             AI.Content = difficulty[difficultyCount];
-            this.DataContext = spit;
+            DataContext = spit;
         }
 
         private void Play_Click(object sender, RoutedEventArgs e)
         {
             //Hide Start Screen UI
-            Play.Visibility = Visibility.Hidden;
-            Settings.Visibility = Visibility.Hidden;
-            Exit.Visibility = Visibility.Hidden;
+            DisplayStartUI(false);
 
             //Display AI Difficulty Levels
-            AI.Visibility = Visibility.Visible;
-            Left.Visibility = Visibility.Visible;
-            Right.Visibility = Visibility.Visible;
-            Load.Visibility = Visibility.Visible;
-            Back.Visibility = Visibility.Visible;
-            AI_Difficulty.Visibility = Visibility.Visible;
+            DisplayPlayUI(true);
 
 
             //Start Game
@@ -60,9 +53,7 @@ namespace Spit
         private void Settings_Click(object sender, RoutedEventArgs e)
         {
             //Disable Start Screen UI
-            Play.Visibility = Visibility.Hidden;
-            Settings.Visibility = Visibility.Hidden;
-            Exit.Visibility = Visibility.Hidden;
+            DisplayStartUI(false);
 
             Back.Visibility = Visibility.Visible;
 
@@ -76,15 +67,9 @@ namespace Spit
 
         private void AI_Click(object sender, RoutedEventArgs e)
         {
-            AI.Visibility = Visibility.Hidden;
-            Load.Visibility = Visibility.Hidden;
-            Back.Visibility = Visibility.Hidden;
-            Left.Visibility = Visibility.Hidden;
-            Right.Visibility = Visibility.Hidden;
-            AI_Difficulty.Visibility = Visibility.Hidden;
-            spit = new Game(difficultyCount);
-
-            card.IsEnabled = true;
+            DisplayPlayUI(false);
+            spit.Start(difficultyCount);
+            cardButton.Visibility = Visibility.Visible;
         }
 
         private void Load_Click(object sender, RoutedEventArgs e)
@@ -95,17 +80,10 @@ namespace Spit
         private void Back_Click(object sender, RoutedEventArgs e)
         {
             //Display Start Screen UI
-            Play.Visibility = Visibility.Visible;
-            Settings.Visibility = Visibility.Visible;
-            Exit.Visibility = Visibility.Visible;
+            DisplayStartUI(true);
 
             //Hide AI Difficulty Levels
-            AI.Visibility = Visibility.Hidden;
-            Load.Visibility = Visibility.Hidden;
-            Back.Visibility = Visibility.Hidden;
-            Left.Visibility = Visibility.Hidden;
-            Right.Visibility = Visibility.Hidden;
-            AI_Difficulty.Visibility = Visibility.Hidden;
+            DisplayPlayUI(false);
         }
 
         private void Left_Click(object sender, RoutedEventArgs e)
@@ -126,6 +104,49 @@ namespace Spit
                 AI.Content = difficulty[difficultyCount];
                 AI_Difficulty.Text = "Reaction Time: " + reactionTime[difficultyCount] + "ms\r\nLooks Ahead " + movesAhead[difficultyCount] + " Moves";
             }
+        }
+
+        private void DisplayStartUI(bool enabled)
+        {
+            if(enabled)
+            {
+                Play.Visibility = Visibility.Visible;
+                Settings.Visibility = Visibility.Visible;
+                Exit.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                Play.Visibility = Visibility.Hidden;
+                Settings.Visibility = Visibility.Hidden;
+                Exit.Visibility = Visibility.Hidden;
+            }
+        }
+
+        private void DisplayPlayUI(bool enabled)
+        {
+            if(enabled)
+            {
+                AI.Visibility = Visibility.Visible;
+                Load.Visibility = Visibility.Visible;
+                Back.Visibility = Visibility.Visible;
+                Left.Visibility = Visibility.Visible;
+                Right.Visibility = Visibility.Visible;
+                AI_Difficulty.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                AI.Visibility = Visibility.Hidden;
+                Load.Visibility = Visibility.Hidden;
+                Back.Visibility = Visibility.Hidden;
+                Left.Visibility = Visibility.Hidden;
+                Right.Visibility = Visibility.Hidden;
+                AI_Difficulty.Visibility = Visibility.Hidden;
+            } 
+        }
+
+        private void OnClick5(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

@@ -9,6 +9,7 @@ namespace Spit.DataStructures
     class Stack
     {
         List stack = new List();
+
         public void Push(Card inp)
         {
             stack.AddLast(inp);
@@ -26,5 +27,7 @@ namespace Spit.DataStructures
         }
 
         public bool IsEmpty() { return stack.IsEmpty(); }
+
+        public int Length() { return stack.Count(); }
     }
 }

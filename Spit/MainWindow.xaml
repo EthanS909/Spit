@@ -41,6 +41,10 @@
         <Button Name="Left" Grid.Column="1" Grid.Row="2" Content="⬶" FontSize="72" Margin="192,0,0,0" Click="Left_Click" Visibility="Hidden"/>
         <Button Name="Right" Grid.Column="3" Grid.Row="2" Content="⤅" FontSize="72" Margin="0,0,192,0" Click="Right_Click" Visibility="Hidden"/>
         <TextBlock Name ="AI_Difficulty" Grid.Column="2" HorizontalAlignment="Left" Grid.Row="1" Text="TextBlock" VerticalAlignment="Top" FontSize="36" Foreground="White" Grid.ColumnSpan="2" Visibility="Hidden"/>
-        <Image Name="card" Source="{Binding TopCard}"/>
+        <Button Name="cardButton" Click="OnClick5" Margin="76,0,111,0" Visibility="Hidden">
+            <Image Source="{Binding TopCard}"/>
+        </Button>
+        <Image Name="plStack" Source="CardImages/back.png" Grid.Column="4" Grid.Row="2" Grid.RowSpan="2" Margin="0,0,0,0"/>
+        <Image Name="aiStack" Source="/CardImages/back.png" Grid.Column="0" Grid.Row="2" Grid.RowSpan="2" Margin="0,0,0,0"/>
     </Grid>
 </Window>

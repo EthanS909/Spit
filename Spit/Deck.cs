@@ -9,7 +9,7 @@ namespace Spit
 {
     class Deck
     {
-        private Stack deck = new Stack();
+        public Stack deck = new Stack();
 
         public void CreateDeck()
         {
@@ -48,7 +48,7 @@ namespace Spit
             return deck;
         }
 
-        public void Shuffle()
+        public void Shuffle(Game game)
         {
             //Unloads cards into an array
             /*Card[] unshuffledDeck = new Card[52];
@@ -67,19 +67,11 @@ namespace Spit
                 int randomSpace = rnd.Next(0, 51);
                 if (!deck.IsEmpty())
                 {
-                    if (shuffledDeck[randomSpace] == null)
+                    while (shuffledDeck[randomSpace] != null)
                     {
-                        shuffledDeck[randomSpace] = deck.Pop();
+                        randomSpace = (randomSpace + 1) % shuffledDeck.Length;
                     }
-                    else
-                    {
-                        int i = randomSpace;
-                        while (shuffledDeck[i] != null)
-                        {
-                            i = (i + 1) % shuffledDeck.Length;
-                        }
-                        shuffledDeck[i] = deck.Pop();
-                    }
+                    shuffledDeck[randomSpace] = deck.Pop();
                 }
             }
 
@@ -88,6 +80,8 @@ namespace Spit
             {
                 deck.Push(shuffledDeck[x]);
             }
+
+            game.TopCard = "CardImages/" + GetTopCard().GetNumber() + "_of_" + GetTopCard().GetSuit() + "s.png";
         }
 
         public bool DisplayCards()

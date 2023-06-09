@@ -60,6 +60,7 @@
     <None Remove="CardImages\9_of_diamonds.png" />
     <None Remove="CardImages\9_of_hearts.png" />
     <None Remove="CardImages\9_of_spades.png" />
+    <None Remove="CardImages\back.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -120,6 +121,7 @@
     <Resource Include="CardImages\9_of_diamonds.png" />
     <Resource Include="CardImages\9_of_hearts.png" />
     <Resource Include="CardImages\9_of_spades.png" />
+    <Resource Include="CardImages\back.png" />
   </ItemGroup>
 
 </Project>
