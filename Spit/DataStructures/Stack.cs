@@ -17,7 +17,7 @@ namespace Spit.DataStructures
 
         public Card Pop()
         {
-            Card card = stack.RemoveAt(stack.Count());
+            Card card = stack.Remove(stack.Count());
             return card;
         }
 
@@ -29,5 +29,10 @@ namespace Spit.DataStructures
         public bool IsEmpty() { return stack.IsEmpty(); }
 
         public int Length() { return stack.Count(); }
+
+        public Card GetCardAt(int pos)
+        {
+            return stack.GetData(pos);
+        }
     }
 }

@@ -50,16 +50,7 @@ namespace Spit
 
         public void Shuffle(Game game)
         {
-            //Unloads cards into an array
-            /*Card[] unshuffledDeck = new Card[52];
-            int count = 0;
-            while(!deck.IsEmpty())
-            {
-                unshuffledDeck[count] = deck.Pop();
-                count++;
-            }*/
-
-            //Shuffle cards
+            //Shuffle cards into array
             Card[] shuffledDeck = new Card[52];
             Random rnd = new Random();
             for(int x = 0; x < shuffledDeck.Length; x++)
@@ -75,7 +66,7 @@ namespace Spit
                 }
             }
 
-            //Loads cards back into the deck
+            //Loads cards from array back into the deck
             for(int x = 0; x < shuffledDeck.Length; x++)
             {
                 deck.Push(shuffledDeck[x]);

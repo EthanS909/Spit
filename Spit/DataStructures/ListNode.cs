@@ -12,7 +12,5 @@ namespace Spit.DataStructures
         public ListNode previous;
 
         public Card data;
-
-        public Card GetData() { return data; }
     }
 }

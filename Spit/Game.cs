@@ -20,42 +20,60 @@ namespace Spit
 
         public string topCard = "";
 
-        public Card firstPile;
+        // Hand
+        public Stack<Card> firstPile = new Stack<Card>();
         public Stack<Card> secondPile = new Stack<Card>();
         public Stack<Card> thirdPile = new Stack<Card>();
         public Stack<Card> fourthPile = new Stack<Card>();
         public Stack<Card> fifthPile = new Stack<Card>();
 
+        // Draw cards
         public Stack<Card> playerPickUp = new Stack<Card>();
         public Stack<Card> AIPickUp = new Stack<Card>();
+
+        // Place card
+        public Stack<Card> pile1 = new Stack<Card>();
+        public Stack<Card> pile2 = new Stack<Card>();
+
+        public int selectedPile;
+        public Stack<Card>[] piles = new Stack<Card>[5];
 
         public Game()
         {
             deck.CreateDeck();
+            piles[0] = firstPile;
+            piles[1] = secondPile;
+            piles[2] = thirdPile;
+            piles[3] = fourthPile;
+            piles[4] = fifthPile;
+
         }
 
-        /*public bool TopCardVisibility
+        public bool TopCardVisibility
         {
             get { return deck.GetTopCard().IsVisible(); }
             set
             {
-                deck.GetTopCard().isVisible = value;
-                if(deck.GetTopCard().IsVisible())
+                Card card = deck.GetTopCard();
+                card.isVisible = value;
+                if(card.IsVisible())
                 {
-                    TopCard = "CardImages/" + deck.GetTopCard().GetNumber() + "_of_" + deck.GetTopCard().GetSuit() + "s.png";
+                    TopCard = "CardImages/" + card.GetNumber() + "_of_" + card.GetSuit() + "s.png";
                 }
-                else
-                {
-                    TopCard = "CardImages/back.png";
-                }
+                else { TopCard = "CardImages/back.png"; }
             }
-        }*/
+        }
 
         public string TopCard
         {
             get
-            {
-                return topCard;
+            { 
+                if (deck.GetTopCard().IsVisible() || topCard == "CardImages/back.png") { return topCard; }
+                else
+                {
+                    TopCard = "CardImages/back.png";
+                    return topCard;
+                }
             }
             set
             {
@@ -64,12 +82,12 @@ namespace Spit
             }
         }
 
-        public bool Place(Card card)
+        public bool Place(Card card, Stack<Card> pile, int selectedPile)
         {
             bool placed = false;
-            if(deck.GetTopCard().GetNumber() == card.GetNumber())
+            if (piles[selectedPile].Peek().GetNumber() <= pile.Peek().GetNumber() && piles[selectedPile].Peek().GetNumber() <= pile.Peek().GetNumber() - 1)
             {
-                deck.GetCards().Push(card);
+                pile.Push(card);
                 placed = true;
             }
 
@@ -116,7 +134,7 @@ namespace Spit
 
         public void PlacePlayingCards()
         {
-            firstPile = playerPickUp.Pop();
+            firstPile.Push(playerPickUp.Pop());
             for (int i = 0; i < 5; i++)
             {
                 if(i < 2)
@@ -138,7 +156,7 @@ namespace Spit
             }
         }
 
-        public int GetPlayerCards()
+        public int GetPlayerCardCount()
         {
             int length = 0;
             if (firstPile != null) { length++; }

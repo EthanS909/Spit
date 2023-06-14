@@ -45,6 +45,12 @@
             <Image Source="{Binding TopCard}"/>
         </Button>
         <Image Name="plStack" Source="CardImages/back.png" Grid.Column="4" Grid.Row="2" Grid.RowSpan="2" Margin="0,0,0,0"/>
-        <Image Name="aiStack" Source="/CardImages/back.png" Grid.Column="0" Grid.Row="2" Grid.RowSpan="2" Margin="0,0,0,0"/>
+        <Image Name="aiStack" Source="CardImages/back.png" Grid.Column="0" Grid.Row="2" Grid.RowSpan="2" Margin="0,0,0,0"/>
+        <Button Name="card"  Click="Button_Click" Grid.Column="1" Grid.ColumnSpan="2" Margin="10,80,374,100" Grid.RowSpan="2" IsEnabled="False">
+            <Image Name="image" Source="CardImages/back.png"/>
+        </Button>
+        <Button Name="card2"  Click="Button_Click2" Grid.Column="2" Grid.ColumnSpan="2" Margin="374,-10,10,10">
+            <Image Name="image2"/>
+        </Button>
     </Grid>
 </Window>

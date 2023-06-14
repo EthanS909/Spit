@@ -37,6 +37,11 @@ namespace Spit
             DataContext = spit;
         }
 
+        public void Update()
+        {
+
+        }
+
         private void Play_Click(object sender, RoutedEventArgs e)
         {
             //Hide Start Screen UI
@@ -145,6 +150,17 @@ namespace Spit
         }
 
         private void OnClick5(object sender, RoutedEventArgs e)
+        {
+            spit.TopCardVisibility = true;
+            card.IsEnabled = true;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            image.Source = new BitmapImage(new Uri(spit.TopCard, UriKind.Relative));
+        }
+
+        private void Button_Click2(object sender, RoutedEventArgs e)
         {
 
         }
