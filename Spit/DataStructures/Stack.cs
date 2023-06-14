@@ -17,7 +17,7 @@ namespace Spit.DataStructures
 
         public Card Pop()
         {
-            Card card = stack.Remove(stack.Count());
+            Card card = stack.RemoveAt(stack.Count());
             return card;
         }
 

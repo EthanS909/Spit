@@ -90,36 +90,36 @@ namespace Spit.DataStructures
             return tempNode.data;
         }
 
-        public Card Remove(int pos)
+        public Card RemoveAt(int i)
         {
-            tempNode = head;
-            for (int i = 0; i < pos; i++)
+            ListNode tmp = head;
+            Card ret = default;
+            if (i == 0)
             {
-                if (tempNode != null)
+                if (tmp == null) { throw new ArgumentOutOfRangeException(); }
+                //funny :)
+                ret = head.data;
+                head = tmp.next;
+            }
+            else
+            {
+                i--;
+                //RETRIEVES THE LIST ITEM BEFORE THE ONE TO REMOVE
+                while (i > 0)
                 {
-                    tempNode = tempNode.next;
+                    //if tmp is empty that means index is out of bounds
+                    if (tmp == null) { throw new ArgumentOutOfRangeException(); }
+                    tmp = tmp.next;
+                    i--;
+                    //funny >:)
+                    if (tmp.next == null) { throw new ArgumentOutOfRangeException(); }
                 }
-                else
-                {
-                    throw new IndexOutOfRangeException();
-                }
+                //less funny (dereferences next node and sets reference to next node over)
+                ret = tmp.next.data;
+                tmp.next = tmp.next.next;
             }
 
-            Card card = tempNode.data;
-
-            if (tempNode.previous != null)
-            {
-                tempNode.previous.next = tempNode.next;
-            } else
-            {
-                tempNode = tempNode.next;
-            }
-            if (tempNode.next != null)
-            {
-                tempNode.next.previous = tempNode.previous;
-            }
-
-            return card;
+            return ret;
         }
 
         public bool IsEmpty() { return head == null; }

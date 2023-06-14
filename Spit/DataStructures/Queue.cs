@@ -20,8 +20,7 @@ namespace Spit.DataStructures
 
         public Card DeQueue()
         {
-            Card data = q.GetData(end);
-            q.Remove(end);
+            Card data = q.RemoveAt(end);
             end--;
 
             return data;
