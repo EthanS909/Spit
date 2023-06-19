@@ -25,6 +25,8 @@ namespace Spit
         private int[] reactionTime = { 350, 250, 150};
         private int[] movesAhead = { 1, 2, 3};
 
+        List<Button> cardPiles = new List<Button>();
+
         private Database database = new Database();
 
         Game spit = new Game();
@@ -35,6 +37,16 @@ namespace Spit
             AI_Difficulty.Text = "Reaction Time: " + reactionTime[difficultyCount] + "ms\r\nLooks Ahead " + movesAhead[difficultyCount] + " Moves";
             AI.Content = difficulty[difficultyCount];
             DataContext = spit;
+            cardPiles.Add(plPile1);
+            cardPiles.Add(plPile2);
+            cardPiles.Add(plPile3);
+            cardPiles.Add(plPile4);
+            cardPiles.Add(plPile5);
+
+            foreach(Button b in cardPiles)
+            {
+                
+            }
         }
 
         public void Update()
@@ -74,7 +86,8 @@ namespace Spit
         {
             DisplayPlayUI(false);
             spit.Start(difficultyCount);
-            cardButton.Visibility = Visibility.Visible;
+            DisplayGameUI();
+
         }
 
         private void Load_Click(object sender, RoutedEventArgs e)
@@ -149,20 +162,59 @@ namespace Spit
             } 
         }
 
-        private void OnClick5(object sender, RoutedEventArgs e)
+        private void DisplayGameUI()
         {
-            spit.TopCardVisibility = true;
-            card.IsEnabled = true;
+            plPile1.Visibility = Visibility.Visible;
+            plPile2.Visibility = Visibility.Visible;
+            plPile3.Visibility = Visibility.Visible;
+            plPile4.Visibility = Visibility.Visible;
+            plPile5.Visibility = Visibility.Visible;
+
+            plStack.Visibility = Visibility.Visible;
+            aiStack.Visibility = Visibility.Visible;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            image.Source = new BitmapImage(new Uri(spit.TopCard, UriKind.Relative));
+            Button pile = (Button)sender;
+
+            int index = 0;
+
+            for(int i = 0; i < cardPiles.Count; i++)
+            {
+                if (cardPiles[i] == pile)
+                {
+                    index = i;
+                }
+            }
+
+            if(pile.BorderThickness != new Thickness(0))
+            {
+                SelectPile(pile, index);
+            }
+            else
+            {
+                DeselectPile();
+            }
         }
 
-        private void Button_Click2(object sender, RoutedEventArgs e)
+        private void SelectPile(Button selected, int index)
         {
+            foreach(Button b in cardPiles)
+            {
+                b.BorderThickness = new Thickness(6);
+            }
+            selected.BorderThickness = new Thickness(0);
+            spit.selectedPile = index;
+        }
 
+        private void DeselectPile()
+        {
+            foreach (Button b in cardPiles)
+            {
+                b.BorderThickness = new Thickness(5);
+            }
+            spit.selectedPile = -1;
         }
     }
 }

@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Threading;
+using Spit.DataStructures;
 
 namespace Spit
 {
@@ -18,14 +20,14 @@ namespace Spit
 
         public Player[] player = new Player[2];
 
-        public string topCard = "";
+        //public string topCard = "";
 
         // Hand
-        public Stack<Card> firstPile = new Stack<Card>();
-        public Stack<Card> secondPile = new Stack<Card>();
-        public Stack<Card> thirdPile = new Stack<Card>();
-        public Stack<Card> fourthPile = new Stack<Card>();
-        public Stack<Card> fifthPile = new Stack<Card>();
+        public Stack firstPile = new Stack();
+        public Stack secondPile = new Stack();
+        public Stack thirdPile = new Stack();
+        public Stack fourthPile = new Stack();
+        public Stack fifthPile = new Stack();
 
         // Draw cards
         public Stack<Card> playerPickUp = new Stack<Card>();
@@ -35,8 +37,62 @@ namespace Spit
         public Stack<Card> pile1 = new Stack<Card>();
         public Stack<Card> pile2 = new Stack<Card>();
 
-        public int selectedPile;
-        public Stack<Card>[] piles = new Stack<Card>[5];
+        public int selectedPile = -1;
+        public Stack[] piles = new Stack[5];
+
+        string firstPileTop;
+        string secondPileTop;
+        string thirdPileTop;
+        string fourthPileTop;
+        string fifthPileTop;
+
+        public string FirstPileTop
+        {
+            get { return firstPileTop; }
+            set
+            { 
+                firstPileTop = value;
+                OnPropertyChanged("FirstPileTop");
+            }
+        }
+        public string SecondPileTop
+        {
+            get { return secondPileTop; }
+            set
+            {
+                secondPileTop = value;
+                OnPropertyChanged("SecondPileTop");
+            }
+        }
+
+        public string ThirdPileTop
+        {
+            get { return thirdPileTop; }
+            set
+            {
+                thirdPileTop = value;
+                OnPropertyChanged("ThirdPileTop");
+            }
+        }
+        public string FourthPileTop
+        {
+            get { return fourthPileTop; }
+            set
+            {
+                fourthPileTop = value;
+                OnPropertyChanged("FourthPileTop");
+            }
+        }
+        public string FifthPileTop
+        {
+            get { return fifthPileTop; }
+            set
+            {
+                fifthPileTop = value;
+                OnPropertyChanged("FifthPileTop");
+            }
+        }
+
 
         public Game()
         {
@@ -47,39 +103,6 @@ namespace Spit
             piles[3] = fourthPile;
             piles[4] = fifthPile;
 
-        }
-
-        public bool TopCardVisibility
-        {
-            get { return deck.GetTopCard().IsVisible(); }
-            set
-            {
-                Card card = deck.GetTopCard();
-                card.isVisible = value;
-                if(card.IsVisible())
-                {
-                    TopCard = "CardImages/" + card.GetNumber() + "_of_" + card.GetSuit() + "s.png";
-                }
-                else { TopCard = "CardImages/back.png"; }
-            }
-        }
-
-        public string TopCard
-        {
-            get
-            { 
-                if (deck.GetTopCard().IsVisible() || topCard == "CardImages/back.png") { return topCard; }
-                else
-                {
-                    TopCard = "CardImages/back.png";
-                    return topCard;
-                }
-            }
-            set
-            {
-                topCard = value;
-                OnPropertyChanged("TopCard");
-            }
         }
 
         public bool Place(Card card, Stack<Card> pile, int selectedPile)
@@ -103,6 +126,12 @@ namespace Spit
 
             SplitCards();
             PlacePlayingCards();
+
+            FirstPileTop = "CardImages/" + firstPile.Peek().GetNumber() + "_of_" + firstPile.Peek().GetSuit() + "s.png";
+            SecondPileTop = "CardImages/" + secondPile.Peek().GetNumber() + "_of_" + secondPile.Peek().GetSuit() + "s.png";
+            ThirdPileTop = "CardImages/" + thirdPile.Peek().GetNumber() + "_of_" + thirdPile.Peek().GetSuit() + "s.png";
+            FourthPileTop = "CardImages/" + fourthPile.Peek().GetNumber() + "_of_" + fourthPile.Peek().GetSuit() + "s.png";
+            FifthPileTop = "CardImages/" + fifthPile.Peek().GetNumber() + "_of_" + fifthPile.Peek().GetSuit() + "s.png";
         }
 
         public void Load()
@@ -160,10 +189,10 @@ namespace Spit
         {
             int length = 0;
             if (firstPile != null) { length++; }
-            length += secondPile.Count();
-            length += thirdPile.Count();
-            length += fourthPile.Count();
-            length += fifthPile.Count();
+            length += secondPile.Length();
+            length += thirdPile.Length();
+            length += fourthPile.Length();
+            length += fifthPile.Length();
             return length;
         }
 

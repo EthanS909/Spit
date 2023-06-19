@@ -71,8 +71,6 @@ namespace Spit
             {
                 deck.Push(shuffledDeck[x]);
             }
-
-            game.TopCard = "CardImages/" + GetTopCard().GetNumber() + "_of_" + GetTopCard().GetSuit() + "s.png";
         }
 
         public bool DisplayCards()

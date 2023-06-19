@@ -16,6 +16,8 @@ namespace Spit.DataStructures
         {
             int count = 0;
 
+            tempNode = head;
+
             while (tempNode.next != null)
             {
                 tempNode = tempNode.next;
