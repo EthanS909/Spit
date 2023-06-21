@@ -9,7 +9,7 @@ namespace Spit.DataStructures
 {
     class Stack
     {
-        List stack = new List();
+        public List stack = new List();
 
         public void Push(Card inp)
         {

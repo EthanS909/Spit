@@ -34,17 +34,21 @@ namespace Spit
         public Stack<Card> AIPickUp = new Stack<Card>();
 
         // Place card
-        public Stack<Card> pile1 = new Stack<Card>();
-        public Stack<Card> pile2 = new Stack<Card>();
+        public Stack pile1 = new Stack();
+        public Stack pile2 = new Stack();
 
         public int selectedPile = -1;
-        public Stack[] piles = new Stack[5];
+        public Stack[] cardPiles = new Stack[5];
+        public Stack[] placePiles = new Stack[2];
 
         string firstPileTop;
         string secondPileTop;
         string thirdPileTop;
         string fourthPileTop;
         string fifthPileTop;
+
+        string pile1Top;
+        string pile2Top;
 
         public string FirstPileTop
         {
@@ -93,25 +97,61 @@ namespace Spit
             }
         }
 
+        public string Pile1Top
+        {
+            get { return pile1Top; }
+            set
+            {
+                pile1Top = value;
+                OnPropertyChanged("Pile1Top");
+            }
+        }
+
+        public string Pile2Top
+        {
+            get { return pile2Top; }
+            set
+            {
+                pile2Top = value;
+                OnPropertyChanged("Pile2Top");
+            }
+        }
+
 
         public Game()
         {
             deck.CreateDeck();
-            piles[0] = firstPile;
-            piles[1] = secondPile;
-            piles[2] = thirdPile;
-            piles[3] = fourthPile;
-            piles[4] = fifthPile;
+            cardPiles[0] = firstPile;
+            cardPiles[1] = secondPile;
+            cardPiles[2] = thirdPile;
+            cardPiles[3] = fourthPile;
+            cardPiles[4] = fifthPile;
 
+            placePiles[0] = pile1;
+            placePiles[1] = pile2;
         }
 
-        public bool Place(Card card, Stack<Card> pile, int selectedPile)
+        public bool Place(int pileNum)
         {
             bool placed = false;
-            if (piles[selectedPile].Peek().GetNumber() <= pile.Peek().GetNumber() && piles[selectedPile].Peek().GetNumber() <= pile.Peek().GetNumber() - 1)
+
+            int cardNumber = cardPiles[selectedPile].Peek().GetNumber();
+            int target1 = placePiles[pileNum].Peek().GetNumber() - 1;
+            int target2 = placePiles[pileNum].Peek().GetNumber() + 1;
+
+            if(target1 > 13) { target1 -= 13; }
+            if(target1 < 1) { target1 += 13; }
+            if(target2 > 13) { target2 -= 13; }
+            if(target2 < 1) { target2 += 13; }
+
+            if (selectedPile != -1)
             {
-                pile.Push(card);
-                placed = true;
+                if (cardNumber == target1 || cardNumber == target2)
+                {
+                    placePiles[pileNum].Push(cardPiles[selectedPile].Pop());
+
+                    placed = true;
+                }
             }
 
             return placed;
@@ -127,11 +167,7 @@ namespace Spit
             SplitCards();
             PlacePlayingCards();
 
-            FirstPileTop = "CardImages/" + firstPile.Peek().GetNumber() + "_of_" + firstPile.Peek().GetSuit() + "s.png";
-            SecondPileTop = "CardImages/" + secondPile.Peek().GetNumber() + "_of_" + secondPile.Peek().GetSuit() + "s.png";
-            ThirdPileTop = "CardImages/" + thirdPile.Peek().GetNumber() + "_of_" + thirdPile.Peek().GetSuit() + "s.png";
-            FourthPileTop = "CardImages/" + fourthPile.Peek().GetNumber() + "_of_" + fourthPile.Peek().GetSuit() + "s.png";
-            FifthPileTop = "CardImages/" + fifthPile.Peek().GetNumber() + "_of_" + fifthPile.Peek().GetSuit() + "s.png";
+            Update();
         }
 
         public void Load()
@@ -183,6 +219,9 @@ namespace Spit
                     fifthPile.Push(playerPickUp.Pop());
                 }
             }
+
+            pile1.Push(AIPickUp.Pop());
+            pile2.Push(playerPickUp.Pop());
         }
 
         public int GetPlayerCardCount()
@@ -199,6 +238,24 @@ namespace Spit
         public int GetAICards()
         {
             return 0;
+        }
+
+        public void Update()
+        {
+            foreach(Stack pile in cardPiles)
+            {
+                if(pile.stack.head != null)
+                {
+                    FirstPileTop = "CardImages/" + firstPile.Peek().GetNumber() + "_of_" + firstPile.Peek().GetSuit() + "s.png";
+                    SecondPileTop = "CardImages/" + secondPile.Peek().GetNumber() + "_of_" + secondPile.Peek().GetSuit() + "s.png";
+                    ThirdPileTop = "CardImages/" + thirdPile.Peek().GetNumber() + "_of_" + thirdPile.Peek().GetSuit() + "s.png";
+                    FourthPileTop = "CardImages/" + fourthPile.Peek().GetNumber() + "_of_" + fourthPile.Peek().GetSuit() + "s.png";
+                    FifthPileTop = "CardImages/" + fifthPile.Peek().GetNumber() + "_of_" + fifthPile.Peek().GetSuit() + "s.png";
+                }
+            }
+
+            Pile1Top = "CardImages/" + pile1.Peek().GetNumber() + "_of_" + pile1.Peek().GetSuit() + "s.png";
+            Pile2Top = "CardImages/" + pile2.Peek().GetNumber() + "_of_" + pile2.Peek().GetSuit() + "s.png";
         }
     }
 }

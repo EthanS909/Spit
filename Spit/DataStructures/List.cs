@@ -9,7 +9,7 @@ namespace Spit.DataStructures
     class List
     {
 
-        ListNode head;
+        public ListNode head;
         ListNode tempNode;
 
         public int Count()

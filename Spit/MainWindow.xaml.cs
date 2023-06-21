@@ -26,6 +26,7 @@ namespace Spit
         private int[] movesAhead = { 1, 2, 3};
 
         List<Button> cardPiles = new List<Button>();
+        List<Button> placePiles = new List<Button>();
 
         private Database database = new Database();
 
@@ -43,10 +44,8 @@ namespace Spit
             cardPiles.Add(plPile4);
             cardPiles.Add(plPile5);
 
-            foreach(Button b in cardPiles)
-            {
-                
-            }
+            placePiles.Add(pile1);
+            placePiles.Add(pile2);
         }
 
         public void Update()
@@ -172,6 +171,9 @@ namespace Spit
 
             plStack.Visibility = Visibility.Visible;
             aiStack.Visibility = Visibility.Visible;
+
+            pile1.Visibility = Visibility.Visible;
+            pile2.Visibility = Visibility.Visible;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -215,6 +217,25 @@ namespace Spit
                 b.BorderThickness = new Thickness(5);
             }
             spit.selectedPile = -1;
+        }
+
+        private void PlaceCard(object sender, RoutedEventArgs e)
+        {
+            Button pile = (Button)sender;
+
+            int index = 0;
+
+            for (int i = 0; i < placePiles.Count; i++)
+            {
+                if (cardPiles[i] == pile)
+                {
+                    index = i;
+                }
+            }
+
+            bool placed = spit.Place(index);
+
+            if (placed) { DeselectPile(); spit.Update(); }
         }
     }
 }
