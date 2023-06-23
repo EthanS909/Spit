@@ -176,7 +176,7 @@ namespace Spit
             pile2.Visibility = Visibility.Visible;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Card_Click(object sender, RoutedEventArgs e)
         {
             Button pile = (Button)sender;
 
@@ -212,9 +212,14 @@ namespace Spit
 
         private void DeselectPile()
         {
-            foreach (Button b in cardPiles)
+            for(int index = 0; index < cardPiles.Count; index++)
             {
-                b.BorderThickness = new Thickness(5);
+                cardPiles[index].BorderThickness = new Thickness(5);
+
+                if (spit.IsPileEmpty(index))
+                {
+                    cardPiles[index].Visibility = Visibility.Hidden;
+                }
             }
             spit.selectedPile = -1;
         }

@@ -45,19 +45,19 @@
         <TextBlock Name ="AI_Difficulty" Grid.Column="2" HorizontalAlignment="Left" Grid.Row="1" Text="TextBlock" VerticalAlignment="Top" FontSize="36" Foreground="White" Grid.ColumnSpan="2" Visibility="Hidden"/>
         <Image Name="plStack" Source="CardImages/back.png" Grid.Column="6" Grid.Row="2" Grid.RowSpan="2" Margin="0,0,0,0" Visibility="Hidden"/>
         <Image Name="aiStack" Source="CardImages/back.png" Grid.Column="0" Grid.Row="2" Grid.RowSpan="2" Margin="0,0,0,0" Visibility="Hidden"/>
-        <Button Name="plPile1"  Click="Button_Click" Grid.Column="1" Grid.RowSpan="2" Margin="0,20,0,0" Background="Transparent" Grid.Row="4" Visibility="Hidden" BorderThickness="5" BorderBrush="Transparent">
+        <Button Name="plPile1"  Click="Card_Click" Grid.Column="1" Grid.RowSpan="2" Margin="0,20,0,0" Background="Transparent" Grid.Row="4" Visibility="Hidden" BorderThickness="5" BorderBrush="Transparent">
             <Image Name="card1" Source="{Binding PlayerFirstPileTop}"/>
         </Button>
-        <Button Name="plPile2"  Click="Button_Click" Grid.Column="2" Grid.RowSpan="2" Margin="0,20,0,0" Background="Transparent" Grid.Row="4" Visibility="Hidden" BorderThickness="5" BorderBrush="Transparent">
+        <Button Name="plPile2"  Click="Card_Click" Grid.Column="2" Grid.RowSpan="2" Margin="0,20,0,0" Background="Transparent" Grid.Row="4" Visibility="Hidden" BorderThickness="5" BorderBrush="Transparent">
             <Image Name="card2" Source="{Binding PlayerSecondPileTop}"/>
         </Button>
-        <Button Name="plPile3"  Click="Button_Click" Grid.Column="3" Grid.RowSpan="2" Margin="0,20,0,0" Background="Transparent" Grid.Row="4" Visibility="Hidden" BorderThickness="5" BorderBrush="Transparent">
+        <Button Name="plPile3"  Click="Card_Click" Grid.Column="3" Grid.RowSpan="2" Margin="0,20,0,0" Background="Transparent" Grid.Row="4" Visibility="Hidden" BorderThickness="5" BorderBrush="Transparent">
             <Image Name="card3" Source="{Binding PlayerThirdPileTop}"/>
         </Button>
-        <Button Name="plPile4"  Click="Button_Click" Grid.Column="4" Grid.RowSpan="2" Margin="0,20,0,0" Background="Transparent" Grid.Row="4" Visibility="Hidden" BorderThickness="5" BorderBrush="Transparent">
+        <Button Name="plPile4"  Click="Card_Click" Grid.Column="4" Grid.RowSpan="2" Margin="0,20,0,0" Background="Transparent" Grid.Row="4" Visibility="Hidden" BorderThickness="5" BorderBrush="Transparent">
             <Image Name="card4" Source="{Binding PlayerFourthPileTop}"/>
         </Button>
-        <Button Name="plPile5"  Click="Button_Click" Grid.Column="5" Grid.RowSpan="2" Margin="0,20,0,0" Background="Transparent" Grid.Row="4" Visibility="Hidden" BorderThickness="5" BorderBrush="Transparent">
+        <Button Name="plPile5"  Click="Card_Click" Grid.Column="5" Grid.RowSpan="2" Margin="0,20,0,0" Background="Transparent" Grid.Row="4" Visibility="Hidden" BorderThickness="5" BorderBrush="Transparent">
             <Image Name="card5" Source="{Binding PlayerFifthPileTop}"/>
         </Button>
         <Button Name="pile1" Click="PlaceCard" Grid.Column="2" Grid.Row="2" Grid.RowSpan="2" Margin="0,0,205,0" Grid.ColumnSpan="2" Background="Transparent" Visibility="Hidden">
