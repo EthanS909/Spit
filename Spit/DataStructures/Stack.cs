@@ -24,7 +24,7 @@ namespace Spit.DataStructures
 
         public Card Peek()
         {
-            return stack.GetData(stack.Count() - 1);
+            return stack.GetData(stack.Count());
         }
 
         public bool IsEmpty() { return stack.IsEmpty(); }

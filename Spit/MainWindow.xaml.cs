@@ -227,7 +227,7 @@ namespace Spit
 
             for (int i = 0; i < placePiles.Count; i++)
             {
-                if (cardPiles[i] == pile)
+                if (placePiles[i] == pile)
                 {
                     index = i;
                 }
