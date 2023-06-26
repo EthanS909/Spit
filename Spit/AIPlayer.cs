@@ -8,7 +8,10 @@ namespace Spit
 {
     internal class AIPlayer : Player
     {
+        // Reaction Speed of the AI
         private int delay;
+
+        // Number of moves the AI looks ahead to chose the best card to place
         private int lookAhead;
 
         public AIPlayer(int difficulty)

@@ -169,6 +169,12 @@ namespace Spit
             plPile4.Visibility = Visibility.Visible;
             plPile5.Visibility = Visibility.Visible;
 
+            aiPile1.Visibility = Visibility.Visible;
+            aiPile2.Visibility = Visibility.Visible;
+            aiPile3.Visibility = Visibility.Visible;
+            aiPile4.Visibility = Visibility.Visible;
+            aiPile5.Visibility = Visibility.Visible;
+
             plStack.Visibility = Visibility.Visible;
             aiStack.Visibility = Visibility.Visible;
 

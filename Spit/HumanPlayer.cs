@@ -8,5 +8,6 @@ namespace Spit
 {
     internal class HumanPlayer : Player
     {
+        
     }
 }

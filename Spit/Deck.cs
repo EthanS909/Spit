@@ -72,20 +72,5 @@ namespace Spit
                 deck.Push(shuffledDeck[x]);
             }
         }
-
-        public bool DisplayCards()
-        {
-            bool display = true;
-            int numberOfCardsHidden = 5;
-            for(int x = 0; x < numberOfCardsHidden; x++)
-            {
-                //oxxxx
-                // oxxx
-                //  oxx
-                //   ox
-                //    o
-            }
-            return display;
-        }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Numerics;
 using System.Security.Permissions;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,25 +18,11 @@ namespace Spit
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
+        const int maxPlayers = 2;
+
         public Deck deck = new Deck();
 
-        public Player[] player = new Player[2];
-
-        //public string topCard = "";
-
-        // Player Hand
-        public Stack playerFirstPile = new Stack();
-        public Stack playerSecondPile = new Stack();
-        public Stack playerThirdPile = new Stack();
-        public Stack playerFourthPile = new Stack();
-        public Stack playerFifthPile = new Stack();
-
-        // AI Hand
-        public Stack AiFirstPile = new Stack();
-        public Stack AiSecondPile = new Stack();
-        public Stack AiThirdPile = new Stack();
-        public Stack AiFourthPile = new Stack();
-        public Stack AiFifthPile = new Stack();
+        public Player[] players = new Player[maxPlayers];
 
         // Draw cards
         public Stack<Card> playerPickUp = new Stack<Card>();
@@ -46,17 +33,18 @@ namespace Spit
         public Stack pile2 = new Stack();
 
         public int selectedPile = -1;
-        public Stack[] cardPiles = new Stack[5];
+        public Stack[] playerCardPiles = new Stack[5];
+        public Stack[] AICardPiles = new Stack[5];
         public Stack[] placePiles = new Stack[2];
 
         public string[] pileTops = new string[5];
         public string[] pileTop = new string[5];
 
-        string playerFirstPileTop = "";
-        string playerSecondPileTop = "";
-        string playerThirdPileTop = "";
-        string playerFourthPileTop = "";
-        string playerFifthPileTop = "";
+        string playerFirstPileTop;
+        string playerSecondPileTop;
+        string playerThirdPileTop;
+        string playerFourthPileTop;
+        string playerFifthPileTop;
 
         string AiFirstPileTop;
         string AiSecondPileTop;
@@ -73,7 +61,7 @@ namespace Spit
         {
             get { return playerFirstPileTop; }
             set
-            { 
+            {
                 playerFirstPileTop = value;
                 OnPropertyChanged("PlayerFirstPileTop");
             }
@@ -183,12 +171,8 @@ namespace Spit
 
         public Game()
         {
+
             deck.CreateDeck();
-            cardPiles[0] = playerFirstPile;
-            cardPiles[1] = playerSecondPile;
-            cardPiles[2] = playerThirdPile;
-            cardPiles[3] = playerFourthPile;
-            cardPiles[4] = playerFifthPile;
 
             placePiles[0] = pile1;
             placePiles[1] = pile2;
@@ -200,7 +184,7 @@ namespace Spit
 
             if (selectedPile != -1)
             {
-                int cardNumber = cardPiles[selectedPile].Peek().GetNumber();
+                int cardNumber = playerCardPiles[selectedPile].Peek().GetNumber();
                 int target1 = placePiles[pileNum].Peek().GetNumber();
                 int target2 = placePiles[pileNum].Peek().GetNumber();
 
@@ -211,7 +195,7 @@ namespace Spit
 
                 if (cardNumber == target1 || cardNumber == target2)
                 {
-                    placePiles[pileNum].Push(cardPiles[selectedPile].Pop());
+                    placePiles[pileNum].Push(playerCardPiles[selectedPile].Pop());
 
                     placed = true;
                 }
@@ -222,8 +206,20 @@ namespace Spit
 
         public void Start(int difficulty)
         {
-            player[0] = new HumanPlayer();
-            player[1] = new AIPlayer(difficulty);
+            players[0] = new HumanPlayer();
+            players[1] = new AIPlayer(difficulty);
+
+            playerCardPiles[0] = players[0].firstPile;
+            playerCardPiles[1] = players[0].secondPile;
+            playerCardPiles[2] = players[0].thirdPile;
+            playerCardPiles[3] = players[0].fourthPile;
+            playerCardPiles[4] = players[0].fifthPile;
+
+            AICardPiles[0] = players[1].firstPile;
+            AICardPiles[1] = players[1].secondPile;
+            AICardPiles[2] = players[1].thirdPile;
+            AICardPiles[3] = players[1].fourthPile;
+            AICardPiles[4] = players[1].fifthPile;
 
             deck.Shuffle(this);
 
@@ -262,45 +258,45 @@ namespace Spit
 
         public void PlacePlayingCards()
         {
-            playerFirstPile.Push(playerPickUp.Pop());
+            players[0].firstPile.Push(playerPickUp.Pop());
             for (int i = 0; i < 5; i++)
             {
                 if(i < 2)
                 {
-                    playerSecondPile.Push(playerPickUp.Pop());
+                    players[0].secondPile.Push(playerPickUp.Pop());
                 }
                 if(i < 3)
                 {
-                    playerThirdPile.Push(playerPickUp.Pop());
+                    players[0].thirdPile.Push(playerPickUp.Pop());
                 }
                 if (i < 4)
                 {
-                    playerFourthPile.Push(playerPickUp.Pop());
+                    players[0].fourthPile.Push(playerPickUp.Pop());
                 }
                 if (i < 5)
                 {
-                    playerFifthPile.Push(playerPickUp.Pop());
+                    players[0].fifthPile.Push(playerPickUp.Pop());
                 }
             }
 
-            AiFirstPile.Push(AIPickUp.Pop());
+            players[1].firstPile.Push(AIPickUp.Pop());
             for (int i = 0; i < 5; i++)
             {
                 if (i < 2)
                 {
-                    AiSecondPile.Push(AIPickUp.Pop());
+                    players[1].secondPile.Push(AIPickUp.Pop());
                 }
                 if (i < 3)
                 {
-                    AiThirdPile.Push(AIPickUp.Pop());
+                    players[1].thirdPile.Push(AIPickUp.Pop());
                 }
                 if (i < 4)
                 {
-                    AiFourthPile.Push(AIPickUp.Pop());
+                    players[1].fourthPile.Push(AIPickUp.Pop());
                 }
                 if (i < 5)
                 {
-                    AiFifthPile.Push(AIPickUp.Pop());
+                    players[1].fifthPile.Push(AIPickUp.Pop());
                 }
             }
 
@@ -311,40 +307,98 @@ namespace Spit
         public int GetPlayerCardCount()
         {
             int length = 0;
-            if (playerFirstPile != null) { length++; }
-            length += playerSecondPile.Length();
-            length += playerThirdPile.Length();
-            length += playerFourthPile.Length();
-            length += playerFifthPile.Length();
+            if (players[0].firstPile != null) { length++; }
+            length += players[0].secondPile.Length();
+            length += players[0].thirdPile.Length();
+            length += players[0].fourthPile.Length();
+            length += players[0].fifthPile.Length();
             return length;
         }
 
         public int GetAICardCount()
         {
             int length = 0;
-            if (AiFirstPile != null) { length++; }
-            length += AiSecondPile.Length();
-            length += AiThirdPile.Length();
-            length += AiFourthPile.Length();
-            length += AiFifthPile.Length();
+            if (players[1].firstPile != null) { length++; }
+            length += players[1].secondPile.Length();
+            length += players[1].thirdPile.Length();
+            length += players[1].fourthPile.Length();
+            length += players[1].fifthPile.Length();
             return length;
+        }
+
+        public void CanPlay()
+        {
+            // Create targets
+            int target1 = pile1.Peek().GetNumber();
+            int target2 = pile1.Peek().GetNumber();
+            int target3 = pile2.Peek().GetNumber();
+            int target4 = pile2.Peek().GetNumber();
+
+            if (target1 == 1) { target1 = 13; }
+            else { target1 -= 1; }
+            if (target2 == 13) { target2 = 1; }
+            else { target2 += 1; }
+            if (target3 == 1) { target3 = 13; }
+            else { target3 += 1; }
+            if (target4 == 13) { target4 = 1; }
+            else { target4 += 1; }
+
+            // Check if human can play
+            bool humanCanPlay = false;
+            foreach(Stack pile in playerCardPiles)
+            {
+                if(pile.stack.GetHead() != null)
+                {
+                    int cardNumber = pile.Peek().GetNumber();
+
+                    if (cardNumber == target1 || cardNumber == target2 || cardNumber == target3 || cardNumber == target4)
+                    {
+                        humanCanPlay = true;
+                    }
+                }   
+            }
+
+            // Check if AI can play
+            bool AICanPlay = false;
+            foreach (Stack pile in AICardPiles)
+            {
+                int cardNumber = pile.Peek().GetNumber();
+
+                if (cardNumber == target1 || cardNumber == target2 || cardNumber == target3 || cardNumber == target4)
+                {
+                    humanCanPlay = true;
+                }
+            }
+
+            if(!humanCanPlay && !AICanPlay)
+            {
+
+            }
         }
 
         public void Update()
         {
-            if (playerFirstPile.stack.GetHead() != null) { PlayerFirstPileTop = "CardImages/" + playerFirstPile.Peek().GetNumber() + "_of_" + playerFirstPile.Peek().GetSuit() + "s.png"; }
-            if (playerSecondPile.stack.GetHead() != null) { PlayerSecondPileTop = "CardImages/" + playerSecondPile.Peek().GetNumber() + "_of_" + playerSecondPile.Peek().GetSuit() + "s.png"; }
-            if (playerThirdPile.stack.GetHead() != null) { PlayerThirdPileTop = "CardImages/" + playerThirdPile.Peek().GetNumber() + "_of_" + playerThirdPile.Peek().GetSuit() + "s.png"; }
-            if (playerFourthPile.stack.GetHead() != null) { PlayerFourthPileTop = "CardImages/" + playerFourthPile.Peek().GetNumber() + "_of_" + playerFourthPile.Peek().GetSuit() + "s.png"; }
-            if (playerFifthPile.stack.GetHead() != null) { PlayerFifthPileTop = "CardImages/" + playerFifthPile.Peek().GetNumber() + "_of_" + playerFifthPile.Peek().GetSuit() + "s.png"; }
+            if (players[0].firstPile.stack.GetHead() != null) { PlayerFirstPileTop = "CardImages/" + players[0].firstPile.Peek().GetNumber() + "_of_" + players[0].firstPile.Peek().GetSuit() + "s.png"; }
+            if (players[0].secondPile.stack.GetHead() != null) { PlayerSecondPileTop = "CardImages/" + players[0].secondPile.Peek().GetNumber() + "_of_" + players[0].secondPile.Peek().GetSuit() + "s.png"; }
+            if (players[0].thirdPile.stack.GetHead() != null) { PlayerThirdPileTop = "CardImages/" + players[0].thirdPile.Peek().GetNumber() + "_of_" + players[0].thirdPile.Peek().GetSuit() + "s.png"; }
+            if (players[0].fourthPile.stack.GetHead() != null) { PlayerFourthPileTop = "CardImages/" + players[0].fourthPile.Peek().GetNumber() + "_of_" + players[0].fourthPile.Peek().GetSuit() + "s.png"; }
+            if (players[0].fifthPile.stack.GetHead() != null) { PlayerFifthPileTop = "CardImages/" + players[0].fifthPile.Peek().GetNumber() + "_of_" + players[0].fifthPile.Peek().GetSuit() + "s.png"; }
+
+            if (players[1].firstPile.stack.GetHead() != null) { AIFirstPileTop = "CardImages/" + players[1].firstPile.Peek().GetNumber() + "_of_" + players[1].firstPile.Peek().GetSuit() + "s.png"; }
+            if (players[1].secondPile.stack.GetHead() != null) { AISecondPileTop = "CardImages/" + players[1].secondPile.Peek().GetNumber() + "_of_" + players[1].secondPile.Peek().GetSuit() + "s.png"; }
+            if (players[1].thirdPile.stack.GetHead() != null) { AIThirdPileTop = "CardImages/" + players[1].thirdPile.Peek().GetNumber() + "_of_" + players[1].thirdPile.Peek().GetSuit() + "s.png"; }
+            if (players[1].fourthPile.stack.GetHead() != null) { AIFourthPileTop = "CardImages/" + players[1].fourthPile.Peek().GetNumber() + "_of_" + players[1].fourthPile.Peek().GetSuit() + "s.png"; }
+            if (players[1].fifthPile.stack.GetHead() != null) { AIFifthPileTop = "CardImages/" + players[1].fifthPile.Peek().GetNumber() + "_of_" + players[1].fifthPile.Peek().GetSuit() + "s.png"; }
 
             Pile1Top = "CardImages/" + pile1.Peek().GetNumber() + "_of_" + pile1.Peek().GetSuit() + "s.png";
             Pile2Top = "CardImages/" + pile2.Peek().GetNumber() + "_of_" + pile2.Peek().GetSuit() + "s.png";
+
+            CanPlay();
         }
 
         public bool IsPileEmpty(int index)
         {
-            return cardPiles[index].IsEmpty();
+            return playerCardPiles[index].IsEmpty();
         }
     }
 }
