@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -38,7 +39,7 @@ namespace Spit
             InitializeComponent();
             AI_Difficulty.Text = "Reaction Time: " + reactionTime[difficultyCount] + "ms\r\nLooks Ahead " + movesAhead[difficultyCount] + " Moves";
             AI.Content = difficulty[difficultyCount];
-            DataContext = spit;
+            SetDataContext();
             cardPiles.Add(plPile1);
             cardPiles.Add(plPile2);
             cardPiles.Add(plPile3);
@@ -55,21 +56,20 @@ namespace Spit
 
             if (!e.Handled && e.Key == Key.Escape && Keyboard.Modifiers == ModifierKeys.None && Play.Visibility != Visibility.Visible)
             {
-                if(Back.Visibility == Visibility.Visible)
+                if (AI.Visibility == Visibility.Visible)
                 {
                     DisplayPlayUI(false);
                     DisplayStartUI(true);
                 }
+                else if (ExitGame.Visibility == Visibility.Visible)
+                {
+                    DisplayPauseMenu(false);
+                }
                 else
                 {
-                    Close();
+                    DisplayPauseMenu(true);
                 }
             }
-        }
-
-        public void Pause()
-        {
-            
         }
 
         private void Play_Click(object sender, RoutedEventArgs e)
@@ -79,20 +79,16 @@ namespace Spit
 
             //Display AI Difficulty Levels
             DisplayPlayUI(true);
-
-
-            //Start Game
-            // Spit game = new Spit();
         }
 
         private void Settings_Click(object sender, RoutedEventArgs e)
         {
             //Disable Start Screen UI
             DisplayStartUI(false);
+            DisplayPauseMenu(false);
+            background.Visibility = Visibility.Visible;
 
-            Back.Visibility = Visibility.Visible;
-
-
+            Back2.Visibility = Visibility.Visible;
         }
 
         private void Exit_Click(object sender, RoutedEventArgs e)
@@ -103,8 +99,10 @@ namespace Spit
         private void AI_Click(object sender, RoutedEventArgs e)
         {
             DisplayPlayUI(false);
+            spit = new Game();
+            SetDataContext();
             spit.Start(difficultyCount);
-            DisplayGameUI();
+            DisplayGameUI(true);
 
         }
 
@@ -115,11 +113,19 @@ namespace Spit
 
         private void Back_Click(object sender, RoutedEventArgs e)
         {
-            //Display Start Screen UI
-            DisplayStartUI(true);
+            if((Button)sender == Back2)
+            {
+                Back2.Visibility = Visibility.Hidden;
+                DisplayPauseMenu(true);
+            }
+            else
+            {
+                // Display Start Screen UI
+                DisplayStartUI(true);
 
-            //Hide AI Difficulty Levels
-            DisplayPlayUI(false);
+                // Hide AI Difficulty Levels
+                DisplayPlayUI(false);
+            }
         }
 
         private void Left_Click(object sender, RoutedEventArgs e)
@@ -180,25 +186,48 @@ namespace Spit
             } 
         }
 
-        private void DisplayGameUI()
+        private void DisplayGameUI(bool enabled)
         {
-            plPile1.Visibility = Visibility.Visible;
-            plPile2.Visibility = Visibility.Visible;
-            plPile3.Visibility = Visibility.Visible;
-            plPile4.Visibility = Visibility.Visible;
-            plPile5.Visibility = Visibility.Visible;
+            if (enabled)
+            {
+                plPile1.Visibility = Visibility.Visible;
+                plPile2.Visibility = Visibility.Visible;
+                plPile3.Visibility = Visibility.Visible;
+                plPile4.Visibility = Visibility.Visible;
+                plPile5.Visibility = Visibility.Visible;
 
-            aiPile1.Visibility = Visibility.Visible;
-            aiPile2.Visibility = Visibility.Visible;
-            aiPile3.Visibility = Visibility.Visible;
-            aiPile4.Visibility = Visibility.Visible;
-            aiPile5.Visibility = Visibility.Visible;
+                aiPile1.Visibility = Visibility.Visible;
+                aiPile2.Visibility = Visibility.Visible;
+                aiPile3.Visibility = Visibility.Visible;
+                aiPile4.Visibility = Visibility.Visible;
+                aiPile5.Visibility = Visibility.Visible;
 
-            plStack.Visibility = Visibility.Visible;
-            aiStack.Visibility = Visibility.Visible;
+                plStack.Visibility = Visibility.Visible;
+                aiStack.Visibility = Visibility.Visible;
 
-            pile1.Visibility = Visibility.Visible;
-            pile2.Visibility = Visibility.Visible;
+                pile1.Visibility = Visibility.Visible;
+                pile2.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                plPile1.Visibility = Visibility.Hidden;
+                plPile2.Visibility = Visibility.Hidden;
+                plPile3.Visibility = Visibility.Hidden;
+                plPile4.Visibility = Visibility.Hidden;
+                plPile5.Visibility = Visibility.Hidden;
+
+                aiPile1.Visibility = Visibility.Hidden;
+                aiPile2.Visibility = Visibility.Hidden;
+                aiPile3.Visibility = Visibility.Hidden;
+                aiPile4.Visibility = Visibility.Hidden;
+                aiPile5.Visibility = Visibility.Hidden;
+
+                plStack.Visibility = Visibility.Hidden;
+                aiStack.Visibility = Visibility.Hidden;
+
+                pile1.Visibility = Visibility.Hidden;
+                pile2.Visibility = Visibility.Hidden;
+            }
         }
 
         private void Card_Click(object sender, RoutedEventArgs e)
@@ -266,6 +295,45 @@ namespace Spit
             bool placed = spit.Place(index);
 
             if (placed) { DeselectPile(); spit.Update(); }
+        }
+
+        private void SaveGame_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ExitGame_Click(object sender, RoutedEventArgs e)
+        {
+            // Hides the Game UI
+            DisplayGameUI(false);
+
+            // Displays the Start Screen UI so you can start a new game
+            DisplayStartUI(true);
+
+            DisplayPauseMenu(false);
+        }
+
+        private void DisplayPauseMenu(bool enabled)
+        {
+            if(enabled)
+            {
+                background.Visibility = Visibility.Visible;
+                Settings2.Visibility = Visibility.Visible;
+                Save.Visibility = Visibility.Visible;
+                ExitGame.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                background.Visibility = Visibility.Hidden;
+                Settings2.Visibility = Visibility.Hidden;
+                Save.Visibility = Visibility.Hidden;
+                ExitGame.Visibility = Visibility.Hidden;
+            }
+        }
+
+        private void SetDataContext()
+        {
+            DataContext = spit;
         }
     }
 }

@@ -171,7 +171,6 @@ namespace Spit
 
         public Game()
         {
-
             deck.CreateDeck();
 
             placePiles[0] = pile1;
