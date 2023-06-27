@@ -9,6 +9,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -48,9 +49,27 @@ namespace Spit
             placePiles.Add(pile2);
         }
 
-        public void Update()
+        protected override void OnKeyDown(KeyEventArgs e)
         {
+            base.OnKeyDown(e);
 
+            if (!e.Handled && e.Key == Key.Escape && Keyboard.Modifiers == ModifierKeys.None && Play.Visibility != Visibility.Visible)
+            {
+                if(Back.Visibility == Visibility.Visible)
+                {
+                    DisplayPlayUI(false);
+                    DisplayStartUI(true);
+                }
+                else
+                {
+                    Close();
+                }
+            }
+        }
+
+        public void Pause()
+        {
+            
         }
 
         private void Play_Click(object sender, RoutedEventArgs e)
