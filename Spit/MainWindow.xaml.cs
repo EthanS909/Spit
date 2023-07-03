@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Automation.Provider;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
@@ -56,10 +57,19 @@ namespace Spit
 
             if (!e.Handled && e.Key == Key.Escape && Keyboard.Modifiers == ModifierKeys.None && Play.Visibility != Visibility.Visible)
             {
-                if (AI.Visibility == Visibility.Visible)
+                if (Back.Visibility == Visibility.Visible)
                 {
-                    DisplayPlayUI(false);
-                    DisplayStartUI(true);
+                    if(background.Visibility == Visibility.Hidden)
+                    {
+                        DisplayPlayUI(false);
+                        DisplayStartUI(true);
+                        DisplayPauseMenu(false);
+                    }
+                    else
+                    {
+                        DisplaySettingsUI(false);
+                        DisplayPauseMenu(true);
+                    }
                 }
                 else if (ExitGame.Visibility == Visibility.Visible)
                 {
@@ -85,10 +95,13 @@ namespace Spit
         {
             //Disable Start Screen UI
             DisplayStartUI(false);
-            DisplayPauseMenu(false);
-            background.Visibility = Visibility.Visible;
+            if(background.Visibility == Visibility.Visible)
+            {
+                DisplayPauseMenu(false);
+                background.Visibility = Visibility.Visible;
+            }
 
-            Back2.Visibility = Visibility.Visible;
+            DisplaySettingsUI(true);
         }
 
         private void Exit_Click(object sender, RoutedEventArgs e)
@@ -113,12 +126,11 @@ namespace Spit
 
         private void Back_Click(object sender, RoutedEventArgs e)
         {
-            if((Button)sender == Back2)
+            if(background.Visibility == Visibility.Visible)
             {
-                Back2.Visibility = Visibility.Hidden;
+                DisplaySettingsUI(false);
                 DisplayPauseMenu(true);
-            }
-            else
+            } else
             {
                 // Display Start Screen UI
                 DisplayStartUI(true);
@@ -127,6 +139,11 @@ namespace Spit
                 DisplayPlayUI(false);
             }
         }
+
+        /*private void Back2_Click(object sender, RoutedEventArgs e)
+        /{
+            DisplayPauseMenu(true);
+        }*/
 
         private void Left_Click(object sender, RoutedEventArgs e)
         {
@@ -328,6 +345,18 @@ namespace Spit
                 Settings2.Visibility = Visibility.Hidden;
                 Save.Visibility = Visibility.Hidden;
                 ExitGame.Visibility = Visibility.Hidden;
+            }
+        }
+
+        public void DisplaySettingsUI(bool enabled)
+        {
+            if (enabled)
+            {
+                Back.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                Back.Visibility = Visibility.Hidden;
             }
         }
 

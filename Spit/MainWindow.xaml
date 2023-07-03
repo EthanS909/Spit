@@ -84,7 +84,6 @@
         <TextBlock Name ="AI_Difficulty" Grid.Column="2" HorizontalAlignment="Left" Grid.Row="1" Text="TextBlock" VerticalAlignment="Top" FontSize="36" Foreground="White" Grid.ColumnSpan="2" Visibility="Hidden"/>
         <Button Name="Save" Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="3" Content="Save Game" FontSize="72" Click="SaveGame_Click" Visibility="Hidden"/>
         <Button Name="Settings2" Grid.Column="2" Grid.Row="3" Grid.ColumnSpan="3" Content="Settings" FontSize="72" Click="Settings_Click" Visibility="Hidden"/>
-        <Button Name="ExitGame" Grid.Column="2" Grid.Row="4" Grid.ColumnSpan="3" Content="Exit" FontSize="72" Click="ExitGame_Click" Visibility="Hidden"/>
-        <Button Name="Back2" Grid.Column="2" Grid.Row="4" Grid.ColumnSpan="3" Content="⮘ Back" FontSize="72" Click="Back_Click" Visibility="Hidden"/>
+        <Button Name="ExitGame" Grid.Column="2" Grid.Row="4" Grid.ColumnSpan="3" Content="Exit Game" FontSize="72" Click="ExitGame_Click" Visibility="Hidden"/>
     </Grid>
 </Window>

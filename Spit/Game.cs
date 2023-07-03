@@ -55,8 +55,6 @@ namespace Spit
         string pile1Top;
         string pile2Top;
 
-        
-
         public string PlayerFirstPileTop
         {
             get { return playerFirstPileTop; }
