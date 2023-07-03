@@ -15,5 +15,20 @@ namespace Spit
         public Stack thirdPile = new Stack();
         public Stack fourthPile = new Stack();
         public Stack fifthPile = new Stack();
+
+        public virtual async void Move()
+        {
+
+        }
+
+        public virtual int GetDelay()
+        {
+            return 0;
+        }
+
+        public virtual Task CalcBestMove()
+        {
+            return Task.CompletedTask;
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +14,8 @@ namespace Spit
 
         // Number of moves the AI looks ahead to choose the best card to place
         private int lookAhead;
+
+        private int bestMove;
 
         public AIPlayer(int difficulty)
         {
@@ -31,6 +34,25 @@ namespace Spit
                 delay = 150;
                 lookAhead = 3;
             }
+        }
+
+        public override int GetDelay()
+        {
+            return delay;
+        }
+
+        public override async void Move()
+        {
+            await CalcBestMove();
+        }
+
+        public override Task CalcBestMove()
+        {
+            bestMove = 0;
+
+            
+
+            return Task.CompletedTask;
         }
     }
 }

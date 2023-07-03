@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace Spit
 {
@@ -35,6 +37,8 @@ namespace Spit
 
         Game spit = new Game();
 
+        DispatcherTimer timer = new DispatcherTimer();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -49,6 +53,8 @@ namespace Spit
 
             placePiles.Add(pile1);
             placePiles.Add(pile2);
+
+            timer.Tick += new EventHandler(Tick);
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
@@ -74,10 +80,12 @@ namespace Spit
                 else if (ExitGame.Visibility == Visibility.Visible)
                 {
                     DisplayPauseMenu(false);
+                    timer.Start();
                 }
                 else
                 {
                     DisplayPauseMenu(true);
+                    timer.Stop();
                 }
             }
         }
@@ -117,6 +125,8 @@ namespace Spit
             spit.Start(difficultyCount);
             DisplayGameUI(true);
 
+            timer.Interval = TimeSpan.FromMilliseconds(spit.players[1].GetDelay());
+            timer.Start();
         }
 
         private void Load_Click(object sender, RoutedEventArgs e)
@@ -363,6 +373,12 @@ namespace Spit
         private void SetDataContext()
         {
             DataContext = spit;
+        }
+
+        public void Tick(object sender, EventArgs e)
+        {
+            //Debug.WriteLine("playing");
+            spit.players[0].Move();
         }
     }
 }
