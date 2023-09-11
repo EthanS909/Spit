@@ -12,20 +12,18 @@ namespace Spit.DataStructures
         ListNode head;
         ListNode tempNode;
 
-        public ListNode GetHead()
-        {
-            return head;
-        }
         public int Count()
         {
             int count = 0;
 
-            tempNode = head;
-
-            while (tempNode.next != null)
+            if (head != null)
             {
-                tempNode = tempNode.next;
-                count++;
+                tempNode = head;
+                while (tempNode.next != null)
+                {
+                    tempNode = tempNode.next;
+                    count++;
+                }
             }
 
             return count;
@@ -81,16 +79,19 @@ namespace Spit.DataStructures
 
         public Card GetData(int pos)
         {
-            tempNode = head;
-            for (int i = 0; i < pos; i++)
+            if (head != null)
             {
-                if (tempNode != null)
+                tempNode = head;
+                for (int i = 0; i < pos; i++)
                 {
-                    tempNode = tempNode.next;
-                }
-                else
-                {
-                    throw new IndexOutOfRangeException();
+                    if (tempNode != null)
+                    {
+                        tempNode = tempNode.next;
+                    }
+                    else
+                    {
+                        throw new IndexOutOfRangeException();
+                    }
                 }
             }
             return tempNode.data;
@@ -117,12 +118,27 @@ namespace Spit.DataStructures
                     if (tmp == null) { throw new ArgumentOutOfRangeException(); }
                     tmp = tmp.next;
                     i--;
-                    //funny >:)
-                    if (tmp.next == null) { throw new ArgumentOutOfRangeException(); }
                 }
                 //less funny (dereferences next node and sets reference to next node over)
                 ret = tmp.next.data;
                 tmp.next = tmp.next.next;
+            }
+
+            return ret;
+        }
+
+        public Card RemoveLast()
+        {
+            tempNode = head;
+            Card ret = default;
+
+            if (head != null)
+            {
+
+
+
+
+
             }
 
             return ret;

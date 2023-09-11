@@ -204,7 +204,7 @@ namespace Spit
         public void Start(int difficulty)
         {
             players[0] = new HumanPlayer();
-            players[1] = new AIPlayer(difficulty);
+            players[1] = new AIPlayer(this, difficulty);
 
             playerCardPiles[0] = players[0].firstPile;
             playerCardPiles[1] = players[0].secondPile;
@@ -344,7 +344,7 @@ namespace Spit
             bool humanCanPlay = false;
             foreach(Stack pile in playerCardPiles)
             {
-                if(pile.stack.GetHead() != null)
+                if (pile.IsEmpty())
                 {
                     int cardNumber = pile.Peek().GetNumber();
 
@@ -359,11 +359,14 @@ namespace Spit
             bool AICanPlay = false;
             foreach (Stack pile in AICardPiles)
             {
-                int cardNumber = pile.Peek().GetNumber();
-
-                if (cardNumber == target1 || cardNumber == target2 || cardNumber == target3 || cardNumber == target4)
+                if (!pile.IsEmpty())
                 {
-                    humanCanPlay = true;
+                    int cardNumber = pile.Peek().GetNumber();
+
+                    if (cardNumber == target1 || cardNumber == target2 || cardNumber == target3 || cardNumber == target4)
+                    {
+                        humanCanPlay = true;
+                    }
                 }
             }
 
@@ -375,17 +378,17 @@ namespace Spit
 
         public void Update()
         {
-            if (players[0].firstPile.stack.GetHead() != null) { PlayerFirstPileTop = "CardImages/" + players[0].firstPile.Peek().GetNumber() + "_of_" + players[0].firstPile.Peek().GetSuit() + "s.png"; }
-            if (players[0].secondPile.stack.GetHead() != null) { PlayerSecondPileTop = "CardImages/" + players[0].secondPile.Peek().GetNumber() + "_of_" + players[0].secondPile.Peek().GetSuit() + "s.png"; }
-            if (players[0].thirdPile.stack.GetHead() != null) { PlayerThirdPileTop = "CardImages/" + players[0].thirdPile.Peek().GetNumber() + "_of_" + players[0].thirdPile.Peek().GetSuit() + "s.png"; }
-            if (players[0].fourthPile.stack.GetHead() != null) { PlayerFourthPileTop = "CardImages/" + players[0].fourthPile.Peek().GetNumber() + "_of_" + players[0].fourthPile.Peek().GetSuit() + "s.png"; }
-            if (players[0].fifthPile.stack.GetHead() != null) { PlayerFifthPileTop = "CardImages/" + players[0].fifthPile.Peek().GetNumber() + "_of_" + players[0].fifthPile.Peek().GetSuit() + "s.png"; }
+            if (!players[0].firstPile.IsEmpty()) { PlayerFirstPileTop = "CardImages/" + players[0].firstPile.Peek().GetNumber() + "_of_" + players[0].firstPile.Peek().GetSuit() + "s.png"; }
+            if (!players[0].secondPile.IsEmpty()) { PlayerSecondPileTop = "CardImages/" + players[0].secondPile.Peek().GetNumber() + "_of_" + players[0].secondPile.Peek().GetSuit() + "s.png"; }
+            if (!players[0].thirdPile.IsEmpty()) { PlayerThirdPileTop = "CardImages/" + players[0].thirdPile.Peek().GetNumber() + "_of_" + players[0].thirdPile.Peek().GetSuit() + "s.png"; }
+            if (!players[0].fourthPile.IsEmpty()) { PlayerFourthPileTop = "CardImages/" + players[0].fourthPile.Peek().GetNumber() + "_of_" + players[0].fourthPile.Peek().GetSuit() + "s.png"; }
+            if (!players[0].fifthPile.IsEmpty()) { PlayerFifthPileTop = "CardImages/" + players[0].fifthPile.Peek().GetNumber() + "_of_" + players[0].fifthPile.Peek().GetSuit() + "s.png"; }
 
-            if (players[1].firstPile.stack.GetHead() != null) { AIFirstPileTop = "CardImages/" + players[1].firstPile.Peek().GetNumber() + "_of_" + players[1].firstPile.Peek().GetSuit() + "s.png"; }
-            if (players[1].secondPile.stack.GetHead() != null) { AISecondPileTop = "CardImages/" + players[1].secondPile.Peek().GetNumber() + "_of_" + players[1].secondPile.Peek().GetSuit() + "s.png"; }
-            if (players[1].thirdPile.stack.GetHead() != null) { AIThirdPileTop = "CardImages/" + players[1].thirdPile.Peek().GetNumber() + "_of_" + players[1].thirdPile.Peek().GetSuit() + "s.png"; }
-            if (players[1].fourthPile.stack.GetHead() != null) { AIFourthPileTop = "CardImages/" + players[1].fourthPile.Peek().GetNumber() + "_of_" + players[1].fourthPile.Peek().GetSuit() + "s.png"; }
-            if (players[1].fifthPile.stack.GetHead() != null) { AIFifthPileTop = "CardImages/" + players[1].fifthPile.Peek().GetNumber() + "_of_" + players[1].fifthPile.Peek().GetSuit() + "s.png"; }
+            if (!players[1].firstPile.IsEmpty()) { AIFirstPileTop = "CardImages/" + players[1].firstPile.Peek().GetNumber() + "_of_" + players[1].firstPile.Peek().GetSuit() + "s.png"; }
+            if (!players[1].secondPile.IsEmpty()) { AISecondPileTop = "CardImages/" + players[1].firstPile.Peek().GetNumber() + "_of_" + players[1].secondPile.Peek().GetSuit() + "s.png"; }
+            if (!players[1].thirdPile.IsEmpty()) { AIThirdPileTop = "CardImages/" + players[1].thirdPile.Peek().GetNumber() + "_of_" + players[1].thirdPile.Peek().GetSuit() + "s.png"; }
+            if (!players[1].fourthPile.IsEmpty()) { AIFourthPileTop = "CardImages/" + players[1].fourthPile.Peek().GetNumber() + "_of_" + players[1].fourthPile.Peek().GetSuit() + "s.png"; }
+            if (!players[1].fifthPile.IsEmpty()) { AIFifthPileTop = "CardImages/" + players[1].fifthPile.Peek().GetNumber() + "_of_" + players[1].fifthPile.Peek().GetSuit() + "s.png"; }
 
             Pile1Top = "CardImages/" + pile1.Peek().GetNumber() + "_of_" + pile1.Peek().GetSuit() + "s.png";
             Pile2Top = "CardImages/" + pile2.Peek().GetNumber() + "_of_" + pile2.Peek().GetSuit() + "s.png";

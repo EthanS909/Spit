@@ -27,7 +27,7 @@ namespace Spit
     {
         private int difficultyCount = 0;
         private string[] difficulty = { "Easy", "Normal", "Hard" };
-        private int[] reactionTime = { 350, 250, 150};
+        private int[] reactionTime = { 1000, 350, 250};
         private int[] movesAhead = { 1, 2, 3};
 
         List<Button> cardPiles = new List<Button>();
@@ -54,6 +54,7 @@ namespace Spit
             placePiles.Add(pile1);
             placePiles.Add(pile2);
 
+            timer.Interval = TimeSpan.FromMilliseconds(1000);
             timer.Tick += new EventHandler(Tick);
         }
 
@@ -378,7 +379,7 @@ namespace Spit
         public void Tick(object sender, EventArgs e)
         {
             //Debug.WriteLine("playing");
-            spit.players[0].Move();
+            spit.players[1].Move();
         }
     }
 }
