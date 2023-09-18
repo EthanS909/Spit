@@ -45,17 +45,17 @@ namespace Spit
         {
             if(difficulty == 0 )
             {
-                delay = 350;
+                delay = 1000;
                 depth = 1;
             }
             if (difficulty == 1)
             {
-                delay = 250;
+                delay = 800;
                 depth = 1;
             }
             if (difficulty == 2)
             {
-                delay = 150;
+                delay = 600;
                 depth = 3;
             }
 
@@ -154,11 +154,13 @@ namespace Spit
                     {
                         game.pile1.Push(tempPiles[x].Pop());
                         game.Update();
+                        return Task.CompletedTask;
                     }
                     else if (tempPiles[x].Peek().GetNumber() == target3 || tempPiles[x].Peek().GetNumber() == target4)
                     {
                         game.pile2.Push(tempPiles[x].Pop());
                         game.Update();
+                        return Task.CompletedTask;
                     }
                 }
             }

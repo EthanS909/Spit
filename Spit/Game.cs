@@ -6,7 +6,9 @@ using System.Linq;
 using System.Numerics;
 using System.Security.Permissions;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Threading;
@@ -17,6 +19,8 @@ namespace Spit
     class Game : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
+
+        MainWindow wnd = (MainWindow)Application.Current.MainWindow;
 
         const int maxPlayers = 2;
 
@@ -222,8 +226,6 @@ namespace Spit
 
             SplitCards();
             PlacePlayingCards();
-
-            Update();
         }
 
         public void Load()
@@ -344,7 +346,7 @@ namespace Spit
             bool humanCanPlay = false;
             foreach(Stack pile in playerCardPiles)
             {
-                if (pile.IsEmpty())
+                if (!pile.IsEmpty())
                 {
                     int cardNumber = pile.Peek().GetNumber();
 
@@ -372,7 +374,11 @@ namespace Spit
 
             if(!humanCanPlay && !AICanPlay)
             {
+                //Thread.Sleep(3000);
 
+                pile1.Push(AIPickUp.Pop());
+                pile2.Push(playerPickUp.Pop());
+                
             }
         }
 
@@ -392,6 +398,14 @@ namespace Spit
 
             Pile1Top = "CardImages/" + pile1.Peek().GetNumber() + "_of_" + pile1.Peek().GetSuit() + "s.png";
             Pile2Top = "CardImages/" + pile2.Peek().GetNumber() + "_of_" + pile2.Peek().GetSuit() + "s.png";
+
+            for (int i = 0; i < AICardPiles.Length; i++)
+            {
+                if (AICardPiles[i].IsEmpty())
+                {
+                    wnd.aiCardPiles[i].Visibility = Visibility.Hidden;
+                }
+            }
 
             CanPlay();
         }
