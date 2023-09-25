@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Automation.Provider;
@@ -38,7 +39,7 @@ namespace Spit
 
         Game spit = new Game();
 
-        DispatcherTimer timer = new DispatcherTimer();
+        public DispatcherTimer timer = new DispatcherTimer();
         DispatcherTimer updateTimer = new DispatcherTimer();
 
         public MainWindow()
@@ -93,12 +94,17 @@ namespace Spit
                     DisplayPauseMenu(false);
                     timer.Start();
                     updateTimer.Start();
+                    if(spit.tick > 0)
+                    {
+                        spit.countDownTimer.Start();
+                    }
                 }
                 else
                 {
                     DisplayPauseMenu(true);
                     timer.Stop();
                     updateTimer.Stop();
+                    spit.countDownTimer.Stop();
                 }
             }
         }

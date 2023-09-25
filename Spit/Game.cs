@@ -22,6 +22,10 @@ namespace Spit
 
         MainWindow wnd = (MainWindow)Application.Current.MainWindow;
 
+        public DispatcherTimer countDownTimer = new DispatcherTimer();
+
+        public int tick = 0;
+
         const int maxPlayers = 2;
 
         public Deck deck = new Deck();
@@ -58,6 +62,8 @@ namespace Spit
 
         string pile1Top;
         string pile2Top;
+
+        int countDown;
 
         public string PlayerFirstPileTop
         {
@@ -170,6 +176,16 @@ namespace Spit
             }
         }
 
+        public int CountDown
+        {
+            get { return countDown;  }
+            set
+            {
+                countDown = value;
+                OnPropertyChanged("CountDown");
+            }
+        }
+
 
         public Game()
         {
@@ -177,6 +193,14 @@ namespace Spit
 
             placePiles[0] = pile1;
             placePiles[1] = pile2;
+
+            countDownTimer.Tick += Tick;
+            countDownTimer.Interval = TimeSpan.FromSeconds(1);
+        }
+
+        private void Tick(object sender, EventArgs e)
+        {
+            tick++;
         }
 
         public bool Place(int pileNum)
@@ -374,11 +398,23 @@ namespace Spit
 
             if(!humanCanPlay && !AICanPlay)
             {
-                //Thread.Sleep(3000);
+                wnd.timer.Stop();
+                wnd.background.Visibility = Visibility.Visible;
+                wnd.CountDown.Visibility = Visibility.Visible;
+                countDownTimer.Start();
 
-                pile1.Push(AIPickUp.Pop());
-                pile2.Push(playerPickUp.Pop());
-                
+                if(tick == 3)
+                {
+                    countDownTimer.Stop();
+                    tick = 0;
+
+                    wnd.CountDown.Visibility = Visibility.Hidden;
+                    wnd.background.Visibility = Visibility.Hidden;
+                    
+                    pile1.Push(AIPickUp.Pop());
+                    pile2.Push(playerPickUp.Pop());
+                    wnd.timer.Start();
+                }
             }
         }
 
@@ -406,6 +442,8 @@ namespace Spit
                     wnd.aiCardPiles[i].Visibility = Visibility.Hidden;
                 }
             }
+
+            CountDown = 3 - tick;
 
             CanPlay();
         }

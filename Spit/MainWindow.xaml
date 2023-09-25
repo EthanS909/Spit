@@ -73,6 +73,7 @@
             <Image Name="aiPile1" Source="{Binding AIFirstPileTop}" Margin="0,0,0,0" Visibility="Hidden"/>
         </Border>
         <Rectangle Name="background" Fill="Black" Grid.Column="0" Grid.Row="0" Grid.RowSpan="6" Grid.ColumnSpan="7" Opacity="0.5" Visibility="Hidden"/>
+        <TextBlock Name="CountDown" Text="{Binding CountDown}" Grid.Column="3" Grid.Row="2" Grid.RowSpan="2" FontSize="256" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Hidden"/>
         <Button Name="Play" Grid.Column="1" Grid.Row="2" Content="Play" FontSize="72" Click="Play_Click" Grid.ColumnSpan="5" Margin="192,0,192,0"/>
         <Button Name="Settings" Grid.Column="1" Grid.Row="3" Content="Settings" FontSize="72" Click="Settings_Click" Grid.ColumnSpan="5" Margin="192,0,192,0"/>
         <Button Name="Exit" Grid.Column="1" Grid.Row="4" Content="Exit" FontSize="72" Click="Exit_Click" Grid.ColumnSpan="5" Margin="192,0,192,0"/>
