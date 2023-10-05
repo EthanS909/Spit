@@ -27,8 +27,8 @@ namespace Spit
     public partial class MainWindow : Window
     {
         private int difficultyCount = 0;
-        private string[] difficulty = { "Easy", "Normal", "Hard" };
-        private int[] reactionTime = { 1000, 350, 250};
+        private string[] difficulty = { "Begginer", "Intermediate", "Expert" };
+        private int[] reactionTime = { 1500, 1200, 900};
         private int[] movesAhead = { 1, 2, 3};
 
         List<Button> plCardPiles = new List<Button>();
@@ -66,7 +66,7 @@ namespace Spit
             timer.Tick += AiPlay;
 
             updateTimer.Tick += Update;
-            updateTimer.Interval = TimeSpan.FromMilliseconds(100);
+            updateTimer.Interval = TimeSpan.FromMilliseconds(10);
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
@@ -85,13 +85,14 @@ namespace Spit
                     }
                     else
                     {
-                        DisplaySettingsUI(false);
+                        DisplayRulesUI(false);
                         DisplayPauseMenu(true);
                     }
                 }
                 else if (ExitGame.Visibility == Visibility.Visible)
                 {
                     DisplayPauseMenu(false);
+                    DrawingText.Visibility = Visibility.Visible;
                     timer.Start();
                     updateTimer.Start();
                     if(spit.tick > 0)
@@ -102,6 +103,7 @@ namespace Spit
                 else
                 {
                     DisplayPauseMenu(true);
+                    DrawingText.Visibility = Visibility.Hidden;
                     timer.Stop();
                     updateTimer.Stop();
                     spit.countDownTimer.Stop();
@@ -118,7 +120,7 @@ namespace Spit
             DisplayPlayUI(true);
         }
 
-        private void Settings_Click(object sender, RoutedEventArgs e)
+        private void Rules_Click(object sender, RoutedEventArgs e)
         {
             //Disable Start Screen UI
             DisplayStartUI(false);
@@ -128,7 +130,7 @@ namespace Spit
                 background.Visibility = Visibility.Visible;
             }
 
-            DisplaySettingsUI(true);
+            DisplayRulesUI(true);
         }
 
         private void Exit_Click(object sender, RoutedEventArgs e)
@@ -158,7 +160,7 @@ namespace Spit
         {
             if(background.Visibility == Visibility.Visible)
             {
-                DisplaySettingsUI(false);
+                DisplayRulesUI(false);
                 DisplayPauseMenu(true);
             } else
             {
@@ -200,13 +202,13 @@ namespace Spit
             if(enabled)
             {
                 Play.Visibility = Visibility.Visible;
-                Settings.Visibility = Visibility.Visible;
+                Rules.Visibility = Visibility.Visible;
                 Exit.Visibility = Visibility.Visible;
             }
             else
             {
                 Play.Visibility = Visibility.Hidden;
-                Settings.Visibility = Visibility.Hidden;
+                Rules.Visibility = Visibility.Hidden;
                 Exit.Visibility = Visibility.Hidden;
             }
         }
@@ -339,9 +341,17 @@ namespace Spit
                 }
             }
 
-            bool placed = spit.Place(index);
+            if (spit.pickAPile == true)
+            {
+                spit.chosenPile = index;
+                DeselectPile();
+            }
+            else
+            {
+                bool placed = spit.Place(index);
 
-            if (placed) { DeselectPile(); }
+                if (placed) { DeselectPile(); }
+            }
         }
 
         private void SaveGame_Click(object sender, RoutedEventArgs e)
@@ -365,20 +375,20 @@ namespace Spit
             if(enabled)
             {
                 background.Visibility = Visibility.Visible;
-                Settings2.Visibility = Visibility.Visible;
+                Rules2.Visibility = Visibility.Visible;
                 Save.Visibility = Visibility.Visible;
                 ExitGame.Visibility = Visibility.Visible;
             }
             else
             {
                 background.Visibility = Visibility.Hidden;
-                Settings2.Visibility = Visibility.Hidden;
+                Rules2.Visibility = Visibility.Hidden;
                 Save.Visibility = Visibility.Hidden;
                 ExitGame.Visibility = Visibility.Hidden;
             }
         }
 
-        public void DisplaySettingsUI(bool enabled)
+        public void DisplayRulesUI(bool enabled)
         {
             if (enabled)
             {

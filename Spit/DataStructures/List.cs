@@ -16,14 +16,13 @@ namespace Spit.DataStructures
         {
             int count = 0;
 
-            if (head != null)
+            if (head == null) return 0;
+
+            tempNode = head;
+            while (tempNode.next != null)
             {
-                tempNode = head;
-                while (tempNode.next != null)
-                {
-                    tempNode = tempNode.next;
-                    count++;
-                }
+                tempNode = tempNode.next;
+                count++;
             }
 
             return count;
@@ -79,21 +78,21 @@ namespace Spit.DataStructures
 
         public Card GetData(int pos)
         {
-            if (head != null)
+            if (head == null) return tempNode.data;
+
+            tempNode = head;
+            for (int i = 0; i < pos; i++)
             {
-                tempNode = head;
-                for (int i = 0; i < pos; i++)
+                if (tempNode != null)
                 {
-                    if (tempNode != null)
-                    {
-                        tempNode = tempNode.next;
-                    }
-                    else
-                    {
-                        throw new IndexOutOfRangeException();
-                    }
+                    tempNode = tempNode.next;
+                }
+                else
+                {
+                    throw new IndexOutOfRangeException();
                 }
             }
+
             return tempNode.data;
         }
 

@@ -14,6 +14,7 @@ using System.Windows.Documents;
 using System.Windows.Threading;
 using Spit.DataStructures;
 
+
 namespace Spit
 {
     class Game : INotifyPropertyChanged
@@ -23,6 +24,10 @@ namespace Spit
         MainWindow wnd = (MainWindow)Application.Current.MainWindow;
 
         public DispatcherTimer countDownTimer = new DispatcherTimer();
+        public DispatcherTimer AIwait = new DispatcherTimer();
+
+        public bool pickAPile = false;
+        public int chosenPile = -1;
 
         public int tick = 0;
 
@@ -44,9 +49,6 @@ namespace Spit
         public Stack[] playerCardPiles = new Stack[5];
         public Stack[] AICardPiles = new Stack[5];
         public Stack[] placePiles = new Stack[2];
-
-        public string[] pileTops = new string[5];
-        public string[] pileTop = new string[5];
 
         string playerFirstPileTop;
         string playerSecondPileTop;
@@ -186,7 +188,6 @@ namespace Spit
             }
         }
 
-
         public Game()
         {
             deck.CreateDeck();
@@ -284,53 +285,59 @@ namespace Spit
             players[0].firstPile.Push(playerPickUp.Pop());
             for (int i = 0; i < 5; i++)
             {
-                if(i < 2)
+                if (playerPickUp.Count != 0)
                 {
-                    players[0].secondPile.Push(playerPickUp.Pop());
-                }
-                if(i < 3)
-                {
-                    players[0].thirdPile.Push(playerPickUp.Pop());
-                }
-                if (i < 4)
-                {
-                    players[0].fourthPile.Push(playerPickUp.Pop());
-                }
-                if (i < 5)
-                {
-                    players[0].fifthPile.Push(playerPickUp.Pop());
+                    if (i < 2)
+                    {
+                        players[0].secondPile.Push(playerPickUp.Pop());
+                    }
+                    if (i < 3)
+                    {
+                        players[0].thirdPile.Push(playerPickUp.Pop());
+                    }
+                    if (i < 4)
+                    {
+                        players[0].fourthPile.Push(playerPickUp.Pop());
+                    }
+                    if (i < 5)
+                    {
+                        players[0].fifthPile.Push(playerPickUp.Pop());
+                    }
                 }
             }
 
             players[1].firstPile.Push(AIPickUp.Pop());
             for (int i = 0; i < 5; i++)
             {
-                if (i < 2)
+                if (AIPickUp.Count != 0)
                 {
-                    players[1].secondPile.Push(AIPickUp.Pop());
-                }
-                if (i < 3)
-                {
-                    players[1].thirdPile.Push(AIPickUp.Pop());
-                }
-                if (i < 4)
-                {
-                    players[1].fourthPile.Push(AIPickUp.Pop());
-                }
-                if (i < 5)
-                {
-                    players[1].fifthPile.Push(AIPickUp.Pop());
+                    if (i < 2)
+                    {
+                        players[1].secondPile.Push(AIPickUp.Pop());
+                    }
+                    if (i < 3)
+                    {
+                        players[1].thirdPile.Push(AIPickUp.Pop());
+                    }
+                    if (i < 4)
+                    {
+                        players[1].fourthPile.Push(AIPickUp.Pop());
+                    }
+                    if (i < 5)
+                    {
+                        players[1].fifthPile.Push(AIPickUp.Pop());
+                    }
                 }
             }
 
-            pile1.Push(AIPickUp.Pop());
-            pile2.Push(playerPickUp.Pop());
+            if (playerPickUp.Count != 0) pile2.Push(playerPickUp.Pop());
+            if (AIPickUp.Count != 0) pile1.Push(AIPickUp.Pop());
         }
 
         public int GetPlayerCardCount()
         {
             int length = 0;
-            if (players[0].firstPile != null) { length++; }
+            length += players[0].firstPile.Length();
             length += players[0].secondPile.Length();
             length += players[0].thirdPile.Length();
             length += players[0].fourthPile.Length();
@@ -341,7 +348,7 @@ namespace Spit
         public int GetAICardCount()
         {
             int length = 0;
-            if (players[1].firstPile != null) { length++; }
+            length += players[1].firstPile.Length();
             length += players[1].secondPile.Length();
             length += players[1].thirdPile.Length();
             length += players[1].fourthPile.Length();
@@ -362,58 +369,127 @@ namespace Spit
             if (target2 == 13) { target2 = 1; }
             else { target2 += 1; }
             if (target3 == 1) { target3 = 13; }
-            else { target3 += 1; }
+            else { target3 -= 1; }
             if (target4 == 13) { target4 = 1; }
             else { target4 += 1; }
 
             // Check if human can play
             bool humanCanPlay = false;
+            int hEmptyPiles = 0;
             foreach(Stack pile in playerCardPiles)
             {
                 if (!pile.IsEmpty())
                 {
-                    int cardNumber = pile.Peek().GetNumber();
+                    int hCardNumber = pile.Peek().GetNumber();
 
-                    if (cardNumber == target1 || cardNumber == target2 || cardNumber == target3 || cardNumber == target4)
-                    {
-                        humanCanPlay = true;
-                    }
-                }   
-            }
-
-            // Check if AI can play
-            bool AICanPlay = false;
-            foreach (Stack pile in AICardPiles)
-            {
-                if (!pile.IsEmpty())
-                {
-                    int cardNumber = pile.Peek().GetNumber();
-
-                    if (cardNumber == target1 || cardNumber == target2 || cardNumber == target3 || cardNumber == target4)
+                    if (hCardNumber == target1 || hCardNumber == target2 || hCardNumber == target3 || hCardNumber == target4)
                     {
                         humanCanPlay = true;
                     }
                 }
+                else { hEmptyPiles++; }
             }
 
-            if(!humanCanPlay && !AICanPlay)
+            // Check if AI can play
+            bool AICanPlay = false;
+            int aiEmptyPiles = 0;
+            foreach (Stack pile in AICardPiles)
             {
-                wnd.timer.Stop();
-                wnd.background.Visibility = Visibility.Visible;
-                wnd.CountDown.Visibility = Visibility.Visible;
-                countDownTimer.Start();
-
-                if(tick == 3)
+                if (!pile.IsEmpty())
                 {
-                    countDownTimer.Stop();
-                    tick = 0;
+                    int aiCardNumber = pile.Peek().GetNumber();
 
-                    wnd.CountDown.Visibility = Visibility.Hidden;
-                    wnd.background.Visibility = Visibility.Hidden;
-                    
-                    pile1.Push(AIPickUp.Pop());
-                    pile2.Push(playerPickUp.Pop());
-                    wnd.timer.Start();
+                    if (aiCardNumber == target1 || aiCardNumber == target2 || aiCardNumber == target3 || aiCardNumber == target4)
+                    {
+                        AICanPlay = true;
+                    }
+                }
+                else { aiEmptyPiles++; }
+            }
+
+            if(hEmptyPiles == 5 || aiEmptyPiles == 5)
+            {
+                StartTimer();
+                pickAPile = true;
+            }
+            else if(!humanCanPlay && !AICanPlay)
+            {
+                if(AIPickUp.Count != 0 && playerPickUp.Count != 0)
+                {
+                    wnd.timer.Stop();
+                    wnd.background.Visibility = Visibility.Visible;
+                    wnd.CountDown.Visibility = Visibility.Visible;
+                    wnd.DrawingText.Visibility = Visibility.Visible;
+                    countDownTimer.Start();
+
+                    if (tick == 3)
+                    {
+                        countDownTimer.Stop();
+                        tick = 0;
+
+                        wnd.CountDown.Visibility = Visibility.Hidden;
+                        wnd.background.Visibility = Visibility.Hidden;
+                        wnd.DrawingText.Visibility = Visibility.Hidden;
+
+                        if (AIPickUp.Count != 0)
+                        {
+                            pile1.Push(AIPickUp.Pop());
+                        }
+                        else
+                        {
+                            wnd.aiStack.Visibility = Visibility.Hidden;
+                        }
+                        if (playerPickUp.Count != 0)
+                        {
+                            pile2.Push(playerPickUp.Pop());
+                        }
+                        else
+                        {
+                            wnd.plStack.Visibility = Visibility.Hidden;
+                        }
+                        wnd.timer.Start();
+                    }
+                }
+            }
+        }
+
+        public void StartTimer()
+        {
+            AIwait.Interval = TimeSpan.FromSeconds(1);
+            AIwait.Tick += ChoosePile;
+            AIwait.Start();
+        }
+
+        public void ChoosePile(object sender, EventArgs e)
+        {
+            AIwait.Stop();
+
+            if(chosenPile != -1)
+            {
+                int pileLen = placePiles[selectedPile].Length();
+                for (int i = 0; i < pileLen; i++)
+                {
+                    playerPickUp.Push(placePiles[selectedPile].Pop());
+                }
+            }
+            else
+            {
+                int pile0Len = placePiles[0].Length();
+                int pile1Len = placePiles[1].Length();
+
+                if (pile0Len < pile1Len)
+                {
+                    for (int i = 0; i < pile0Len; i++)
+                    {
+                        AIPickUp.Push(placePiles[0].Pop());
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < pile1Len; i++)
+                    {
+                        AIPickUp.Push(placePiles[1].Pop());
+                    }
                 }
             }
         }
@@ -445,7 +521,10 @@ namespace Spit
 
             CountDown = 3 - tick;
 
-            CanPlay();
+            if (!pickAPile)
+            {
+                CanPlay();
+            }
         }
 
         public bool IsPileEmpty(int index)

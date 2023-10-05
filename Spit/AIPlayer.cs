@@ -45,17 +45,17 @@ namespace Spit
         {
             if(difficulty == 0 )
             {
-                delay = 1000;
+                delay = 1500;
                 depth = 1;
             }
             if (difficulty == 1)
             {
-                delay = 800;
+                delay = 1200;
                 depth = 1;
             }
             if (difficulty == 2)
             {
-                delay = 600;
+                delay = 900;
                 depth = 3;
             }
 
@@ -204,9 +204,9 @@ namespace Spit
             if (target2 == 13) { target2 = 1; }
             else { target2 += 1; }
             if (target3 == 1) { target3 = 13; }
-            else { target3 += 1; }
+            else { target3 -= 1; }
             if (target4 == 13) { target4 = 1; }
-            else { target4 -= 1; }
+            else { target4 += 1; }
         }
     }
 }
