@@ -11,12 +11,13 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Media.Animation;
 using System.Windows.Threading;
 using Spit.DataStructures;
 
-
 namespace Spit
 {
+    //MVVM for design
     class Game : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -416,7 +417,7 @@ namespace Spit
             {
                 if(AIPickUp.Count != 0 && playerPickUp.Count != 0)
                 {
-                    wnd.timer.Stop();
+                    wnd.aiTimer.Stop();
                     wnd.background.Visibility = Visibility.Visible;
                     wnd.CountDown.Visibility = Visibility.Visible;
                     wnd.DrawingText.Visibility = Visibility.Visible;
@@ -447,7 +448,7 @@ namespace Spit
                         {
                             wnd.plStack.Visibility = Visibility.Hidden;
                         }
-                        wnd.timer.Start();
+                        wnd.aiTimer.Start();
                     }
                 }
             }
@@ -456,20 +457,27 @@ namespace Spit
         public void StartTimer()
         {
             AIwait.Interval = TimeSpan.FromSeconds(1);
-            AIwait.Tick += ChoosePile;
+            AIwait.Tick += AIChoosePile;
             AIwait.Start();
+            wnd.aiTimer.Stop();
         }
 
-        public void ChoosePile(object sender, EventArgs e)
+        public void AIChoosePile(object sender, EventArgs e)
+        {
+            ChoosePile();
+        }
+
+        public void ChoosePile()
         {
             AIwait.Stop();
 
             if(chosenPile != -1)
             {
-                int pileLen = placePiles[selectedPile].Length();
-                for (int i = 0; i < pileLen; i++)
+                int pileLen = placePiles[chosenPile].Length();
+                for (int i = 0; i < pileLen + 1; i++)
                 {
-                    playerPickUp.Push(placePiles[selectedPile].Pop());
+                    playerPickUp.Push(placePiles[chosenPile].Pop());
+                    AIPickUp.Push(placePiles[(chosenPile + 1) % 2].Pop());
                 }
             }
             else
@@ -479,16 +487,18 @@ namespace Spit
 
                 if (pile0Len < pile1Len)
                 {
-                    for (int i = 0; i < pile0Len; i++)
+                    for (int i = 0; i < pile0Len + 1; i++)
                     {
                         AIPickUp.Push(placePiles[0].Pop());
+                        playerPickUp.Push(placePiles[1].Pop());
                     }
                 }
                 else
                 {
-                    for (int i = 0; i < pile1Len; i++)
+                    for (int i = 0; i < pile1Len + 1; i++)
                     {
                         AIPickUp.Push(placePiles[1].Pop());
+                        playerPickUp.Push(placePiles[0].Pop());
                     }
                 }
             }

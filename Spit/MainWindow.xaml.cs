@@ -39,7 +39,7 @@ namespace Spit
 
         Game spit = new Game();
 
-        public DispatcherTimer timer = new DispatcherTimer();
+        public DispatcherTimer aiTimer = new DispatcherTimer();
         DispatcherTimer updateTimer = new DispatcherTimer();
 
         public MainWindow()
@@ -63,7 +63,7 @@ namespace Spit
             placePiles.Add(pile1);
             placePiles.Add(pile2);
 
-            timer.Tick += AiPlay;
+            aiTimer.Tick += AiPlay;
 
             updateTimer.Tick += Update;
             updateTimer.Interval = TimeSpan.FromMilliseconds(10);
@@ -104,7 +104,7 @@ namespace Spit
                 {
                     DisplayPauseMenu(true);
                     DrawingText.Visibility = Visibility.Hidden;
-                    timer.Stop();
+                    aiTimer.Stop();
                     updateTimer.Stop();
                     spit.countDownTimer.Stop();
                 }
@@ -146,8 +146,8 @@ namespace Spit
             spit.Start(difficultyCount);
             DisplayGameUI(true);
 
-            timer.Interval = TimeSpan.FromMilliseconds(spit.players[1].GetDelay());
-            timer.Start();
+            aiTimer.Interval = TimeSpan.FromMilliseconds(spit.players[1].GetDelay());
+            aiTimer.Start();
             updateTimer.Start();
         }
 
@@ -344,6 +344,8 @@ namespace Spit
             if (spit.pickAPile == true)
             {
                 spit.chosenPile = index;
+                spit.AIwait.Stop();
+                spit.ChoosePile();
                 DeselectPile();
             }
             else
@@ -407,7 +409,6 @@ namespace Spit
 
         public void AiPlay(object sender, EventArgs e)
         {
-            //Debug.WriteLine("playing");
             spit.players[1].Move();
         }
 

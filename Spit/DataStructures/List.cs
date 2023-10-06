@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Spit.DataStructures
 {
-    class List
+    class List 
     {
 
         ListNode head;
@@ -102,10 +102,11 @@ namespace Spit.DataStructures
             Card ret = default;
             if (i == 0)
             {
-                if (tmp == null) { throw new ArgumentOutOfRangeException(); }
-                //funny :)
-                ret = head.data;
-                head = tmp.next;
+                if (tmp != null)
+                {
+                    ret = head.data;
+                    head = tmp.next;
+                }
             }
             else
             {
@@ -121,23 +122,6 @@ namespace Spit.DataStructures
                 //less funny (dereferences next node and sets reference to next node over)
                 ret = tmp.next.data;
                 tmp.next = tmp.next.next;
-            }
-
-            return ret;
-        }
-
-        public Card RemoveLast()
-        {
-            tempNode = head;
-            Card ret = default;
-
-            if (head != null)
-            {
-
-
-
-
-
             }
 
             return ret;
