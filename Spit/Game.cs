@@ -526,7 +526,51 @@ namespace Spit
 
         public void ShuffleCards()
         {
+            ///Player pick up cards shuffling
+            //Shuffle cards into array
+            Card[] shuffledDeck = new Card[52];
+            Random rnd = new Random();
+            for (int x = 0; x < shuffledDeck.Length; x++)
+            {
+                int randomSpace = rnd.Next(0, 51);
+                if (playerPickUp.Count != 0)
+                {
+                    while (shuffledDeck[randomSpace] != null)
+                    {
+                        randomSpace = (randomSpace + 1) % shuffledDeck.Length;
+                    }
+                    shuffledDeck[randomSpace] = playerPickUp.Pop();
+                }
+            }
 
+            //Loads cards from array back into the players pick up pile
+            for (int x = 0; x < shuffledDeck.Length; x++)
+            {
+                playerPickUp.Push(shuffledDeck[x]);
+            }
+
+            ///AI pick up cards shuffling
+            //Shuffle cards into array
+            shuffledDeck = new Card[52];
+            rnd = new Random();
+            for (int x = 0; x < shuffledDeck.Length; x++)
+            {
+                int randomSpace = rnd.Next(0, 51);
+                if (AIPickUp.Count != 0)
+                {
+                    while (shuffledDeck[randomSpace] != null)
+                    {
+                        randomSpace = (randomSpace + 1) % shuffledDeck.Length;
+                    }
+                    shuffledDeck[randomSpace] = AIPickUp.Pop();
+                }
+            }
+
+            //Loads cards from array back into the AIs pick up pile
+            for (int x = 0; x < shuffledDeck.Length; x++)
+            {
+                AIPickUp.Push(shuffledDeck[x]);
+            }
         }
 
         public void Update()
