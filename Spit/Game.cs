@@ -288,48 +288,42 @@ namespace Spit
             players[0].firstPile.Push(playerPickUp.Pop());
             for (int i = 0; i < 5; i++)
             {
-                if (playerPickUp.Count != 0)
+                if (i < 2 && playerPickUp.Count != 0)
                 {
-                    if (i < 2)
-                    {
-                        players[0].secondPile.Push(playerPickUp.Pop());
-                    }
-                    if (i < 3)
-                    {
-                        players[0].thirdPile.Push(playerPickUp.Pop());
-                    }
-                    if (i < 4)
-                    {
-                        players[0].fourthPile.Push(playerPickUp.Pop());
-                    }
-                    if (i < 5)
-                    {
-                        players[0].fifthPile.Push(playerPickUp.Pop());
-                    }
+                    players[0].secondPile.Push(playerPickUp.Pop());
+                }
+                if (i < 3 && playerPickUp.Count != 0)
+                {
+                    players[0].thirdPile.Push(playerPickUp.Pop());
+                }
+                if (i < 4 && playerPickUp.Count != 0)
+                {
+                    players[0].fourthPile.Push(playerPickUp.Pop());
+                }
+                if (i < 5 && playerPickUp.Count != 0)
+                {
+                    players[0].fifthPile.Push(playerPickUp.Pop());
                 }
             }
 
             players[1].firstPile.Push(AIPickUp.Pop());
             for (int i = 0; i < 5; i++)
             {
-                if (AIPickUp.Count != 0)
+                if (i < 2 && AIPickUp.Count != 0)
                 {
-                    if (i < 2)
-                    {
-                        players[1].secondPile.Push(AIPickUp.Pop());
-                    }
-                    if (i < 3)
-                    {
-                        players[1].thirdPile.Push(AIPickUp.Pop());
-                    }
-                    if (i < 4)
-                    {
-                        players[1].fourthPile.Push(AIPickUp.Pop());
-                    }
-                    if (i < 5)
-                    {
-                        players[1].fifthPile.Push(AIPickUp.Pop());
-                    }
+                    players[1].secondPile.Push(AIPickUp.Pop());
+                }
+                if (i < 3 && AIPickUp.Count != 0)
+                {
+                    players[1].thirdPile.Push(AIPickUp.Pop());
+                }
+                if (i < 4 && AIPickUp.Count != 0)
+                {
+                    players[1].fourthPile.Push(AIPickUp.Pop());
+                }
+                if (i < 5 && AIPickUp.Count != 0)
+                {
+                    players[1].fifthPile.Push(AIPickUp.Pop());
                 }
             }
 
