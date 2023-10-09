@@ -48,7 +48,7 @@ namespace Spit
             return deck;
         }
 
-        public void Shuffle(Game game)
+        public void Shuffle()
         {
             //Shuffle cards into array
             Card[] shuffledDeck = new Card[52];

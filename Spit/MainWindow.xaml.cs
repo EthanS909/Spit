@@ -31,9 +31,9 @@ namespace Spit
         private int[] reactionTime = { 1500, 1200, 900};
         private int[] movesAhead = { 1, 2, 3};
 
-        List<Button> plCardPiles = new List<Button>();
+        public List<Button> plCardPiles = new List<Button>();
         public List<Image> aiCardPiles = new List<Image>();
-        List<Button> placePiles = new List<Button>();
+        public List<Button> placePiles = new List<Button>();
 
         private Database database = new Database();
 
@@ -93,7 +93,7 @@ namespace Spit
                 {
                     DisplayPauseMenu(false);
                     DrawingText.Visibility = Visibility.Visible;
-                    timer.Start();
+                    aiTimer.Start();
                     updateTimer.Start();
                     if(spit.tick > 0)
                     {
@@ -318,11 +318,6 @@ namespace Spit
             for(int index = 0; index < plCardPiles.Count; index++)
             {
                 plCardPiles[index].BorderThickness = new Thickness(5);
-
-                if (spit.IsPileEmpty(index))
-                {
-                    plCardPiles[index].Visibility = Visibility.Hidden;
-                }
             }
             spit.selectedPile = -1;
         }

@@ -228,6 +228,8 @@ namespace Spit
                 }
             }
 
+            wnd.aiTimer.Start();
+
             return placed;
         }
 
@@ -248,7 +250,7 @@ namespace Spit
             AICardPiles[3] = players[1].fourthPile;
             AICardPiles[4] = players[1].fifthPile;
 
-            deck.Shuffle(this);
+            deck.Shuffle();
 
             SplitCards();
             PlacePlayingCards();
@@ -465,6 +467,11 @@ namespace Spit
         public void AIChoosePile(object sender, EventArgs e)
         {
             ChoosePile();
+            CollectPlayingCards();
+            Update();
+            ShuffleCards();
+            PlacePlayingCards();
+            pickAPile = false;
         }
 
         public void ChoosePile()
@@ -504,6 +511,30 @@ namespace Spit
             }
         }
 
+        public void CollectPlayingCards()
+        {
+            foreach (Stack pile in playerCardPiles)
+            {
+                while (!pile.IsEmpty())
+                {
+                    playerPickUp.Push(pile.Pop());
+                }
+            }
+
+            foreach (Stack pile in AICardPiles)
+            {
+                while (!pile.IsEmpty())
+                {
+                    AIPickUp.Push(pile.Pop());
+                }
+            }
+        }
+
+        public void ShuffleCards()
+        {
+
+        }
+
         public void Update()
         {
             if (!players[0].firstPile.IsEmpty()) { PlayerFirstPileTop = "CardImages/" + players[0].firstPile.Peek().GetNumber() + "_of_" + players[0].firstPile.Peek().GetSuit() + "s.png"; }
@@ -529,17 +560,29 @@ namespace Spit
                 }
             }
 
+            for (int i = 0; i < playerCardPiles.Length; i++)
+            {
+                if (playerCardPiles[i].IsEmpty())
+                {
+                    wnd.plCardPiles[i].Visibility = Visibility.Hidden;
+                }
+            }
+
+            if(pile1.IsEmpty())
+            {
+                wnd.placePiles[0].Visibility = Visibility.Hidden;
+            }
+            if (pile2.IsEmpty())
+            {
+                wnd.placePiles[1].Visibility = Visibility.Hidden;
+            }
+
             CountDown = 3 - tick;
 
             if (!pickAPile)
             {
                 CanPlay();
             }
-        }
-
-        public bool IsPileEmpty(int index)
-        {
-            return playerCardPiles[index].IsEmpty();
         }
     }
 }

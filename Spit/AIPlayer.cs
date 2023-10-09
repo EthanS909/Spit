@@ -153,13 +153,11 @@ namespace Spit
                     if (tempPiles[x].Peek().GetNumber() == target1 || tempPiles[x].Peek().GetNumber() == target2)
                     {
                         game.pile1.Push(tempPiles[x].Pop());
-                        game.Update();
                         return Task.CompletedTask;
                     }
                     else if (tempPiles[x].Peek().GetNumber() == target3 || tempPiles[x].Peek().GetNumber() == target4)
                     {
                         game.pile2.Push(tempPiles[x].Pop());
-                        game.Update();
                         return Task.CompletedTask;
                     }
                 }
