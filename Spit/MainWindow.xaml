@@ -78,7 +78,7 @@
         <Button Name="Play" Grid.Column="1" Grid.Row="2" Content="Play" FontSize="72" Click="Play_Click" Grid.ColumnSpan="5" Margin="192,0,192,0"/>
         <Button Name="Rules" Grid.Column="1" Grid.Row="3" Content="Rules" FontSize="72" Click="Rules_Click" Grid.ColumnSpan="5" Margin="192,0,192,0"/>
         <Button Name="Exit" Grid.Column="1" Grid.Row="4" Content="Exit" FontSize="72" Click="Exit_Click" Grid.ColumnSpan="5" Margin="192,0,192,0"/>
-        <Button Name="AI" Grid.Column="2" Grid.Row="2" Content="Easy" FontSize="72" Click="AI_Click"  Visibility="Hidden" Grid.ColumnSpan="3" Margin="137,0,137,0"/>
+        <Button Name="AI" Grid.Column="2" Grid.Row="2" Content="Easy" FontSize="64" Click="AI_Click"  Visibility="Hidden" Grid.ColumnSpan="3" Margin="137,0,137,0"/>
         <Button Name="Load" Grid.Column="1" Grid.Row="3" Content="Load" FontSize="72" Click="Load_Click" Grid.ColumnSpan="5" Margin="192,0,192,0"  Visibility="Hidden"/>
         <Button Name="Back" Grid.Column="1" Grid.Row="4" Content="⮘ Back" FontSize="72" Click="Back_Click" Grid.ColumnSpan="5" Margin="192,0,192,0"  Visibility="Hidden"/>
         <Button Name="Left" Grid.Column="1" Grid.Row="2" Content="⬶" FontSize="72" Margin="192,0,75,0" Click="Left_Click" Visibility="Hidden" Grid.ColumnSpan="2"/>

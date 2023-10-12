@@ -28,14 +28,10 @@ namespace Spit
         private int target3;
         private int target4;
 
-        private Stack tempPile1 = new Stack();
-        private Stack tempPile2 = new Stack();
+        private Pile tempPile1 = new Pile();
+        private Pile tempPile2 = new Pile();
         
-        private Stack tempPile1st = new Stack();
-        private Stack tempPile2nd = new Stack();
-        private Stack tempPile3rd = new Stack();
-        private Stack tempPile4th = new Stack();
-        private Stack tempPile5th = new Stack();
+        private Hand tempHand = new Hand();
 
         private List<Stack> tempPiles = new List<Stack>();
 
@@ -46,7 +42,7 @@ namespace Spit
             if(difficulty == 0 )
             {
                 delay = 1500;
-                depth = 1;
+                depth = 0;
             }
             if (difficulty == 1)
             {
@@ -56,7 +52,7 @@ namespace Spit
             if (difficulty == 2)
             {
                 delay = 900;
-                depth = 3;
+                depth = 2;
             }
 
             this.game = game;
@@ -64,17 +60,7 @@ namespace Spit
             tempPile1 = game.pile1;
             tempPile2 = game.pile2;
 
-            tempPile1st = piles[0];
-            tempPile2nd = piles[1];
-            tempPile3rd = piles[2];
-            tempPile4th = piles[3];
-            tempPile5th = piles[4];
-
-            tempPiles.Add(tempPile1st);
-            tempPiles.Add(tempPile2nd);
-            tempPiles.Add(tempPile3rd);
-            tempPiles.Add(tempPile4th);
-            tempPiles.Add(tempPile5th);
+            tempHand = hand;
         }
 
         public override int GetDelay()
@@ -87,7 +73,7 @@ namespace Spit
             await CalcBestMove();
         }
 
-        public override Task CalcBestMove()
+        public  Task CalcBestMove()
         {
             bestMove = 0;
 
@@ -113,7 +99,7 @@ namespace Spit
 
             CalcTargets();
 
-            for (int x = 0; x < tempPiles.Count; x++)
+            for (int x = 0; x < hand.piles.Length; x++)
             {
                 /*for (int i = 0; i < tempPiles.Count; i++)
                 {
@@ -148,16 +134,16 @@ namespace Spit
                     }
                 }*/
 
-                if (!tempPiles[x].IsEmpty())
+                if (!hand.piles[x].pile.IsEmpty())
                 {
-                    if (tempPiles[x].Peek().GetNumber() == target1 || tempPiles[x].Peek().GetNumber() == target2)
+                    if (hand.piles[x].pile.Peek().GetNumber() == target1 || hand.piles[x].pile.Peek().GetNumber() == target2)
                     {
-                        game.pile1.Push(tempPiles[x].Pop());
+                        game.pile1.pile.Push(hand.piles[x].pile.Pop());
                         return Task.CompletedTask;
                     }
-                    else if (tempPiles[x].Peek().GetNumber() == target3 || tempPiles[x].Peek().GetNumber() == target4)
+                    else if (hand.piles[x].pile.Peek().GetNumber() == target3 || hand.piles[x].pile.Peek().GetNumber() == target4)
                     {
-                        game.pile2.Push(tempPiles[x].Pop());
+                        game.pile2.pile.Push(hand.piles[x].pile.Pop());
                         return Task.CompletedTask;
                     }
                 }
@@ -190,12 +176,12 @@ namespace Spit
             return Task.CompletedTask;
         }
 
-        public override void CalcTargets()
+        public void CalcTargets()
         {
-            target1 = game.pile1.Peek().GetNumber();
-            target2 = game.pile1.Peek().GetNumber();
-            target3 = game.pile2.Peek().GetNumber();
-            target4 = game.pile2.Peek().GetNumber();
+            target1 = game.pile1.pile.Peek().GetNumber();
+            target2 = game.pile1.pile.Peek().GetNumber();
+            target3 = game.pile2.pile.Peek().GetNumber();
+            target4 = game.pile2.pile.Peek().GetNumber();
 
             if (target1 == 1) { target1 = 13; }
             else { target1 -= 1; }

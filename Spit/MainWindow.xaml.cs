@@ -27,7 +27,7 @@ namespace Spit
     public partial class MainWindow : Window
     {
         private int difficultyCount = 0;
-        private string[] difficulty = { "Begginer", "Intermediate", "Expert" };
+        private string[] difficulty = { "Begginer", "Intermediate", "Advanced" };
         private int[] reactionTime = { 1500, 1200, 900};
         private int[] movesAhead = { 1, 2, 3};
 
@@ -35,12 +35,10 @@ namespace Spit
         public List<Image> aiCardPiles = new List<Image>();
         public List<Button> placePiles = new List<Button>();
 
-        private Database database = new Database();
-
         Game spit = new Game();
 
         public DispatcherTimer aiTimer = new DispatcherTimer();
-        DispatcherTimer updateTimer = new DispatcherTimer();
+        public DispatcherTimer updateTimer = new DispatcherTimer();
 
         public MainWindow()
         {
