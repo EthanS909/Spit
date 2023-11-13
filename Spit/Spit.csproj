@@ -61,11 +61,12 @@
     <None Remove="CardImages\9_of_hearts.png" />
     <None Remove="CardImages\9_of_spades.png" />
     <None Remove="CardImages\back.png" />
+    <None Remove="CardImages\back_of_card.png" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="EntityFramework" Version="6.4.4" />
-    <PackageReference Include="System.Data.SQLite" Version="1.0.117" />
+    <PackageReference Include="System.Data.SQLite" Version="1.0.118" />
   </ItemGroup>
 
   <ItemGroup>
@@ -122,6 +123,7 @@
     <Resource Include="CardImages\9_of_hearts.png" />
     <Resource Include="CardImages\9_of_spades.png" />
     <Resource Include="CardImages\back.png" />
+    <Resource Include="CardImages\back_of_card.png" />
   </ItemGroup>
 
 </Project>

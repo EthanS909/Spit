@@ -27,7 +27,7 @@ namespace Spit
     public partial class MainWindow : Window
     {
         private int difficultyCount = 0;
-        private string[] difficulty = { "Begginer", "Intermediate", "Advanced" };
+        private string[] difficulty = { "Beginer", "Intermediate", "Advanced" };
         private int[] reactionTime = { 1500, 1200, 900};
         private int[] movesAhead = { 1, 2, 3};
 
@@ -35,7 +35,10 @@ namespace Spit
         public List<Image> aiCardPiles = new List<Image>();
         public List<Button> placePiles = new List<Button>();
 
-        Game spit = new Game();
+        List<Image> placePile1 = new List<Image>();
+        List<Image> placePile2 = new List<Image>();
+
+        Game spit;
 
         public DispatcherTimer aiTimer = new DispatcherTimer();
         public DispatcherTimer updateTimer = new DispatcherTimer();
@@ -144,14 +147,28 @@ namespace Spit
             spit.Start(difficultyCount);
             DisplayGameUI(true);
 
-            aiTimer.Interval = TimeSpan.FromMilliseconds(spit.players[1].GetDelay());
+            aiTimer.Interval = TimeSpan.FromMilliseconds(spit.players[Game.AI].GetDelay());
             aiTimer.Start();
             updateTimer.Start();
         }
 
         private void Load_Click(object sender, RoutedEventArgs e)
         {
-            //spit.Load();
+            spit = new Game();
+            SetDataContext();
+            spit.LoadGame();
+
+            spit.Start(difficultyCount);
+            DisplayGameUI(true);
+
+            aiTimer.Interval = TimeSpan.FromMilliseconds(spit.players[Game.AI].GetDelay());
+            aiTimer.Start();
+            updateTimer.Start();
+        }
+
+        private void SaveGame_Click(object sender, RoutedEventArgs e)
+        {
+            spit.SaveGame();
         }
 
         private void Back_Click(object sender, RoutedEventArgs e)
@@ -349,11 +366,6 @@ namespace Spit
             }
         }
 
-        private void SaveGame_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void ExitGame_Click(object sender, RoutedEventArgs e)
         {
             // Hides the Game UI
@@ -363,6 +375,8 @@ namespace Spit
             DisplayStartUI(true);
 
             DisplayPauseMenu(false);
+
+            ResetExtraCardImages();
         }
 
         private void DisplayPauseMenu(bool enabled)
@@ -408,6 +422,69 @@ namespace Spit
         public void Update(object sender, EventArgs e)
         {
             spit.Update();
+            GenerateExtraCardImages(0, -1);
+        }
+
+        int ZIndex = 51;
+        int[] nextInts = { 10, 10, 200, 170 };
+        Thickness next = new Thickness(10, 10, 200, 170);
+        int numberOfCards = 0;
+        public void GenerateExtraCardImages(int pileIndex, int player)
+        {
+            //10,10,190,170
+            //20,20,175,160
+            int length = spit.pile1.pile.Length();
+            int i = 0;
+
+            if (player == -1)
+            {
+                for (i = 0; i < (length / 3) - numberOfCards; i++)
+                {
+                    Image newCardImage = new Image();
+                    newCardImage.Margin = next;
+                    newCardImage.Source = plStack.Source;
+                    Grid.SetColumn(newCardImage, 2);
+                    Grid.SetRow(newCardImage, 2);
+                    Grid.SetRowSpan(newCardImage, 3);
+                    Grid.SetColumnSpan(newCardImage, 2);
+                    Grid.SetZIndex(newCardImage, ZIndex);
+                    ZIndex -= 1;
+                    screen.Children.Add(newCardImage);
+
+                    placePile1.Add(newCardImage);
+
+                    nextInts[0] += 5;
+                    nextInts[1] += 5;
+                    nextInts[2] -= 7;
+                    nextInts[3] -= 5;
+                    next = new Thickness(nextInts[0], nextInts[1], nextInts[2], nextInts[3]);
+                }
+                numberOfCards += i;
+            }
+            else if (player == Game.HUMAN)
+            {
+
+            } else if (player == Game.AI)
+            {
+
+            }
+        }
+
+        public void ResetExtraCardImages()
+        {
+            for (int i = 0; i < placePile1.Count; i++)
+            {
+                screen.Children.Remove(placePile1[i]);
+            }
+            placePile1 = new List<Image>();
+
+            ZIndex = 51;
+            nextInts[0] = 10;
+            nextInts[1] = 10;
+            nextInts[2] = 200;
+            nextInts[3] = 170;
+            next = new Thickness(10, 10, 200, 170);
+            numberOfCards = 0;
         }
     }
 }

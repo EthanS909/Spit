@@ -22,7 +22,7 @@ namespace Spit
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        private Database database = new Database();
+        private Database database;
 
         MainWindow wnd = (MainWindow)Application.Current.MainWindow;
 
@@ -35,8 +35,8 @@ namespace Spit
         public int tick = 0;
 
         const int maxPlayers = 2;
-        const int human = 0;
-        const int ai = 1;
+        public const int HUMAN = 0;
+        public const int AI = 1;
 
         public Deck deck = new Deck();
 
@@ -57,11 +57,11 @@ namespace Spit
         string playerFourthPileTop;
         string playerFifthPileTop;
 
-        string AiFirstPileTop;
-        string AiSecondPileTop;
-        string AiThirdPileTop;
-        string AiFourthPileTop;
-        string AiFifthPileTop;
+        string aiFirstPileTop;
+        string aiSecondPileTop;
+        string aiThirdPileTop;
+        string aiFourthPileTop;
+        string aiFifthPileTop;
 
         string pile1Top;
         string pile2Top;
@@ -135,46 +135,46 @@ namespace Spit
 
         public string AIFirstPileTop
         {
-            get { return AiFirstPileTop; }
+            get { return aiFirstPileTop; }
             set
             {
-                AiFirstPileTop = value;
+                aiFirstPileTop = value;
                 OnPropertyChanged("AIFirstPileTop");
             }
         }
         public string AISecondPileTop
         {
-            get { return AiSecondPileTop; }
+            get { return aiSecondPileTop; }
             set
             {
-                AiSecondPileTop = value;
+                aiSecondPileTop = value;
                 OnPropertyChanged("AISecondPileTop");
             }
         }
         public string AIThirdPileTop
         {
-            get { return AiThirdPileTop; }
+            get { return aiThirdPileTop; }
             set
             {
-                AiThirdPileTop = value;
+                aiThirdPileTop = value;
                 OnPropertyChanged("AIThirdPileTop");
             }
         }
         public string AIFourthPileTop
         {
-            get { return AiFourthPileTop; }
+            get { return aiFourthPileTop; }
             set
             {
-                AiFourthPileTop = value;
+                aiFourthPileTop = value;
                 OnPropertyChanged("AIFourthPileTop");
             }
         }
         public string AIFifthPileTop
         {
-            get { return AiFifthPileTop; }
+            get { return aiFifthPileTop; }
             set
             {
-                AiFifthPileTop = value;
+                aiFifthPileTop = value;
                 OnPropertyChanged("AIFifthPileTop");
             }
         }
@@ -200,6 +200,18 @@ namespace Spit
 
             countDownTimer.Tick += Tick;
             countDownTimer.Interval = TimeSpan.FromSeconds(1);
+
+            database = new Database(this);
+        }
+
+        public void LoadGame()
+        {
+            database.LoadGameState();
+        }
+
+        public void SaveGame()
+        {
+            database.SaveGameState();
         }
 
         private void Tick(object sender, EventArgs e)
@@ -213,7 +225,7 @@ namespace Spit
 
             if (selectedPile != -1)
             {
-                int cardNumber = players[human].hand.piles[selectedPile].pile.Peek().GetNumber();
+                int cardNumber = players[HUMAN].hand.piles[selectedPile].pile.Peek().GetNumber();
                 int target1 = placePiles[pileNum].pile.Peek().GetNumber();
                 int target2 = placePiles[pileNum].pile.Peek().GetNumber();
 
@@ -224,7 +236,7 @@ namespace Spit
 
                 if (cardNumber == target1 || cardNumber == target2)
                 {
-                    placePiles[pileNum].pile.Push(players[human].hand.piles[selectedPile].pile.Pop());
+                    placePiles[pileNum].pile.Push(players[HUMAN].hand.piles[selectedPile].pile.Pop());
 
                     placed = true;
                 }
@@ -238,8 +250,8 @@ namespace Spit
 
         public void Start(int difficulty)
         {
-            players[human] = new HumanPlayer();
-            players[ai] = new AIPlayer(this, difficulty);
+            players[HUMAN] = new HumanPlayer();
+            players[AI] = new AIPlayer(this, difficulty);
 
             deck.Shuffle();
 
@@ -261,60 +273,60 @@ namespace Spit
 
             for(int i = 0; i < length / 2; i++)
             {
-                players[human].hand.pickUpPile.pile.Push(deck.deck.Pop());
+                players[HUMAN].hand.pickUpPile.pile.Push(deck.deck.Pop());
             }
             for (int i = 0; i < length / 2; i++)
             {
-                players[ai].hand.pickUpPile.pile.Push(deck.deck.Pop());
+                players[AI].hand.pickUpPile.pile.Push(deck.deck.Pop());
             }
         }
 
         public void PlacePlayingCards()
         {
-            players[human].hand.firstPile.pile.Push(players[human].hand.pickUpPile.pile.Pop());
+            players[HUMAN].hand.firstPile.pile.Push(players[HUMAN].hand.pickUpPile.pile.Pop());
             for (int i = 0; i < 5; i++)
             {
-                if (i < 2 && players[human].hand.pickUpPile.pile.Length() != 0)
+                if (i < 2 && players[HUMAN].hand.pickUpPile.pile.Length() != 0)
                 {
-                    players[human].hand.secondPile.pile.Push(players[human].hand.pickUpPile.pile.Pop());
+                    players[HUMAN].hand.secondPile.pile.Push(players[HUMAN].hand.pickUpPile.pile.Pop());
                 }
-                if (i < 3 && players[human].hand.pickUpPile.pile.Length() != 0)
+                if (i < 3 && players[HUMAN].hand.pickUpPile.pile.Length() != 0)
                 {
-                    players[human].hand.thirdPile.pile.Push(players[human].hand.pickUpPile.pile.Pop());
+                    players[HUMAN].hand.thirdPile.pile.Push(players[HUMAN].hand.pickUpPile.pile.Pop());
                 }
-                if (i < 4 && players[human].hand.pickUpPile.pile.Length() != 0)
+                if (i < 4 && players[HUMAN].hand.pickUpPile.pile.Length() != 0)
                 {
-                    players[human].hand.fourthPile.pile.Push(players[human].hand.pickUpPile.pile.Pop());
+                    players[HUMAN].hand.fourthPile.pile.Push(players[HUMAN].hand.pickUpPile.pile.Pop());
                 }
-                if (i < 5 && players[human].hand.pickUpPile.pile.Length() != 0)
+                if (i < 5 && players[HUMAN].hand.pickUpPile.pile.Length() != 0)
                 {
-                    players[human].hand.fifthPile.pile.Push(players[human].hand.pickUpPile.pile.Pop());
+                    players[HUMAN].hand.fifthPile.pile.Push(players[HUMAN].hand.pickUpPile.pile.Pop());
                 }
             }
 
-            players[ai].hand.firstPile.pile.Push(players[ai].hand.pickUpPile.pile.Pop());
+            players[AI].hand.firstPile.pile.Push(players[AI].hand.pickUpPile.pile.Pop());
             for (int i = 0; i < 5; i++)
             {
-                if (i < 2 && players[ai].hand.pickUpPile.pile.Length() != 0)
+                if (i < 2 && players[AI].hand.pickUpPile.pile.Length() != 0)
                 {
-                    players[ai].hand.secondPile.pile.Push(players[ai].hand.pickUpPile.pile.Pop());
+                    players[AI].hand.secondPile.pile.Push(players[AI].hand.pickUpPile.pile.Pop());
                 }
-                if (i < 3 && players[ai].hand.pickUpPile.pile.Length() != 0)
+                if (i < 3 && players[AI].hand.pickUpPile.pile.Length() != 0)
                 {
-                    players[ai].hand.thirdPile.pile.Push(players[ai].hand.pickUpPile.pile.Pop());
+                    players[AI].hand.thirdPile.pile.Push(players[AI].hand.pickUpPile.pile.Pop());
                 }
-                if (i < 4 && players[ai].hand.pickUpPile.pile.Length() != 0)
+                if (i < 4 && players[AI].hand.pickUpPile.pile.Length() != 0)
                 {
-                    players[ai].hand.fourthPile.pile.Push(players[ai].hand.pickUpPile.pile.Pop());
+                    players[AI].hand.fourthPile.pile.Push(players[AI].hand.pickUpPile.pile.Pop());
                 }
-                if (i < 5 && players[ai].hand.pickUpPile.pile.Length() != 0)
+                if (i < 5 && players[AI].hand.pickUpPile.pile.Length() != 0)
                 {
-                    players[ai].hand.fifthPile.pile.Push(players[ai].hand.pickUpPile.pile.Pop());
+                    players[AI].hand.fifthPile.pile.Push(players[AI].hand.pickUpPile.pile.Pop());
                 }
             }
 
-            if (players[human].hand.pickUpPile.pile.Length() != 0) pile2.pile.Push(players[human].hand.pickUpPile.pile.Pop());
-            if (players[ai].hand.pickUpPile.pile.Length() != 0) pile1.pile.Push(players[ai].hand.pickUpPile.pile.Pop());
+            if (players[HUMAN].hand.pickUpPile.pile.Length() != 0) pile2.pile.Push(players[HUMAN].hand.pickUpPile.pile.Pop());
+            if (players[AI].hand.pickUpPile.pile.Length() != 0) pile1.pile.Push(players[AI].hand.pickUpPile.pile.Pop());
         }
 
         public void CanPlay()
@@ -337,7 +349,7 @@ namespace Spit
             // Check if human can play
             bool humanCanPlay = false;
             int hEmptyPiles = 0;
-            foreach(Pile pile in players[human].hand.piles)
+            foreach(Pile pile in players[HUMAN].hand.piles)
             {
                 if (!pile.pile.IsEmpty())
                 {
@@ -353,29 +365,29 @@ namespace Spit
 
             // Check if AI can play
             bool AICanPlay = false;
-            int aiEmptyPiles = 0;
-            foreach (Pile pile in players[ai].hand.piles)
+            int AIEmptyPiles = 0;
+            foreach (Pile pile in players[AI].hand.piles)
             {
                 if (!pile.pile.IsEmpty())
                 {
-                    int aiCardNumber = pile.pile.Peek().GetNumber();
+                    int AICardNumber = pile.pile.Peek().GetNumber();
 
-                    if (aiCardNumber == target1 || aiCardNumber == target2 || aiCardNumber == target3 || aiCardNumber == target4)
+                    if (AICardNumber == target1 || AICardNumber == target2 || AICardNumber == target3 || AICardNumber == target4)
                     {
                         AICanPlay = true;
                     }
                 }
-                else { aiEmptyPiles++; }
+                else { AIEmptyPiles++; }
             }
 
-            if(hEmptyPiles == 5 || aiEmptyPiles == 5)
+            if(hEmptyPiles == 5 || AIEmptyPiles == 5)
             {
                 StartTimer();
                 pickAPile = true;
             }
             else if(!humanCanPlay && !AICanPlay)
             {
-                if(players[human].hand.pickUpPile.pile.Length() != 0 && players[ai].hand.pickUpPile.pile.Length() != 0)
+                if(players[HUMAN].hand.pickUpPile.pile.Length() != 0 && players[AI].hand.pickUpPile.pile.Length() != 0)
                 {
                     wnd.aiTimer.Stop();
                     wnd.background.Visibility = Visibility.Visible;
@@ -392,17 +404,17 @@ namespace Spit
                         wnd.background.Visibility = Visibility.Hidden;
                         wnd.DrawingText.Visibility = Visibility.Hidden;
 
-                        if (players[ai].hand.pickUpPile.pile.Length() != 0)
+                        if (players[AI].hand.pickUpPile.pile.Length() != 0)
                         {
-                            pile1.pile.Push(players[ai].hand.pickUpPile.pile.Pop());
+                            pile1.pile.Push(players[AI].hand.pickUpPile.pile.Pop());
                         }
                         else
                         {
                             wnd.aiStack.Visibility = Visibility.Hidden;
                         }
-                        if (players[human].hand.pickUpPile.pile.Length() != 0)
+                        if (players[HUMAN].hand.pickUpPile.pile.Length() != 0)
                         {
-                            pile2.pile.Push(players[human].hand.pickUpPile.pile.Pop());
+                            pile2.pile.Push(players[HUMAN].hand.pickUpPile.pile.Pop());
                         }
                         else
                         {
@@ -410,6 +422,87 @@ namespace Spit
                         }
                         wnd.aiTimer.Start();
                     }
+                }
+                else
+                {
+                    /*int pile1Length = pile1.pile.Length();
+                    int pile2Length = pile2.pile.Length();
+
+                    int numOfCardToRemove = 0;
+
+                    Stack pile1Reversed = new Stack();
+                    Stack pile2Reversed = new Stack();
+
+                    Stack pickup = new Stack();
+
+                    if (pile1Length < pile2Length)
+                    { 
+                        numOfCardToRemove = pile1Length - 1;
+                    }
+                    else if (pile2Length < pile1Length)
+                    {
+                        numOfCardToRemove = pile2Length - 1;
+                    }
+                    else if (pile1Length == pile2Length)
+                    {
+                        numOfCardToRemove = pile1Length - 1;
+                    }
+
+                    for (int i = 0; i < pile1Length; i++)
+                    {
+                        pile1Reversed.Push(pile1.pile.Pop());
+                    }
+                    for (int i = 0; i < pile2Length; i++)
+                    {
+                        pile2Reversed.Push(pile2.pile.Pop());
+                    }
+
+                    for (int i = 0; i < numOfCardToRemove; i++)
+                    {
+                        pickup.Push(pile1Reversed.Pop());
+                        pickup.Push(pile2Reversed.Pop());
+                    }
+
+                    for (int i = 0; i < pile1Reversed.Length(); i++)
+                    {
+                        pile1.pile.Push(pile1Reversed.Pop());
+                    }
+                    for (int i = 0; i < pile2Reversed.Length(); i++)
+                    {
+                        pile2.pile.Push(pile2Reversed.Pop());
+                    }
+
+                    Card[] shuffledPickup = new Card[numOfCardToRemove * 2];
+                    Random rnd = new Random();
+                    while (!pickup.IsEmpty())
+                    {
+                        int randomSpace = rnd.Next(0, (numOfCardToRemove * 2) - 1);
+                        while (shuffledPickup[randomSpace] != null)
+                        {
+                            randomSpace = (randomSpace + 1) % shuffledPickup.Length;
+                        }
+                        shuffledPickup[randomSpace] = pickup.Pop();
+                    }
+
+                    for (int x = 0; x < shuffledPickup.Length; x++)
+                    {
+                        pickup.Push(shuffledPickup[x]);
+                    }
+
+                    for (int i = 0; i < numOfCardToRemove * 2; i++)
+                    {
+                        if(i <= numOfCardToRemove)
+                        {
+                            players[HUMAN].hand.pickUpPile.pile.Push(pickup.Pop());
+                        }
+                        else
+                        {
+                            players[AI].hand.pickUpPile.pile.Push(pickup.Pop());
+                        }
+                    }*/
+
+                    pickAPile = true;
+                    StartTimer();
                 }
             }
         }
@@ -434,8 +527,8 @@ namespace Spit
 
             if(chosenPile != -1)
             {
-                placePiles[chosenPile].Unload(players[human]);
-                placePiles[(chosenPile + 1) % 2].Unload(players[ai]);
+                placePiles[chosenPile].Unload(players[HUMAN]);
+                placePiles[(chosenPile + 1) % 2].Unload(players[AI]);
             }
             else
             {
@@ -444,13 +537,13 @@ namespace Spit
 
                 if (pile0Len < pile1Len)
                 {
-                    placePiles[0].Unload(players[ai]);
-                    placePiles[1].Unload(players[human]);
+                    placePiles[0].Unload(players[AI]);
+                    placePiles[1].Unload(players[HUMAN]);
                 }
                 else
                 {
-                    placePiles[1].Unload(players[ai]);
-                    placePiles[0].Unload(players[human]);
+                    placePiles[1].Unload(players[AI]);
+                    placePiles[0].Unload(players[HUMAN]);
                 }
             }
 
@@ -458,25 +551,26 @@ namespace Spit
             ShuffleCards();
             PlacePlayingCards();
             pickAPile = false;
+            wnd.ResetExtraCardImages();
             wnd.updateTimer.Start();
             wnd.aiTimer.Start();
         }
 
         public void CollectPlayingCards()
         {
-            foreach (Pile pile in players[human].hand.piles)
+            foreach (Pile pile in players[HUMAN].hand.piles)
             {
                 while (!pile.pile.IsEmpty())
                 {
-                    players[human].hand.pickUpPile.pile.Push(pile.pile.Pop());
+                    players[HUMAN].hand.pickUpPile.pile.Push(pile.pile.Pop());
                 }
             }
 
-            foreach (Pile pile in players[ai].hand.piles)
+            foreach (Pile pile in players[AI].hand.piles)
             {
                 while (!pile.pile.IsEmpty())
                 {
-                    players[ai].hand.pickUpPile.pile.Push(pile.pile.Pop());
+                    players[AI].hand.pickUpPile.pile.Push(pile.pile.Pop());
                 }
             }
         }
@@ -485,77 +579,77 @@ namespace Spit
         {
             ///Player pick up cards shuffling
             //Shuffle cards into array
-            if(players[human].hand.pickUpPile.pile.Length() != 0)
+            if(players[HUMAN].hand.pickUpPile.pile.Length() != 0)
             {
-                Card[] shuffledDeck = new Card[players[human].hand.pickUpPile.pile.Length()];
+                Card[] shuffledDeck = new Card[players[HUMAN].hand.pickUpPile.pile.Length()];
                 Random rnd = new Random();
                 for (int x = 0; x < shuffledDeck.Length; x++)
                 {
-                    int randomSpace = rnd.Next(0, players[human].hand.pickUpPile.pile.Length() - 1);
-                    if (players[human].hand.pickUpPile.pile.Length() != 0)
+                    int randomSpace = rnd.Next(0, players[HUMAN].hand.pickUpPile.pile.Length() - 1);
+                    if (players[HUMAN].hand.pickUpPile.pile.Length() != 0)
                     {
                         while (shuffledDeck[randomSpace] != null)
                         {
                             randomSpace = (randomSpace + 1) % shuffledDeck.Length;
                         }
-                        shuffledDeck[randomSpace] = players[human].hand.pickUpPile.pile.Pop();
+                        shuffledDeck[randomSpace] = players[HUMAN].hand.pickUpPile.pile.Pop();
                     }
                 }
 
                 //Loads cards from array back into the players pick up pile
                 for (int x = 0; x < shuffledDeck.Length; x++)
                 {
-                    players[human].hand.pickUpPile.pile.Push(shuffledDeck[x]);
+                    players[HUMAN].hand.pickUpPile.pile.Push(shuffledDeck[x]);
                 }
             }
 
             ///AI pick up cards shuffling
             //Shuffle cards into array
-            if (players[ai].hand.pickUpPile.pile.Length() != 0)
+            if (players[AI].hand.pickUpPile.pile.Length() != 0)
             {
-                Card[] shuffledDeck = new Card[players[ai].hand.pickUpPile.pile.Length()];
+                Card[] shuffledDeck = new Card[players[AI].hand.pickUpPile.pile.Length()];
                 Random rnd = new Random();
                 for (int x = 0; x < shuffledDeck.Length; x++)
                 {
-                    int randomSpace = rnd.Next(0, players[ai].hand.pickUpPile.pile.Length() - 1);
-                    if (players[ai].hand.pickUpPile.pile.Length() != 0)
+                    int randomSpace = rnd.Next(0, players[AI].hand.pickUpPile.pile.Length() - 1);
+                    if (players[AI].hand.pickUpPile.pile.Length() != 0)
                     {
                         while (shuffledDeck[randomSpace] != null)
                         {
                             randomSpace = (randomSpace + 1) % shuffledDeck.Length;
                         }
-                        shuffledDeck[randomSpace] = players[ai].hand.pickUpPile.pile.Pop();
+                        shuffledDeck[randomSpace] = players[AI].hand.pickUpPile.pile.Pop();
                     }
                 }
 
                 //Loads cards from array back into the AIs pick up pile
                 for (int x = 0; x < shuffledDeck.Length; x++)
                 {
-                    players[ai].hand.pickUpPile.pile.Push(shuffledDeck[x]);
+                    players[AI].hand.pickUpPile.pile.Push(shuffledDeck[x]);
                 }
             }
         }
 
         public void Update()
         {
-            if (!players[human].hand.firstPile.pile.IsEmpty()) { PlayerFirstPileTop = "CardImages/" + players[human].hand.firstPile.pile.Peek().GetNumber() + "_of_" + players[human].hand.firstPile.pile.Peek().GetSuit() + "s.png"; }
-            if (!players[human].hand.secondPile.pile.IsEmpty()) { PlayerSecondPileTop = "CardImages/" + players[human].hand.secondPile.pile.Peek().GetNumber() + "_of_" + players[human].hand.secondPile.pile.Peek().GetSuit() + "s.png"; }
-            if (!players[human].hand.thirdPile.pile.IsEmpty()) { PlayerThirdPileTop = "CardImages/" + players[human].hand.thirdPile.pile.Peek().GetNumber() + "_of_" + players[human].hand.thirdPile.pile.Peek().GetSuit() + "s.png"; }
-            if (!players[human].hand.fourthPile.pile.IsEmpty()) { PlayerFourthPileTop = "CardImages/" + players[human].hand.fourthPile.pile.Peek().GetNumber() + "_of_" + players[human].hand.fourthPile.pile.Peek().GetSuit() + "s.png"; }
-            if (!players[human].hand.fifthPile.pile.IsEmpty()) { PlayerFifthPileTop = "CardImages/" + players[human].hand.fifthPile.pile.Peek().GetNumber() + "_of_" + players[human].hand.fifthPile.pile.Peek().GetSuit() + "s.png"; }
+            if (!players[HUMAN].hand.firstPile.pile.IsEmpty()) { PlayerFirstPileTop = "CardImages/" + players[HUMAN].hand.firstPile.pile.Peek().GetNumber() + "_of_" + players[HUMAN].hand.firstPile.pile.Peek().GetSuit() + "s.png"; }
+            if (!players[HUMAN].hand.secondPile.pile.IsEmpty()) { PlayerSecondPileTop = "CardImages/" + players[HUMAN].hand.secondPile.pile.Peek().GetNumber() + "_of_" + players[HUMAN].hand.secondPile.pile.Peek().GetSuit() + "s.png"; }
+            if (!players[HUMAN].hand.thirdPile.pile.IsEmpty()) { PlayerThirdPileTop = "CardImages/" + players[HUMAN].hand.thirdPile.pile.Peek().GetNumber() + "_of_" + players[HUMAN].hand.thirdPile.pile.Peek().GetSuit() + "s.png"; }
+            if (!players[HUMAN].hand.fourthPile.pile.IsEmpty()) { PlayerFourthPileTop = "CardImages/" + players[HUMAN].hand.fourthPile.pile.Peek().GetNumber() + "_of_" + players[HUMAN].hand.fourthPile.pile.Peek().GetSuit() + "s.png"; }
+            if (!players[HUMAN].hand.fifthPile.pile.IsEmpty()) { PlayerFifthPileTop = "CardImages/" + players[HUMAN].hand.fifthPile.pile.Peek().GetNumber() + "_of_" + players[HUMAN].hand.fifthPile.pile.Peek().GetSuit() + "s.png"; }
 
-            if (!players[ai].hand.firstPile.pile.IsEmpty()) { AIFirstPileTop = "CardImages/" + players[ai].hand.firstPile.pile.Peek().GetNumber() + "_of_" + players[ai].hand.firstPile.pile.Peek().GetSuit() + "s.png"; }
-            if (!players[ai].hand.secondPile.pile.IsEmpty()) { AISecondPileTop = "CardImages/" + players[ai].hand.secondPile.pile.Peek().GetNumber() + "_of_" + players[ai].hand.secondPile.pile.Peek().GetSuit() + "s.png"; }
-            if (!players[ai].hand.thirdPile.pile.IsEmpty()) { AIThirdPileTop = "CardImages/" + players[ai].hand.thirdPile.pile.Peek().GetNumber() + "_of_" + players[ai].hand.thirdPile.pile.Peek().GetSuit() + "s.png"; }
-            if (!players[ai].hand.fourthPile.pile.IsEmpty()) { AIFourthPileTop = "CardImages/" + players[ai].hand.fourthPile.pile.Peek().GetNumber() + "_of_" + players[ai].hand.fourthPile.pile.Peek().GetSuit() + "s.png"; }
-            if (!players[ai].hand.fifthPile.pile.IsEmpty()) { AIFifthPileTop = "CardImages/" + players[ai].hand.fifthPile.pile.Peek().GetNumber() + "_of_" + players[ai].hand.fifthPile.pile.Peek().GetSuit() + "s.png"; }
+            if (!players[AI].hand.firstPile.pile.IsEmpty()) { AIFirstPileTop = "CardImages/" + players[AI].hand.firstPile.pile.Peek().GetNumber() + "_of_" + players[AI].hand.firstPile.pile.Peek().GetSuit() + "s.png"; }
+            if (!players[AI].hand.secondPile.pile.IsEmpty()) { AISecondPileTop = "CardImages/" + players[AI].hand.secondPile.pile.Peek().GetNumber() + "_of_" + players[AI].hand.secondPile.pile.Peek().GetSuit() + "s.png"; }
+            if (!players[AI].hand.thirdPile.pile.IsEmpty()) { AIThirdPileTop = "CardImages/" + players[AI].hand.thirdPile.pile.Peek().GetNumber() + "_of_" + players[AI].hand.thirdPile.pile.Peek().GetSuit() + "s.png"; }
+            if (!players[AI].hand.fourthPile.pile.IsEmpty()) { AIFourthPileTop = "CardImages/" + players[AI].hand.fourthPile.pile.Peek().GetNumber() + "_of_" + players[AI].hand.fourthPile.pile.Peek().GetSuit() + "s.png"; }
+            if (!players[AI].hand.fifthPile.pile.IsEmpty()) { AIFifthPileTop = "CardImages/" + players[AI].hand.fifthPile.pile.Peek().GetNumber() + "_of_" + players[AI].hand.fifthPile.pile.Peek().GetSuit() + "s.png"; }
 
-            Pile1Top = "CardImages/" + pile1.pile.Peek().GetNumber() + "_of_" + pile1.pile.Peek().GetSuit() + "s.png";
-            Pile2Top = "CardImages/" + pile2.pile.Peek().GetNumber() + "_of_" + pile2.pile.Peek().GetSuit() + "s.png";
+            if (!pile1.pile.IsEmpty()) Pile1Top = "CardImages/" + pile1.pile.Peek().GetNumber() + "_of_" + pile1.pile.Peek().GetSuit() + "s.png";
+            if (!pile2.pile.IsEmpty()) Pile2Top = "CardImages/" + pile2.pile.Peek().GetNumber() + "_of_" + pile2.pile.Peek().GetSuit() + "s.png";
 
             for (int i = 0; i < AICardPiles.Length; i++)
             {
-                if (players[ai].hand.piles[i].pile.IsEmpty())
+                if (players[AI].hand.piles[i].pile.IsEmpty())
                 {
                     wnd.aiCardPiles[i].Visibility = Visibility.Hidden;
                 }
@@ -563,7 +657,7 @@ namespace Spit
 
             for (int i = 0; i < playerCardPiles.Length; i++)
             {
-                if (players[human].hand.piles[i].pile.IsEmpty())
+                if (players[HUMAN].hand.piles[i].pile.IsEmpty())
                 {
                     wnd.plCardPiles[i].Visibility = Visibility.Hidden;
                 }
@@ -580,7 +674,7 @@ namespace Spit
 
             for (int i = 0; i < AICardPiles.Length; i++)
             {
-                if (!players[ai].hand.piles[i].pile.IsEmpty())
+                if (!players[AI].hand.piles[i].pile.IsEmpty())
                 {
                     wnd.aiCardPiles[i].Visibility = Visibility.Visible;
                 }
@@ -588,7 +682,7 @@ namespace Spit
 
             for (int i = 0; i < playerCardPiles.Length; i++)
             {
-                if (!players[human].hand.piles[i].pile.IsEmpty())
+                if (!players[HUMAN].hand.piles[i].pile.IsEmpty())
                 {
                     wnd.plCardPiles[i].Visibility = Visibility.Visible;
                 }

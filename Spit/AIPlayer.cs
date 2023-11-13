@@ -192,5 +192,89 @@ namespace Spit
             if (target4 == 13) { target4 = 1; }
             else { target4 += 1; }
         }
+
+        public void MinMax()
+        {
+            bestMove = 0;
+
+            int bestScore = 0;
+            int score = 0;
+
+            List pile1 = new List();
+            List pile2 = new List();
+            List pile3 = new List();
+            List pile4 = new List();
+            List pile5 = new List();
+
+            List<List> piles = new List<List>
+            {
+                pile1,
+                pile2,
+                pile3,
+                pile4,
+                pile5
+            };
+
+            List<int> order = new List<int>();
+
+            CalcTargets();
+
+            for (int x = 0; x < hand.piles.Length; x++)
+            {
+                /*for (int i = 0; i < tempPiles.Count; i++)
+                {
+                    if (tempPiles[i].Peek().GetNumber() == target1 || tempPiles[i].Peek().GetNumber() == target2)
+                    {
+                        target1 = tempPiles[i].Peek().GetNumber() + 1;
+                        if (target1 > 13) target1 = 1;
+
+                        target2 = tempPiles[i].Peek().GetNumber() - 1;
+                        if (target2 < 1) target2 = 13;
+
+                        piles[i].AddLast(tempPiles[i].Pop());
+
+                        order.Add(i);
+
+                        score++;
+                    }
+
+                    else if (tempPiles[i].Peek().GetNumber() == target3 || tempPiles[i].Peek().GetNumber() == target4)
+                    {
+                        target3 = tempPiles[i].Peek().GetNumber() + 1;
+                        if (target3 > 13) target3 = 1;
+
+                        target4 = tempPiles[i].Peek().GetNumber() - 1;
+                        if (target4 < 1) target4 = 13;
+
+                        piles[i].AddLast(tempPiles[i].Pop());
+
+                        order.Add(i);
+
+                        score++;
+                    }
+                }*/
+            }
+
+            /*List<Card> cardsToPlace = new List<Card>();
+
+
+            if (order.Count == 0)
+            {
+                for (int i = 0; i < order.Count; i++)
+                {
+                    cardsToPlace.Add(piles[order.Last()].RemoveAt(piles[order.Last()].Count()));
+                }
+            }
+
+            CalcTargets();
+
+            if(cardsToPlace.Last().GetNumber() == target1 || cardsToPlace.Last().GetNumber() == target2)
+            {
+                game.pile1.Push(cardsToPlace.Last());
+            } else if(cardsToPlace.Last().GetNumber() == target3 || cardsToPlace.Last().GetNumber() == target4)
+            {
+                game.pile2.Push(cardsToPlace.Last());
+            }*/
+        }
     }
 }

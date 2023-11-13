@@ -14,7 +14,7 @@ namespace Spit
         public void Unload(Player player)
         {
             int pileLen = pile.Length();
-            for (int i = 0; i < pileLen + 1; i++)
+            for (int i = 0; i < pileLen; i++)
             {
                 player.hand.pickUpPile.pile.Push(pile.Pop());
             }

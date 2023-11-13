@@ -14,18 +14,17 @@ namespace Spit.DataStructures
 
         public int Count()
         {
-            int count = 0;
+            return Length(head);
+        }
 
-            if (head == null) return 0;
-
-            tempNode = head;
-            while (tempNode.next != null)
+        private int Length(ListNode node)
+        {
+            //if node == null, the list is empty
+            if (node != null)
             {
-                tempNode = tempNode.next;
-                count++;
+                return 1 + Length(node.next);
             }
-
-            return count;
+            else { return 0; }
         }
 
         public void AddLast(Card inp)
@@ -102,11 +101,10 @@ namespace Spit.DataStructures
             Card ret = default;
             if (i == 0)
             {
-                if (tmp != null)
-                {
-                    ret = head.data;
-                    head = tmp.next;
-                }
+                if (tmp == null) { throw new ArgumentOutOfRangeException(); }
+                //funny :)
+                ret = head.data;
+                head = tmp.next;
             }
             else
             {
@@ -118,6 +116,8 @@ namespace Spit.DataStructures
                     if (tmp == null) { throw new ArgumentOutOfRangeException(); }
                     tmp = tmp.next;
                     i--;
+                    //funny >:)
+                    if (tmp.next == null) { throw new ArgumentOutOfRangeException(); }
                 }
                 //less funny (dereferences next node and sets reference to next node over)
                 ret = tmp.next.data;

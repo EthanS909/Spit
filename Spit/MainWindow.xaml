@@ -16,7 +16,7 @@
             <GradientStop Color="DarkGreen" Offset="1.0"/>
         </LinearGradientBrush>
     </Window.Background>
-    <Grid>
+    <Grid Name="screen">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
@@ -34,8 +34,8 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Image Name="plStack" Source="CardImages/back.png" Grid.Column="6" Grid.Row="2" Grid.RowSpan="2" Margin="0,0,0,0" Visibility="Hidden"/>
-        <Image Name="aiStack" Source="CardImages/back.png" Grid.Column="0" Grid.Row="2" Grid.RowSpan="2" Margin="0,0,0,0" Visibility="Hidden"/>
+        <Image Name="plStack" Source="CardImages/back_of_card.png" Grid.Column="6" Grid.Row="2" Grid.RowSpan="2" Margin="0,0,0,0" Visibility="Hidden"/>
+        <Image Name="aiStack" Source="CardImages/back_of_card.png" Grid.Column="0" Grid.Row="2" Grid.RowSpan="2" Margin="0,0,0,0" Visibility="Hidden"/>
         <Button Name="plPile1"  Click="Card_Click" Grid.Column="1" Grid.RowSpan="2" Margin="0,20,0,0" Background="Transparent" Grid.Row="4" Visibility="Hidden" BorderThickness="5" BorderBrush="Transparent">
             <Image Name="card1" Source="{Binding PlayerFirstPileTop}"/>
         </Button>
@@ -51,10 +51,10 @@
         <Button Name="plPile5"  Click="Card_Click" Grid.Column="5" Grid.RowSpan="2" Margin="0,20,0,0" Background="Transparent" Grid.Row="4" Visibility="Hidden" BorderThickness="5" BorderBrush="Transparent">
             <Image Name="card5" Source="{Binding PlayerFifthPileTop}"/>
         </Button>
-        <Button Name="pile1" Click="PlaceCard" Grid.Column="2" Grid.Row="2" Grid.RowSpan="2" Margin="0,0,205,0" Grid.ColumnSpan="2" Background="Transparent" Visibility="Hidden">
+        <Button Name="pile1" Click="PlaceCard" Grid.Column="2" Grid.Row="2" Grid.RowSpan="2" Margin="0,0,205,0" Grid.ColumnSpan="2" Background="Transparent" Visibility="Hidden" Panel.ZIndex="52" BorderThickness="0">
             <Image Name="pile1Card" Source="{Binding Pile1Top}"/>
         </Button>
-        <Button Name="pile2" Click="PlaceCard" Grid.Column="3" Grid.Row="2" Grid.RowSpan="2" Margin="205,0,0,0" Grid.ColumnSpan="2" Background="Transparent" Visibility="Hidden">
+        <Button Name="pile2" Click="PlaceCard" Grid.Column="3" Grid.Row="2" Grid.RowSpan="2" Margin="205,0,0,0" Grid.ColumnSpan="2" Background="Transparent" Visibility="Hidden" Panel.ZIndex="52" BorderThickness="0">
             <Image Name="pile2Card" Source="{Binding Pile2Top}"/>
         </Button>
         <Border Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" BorderThickness="5" BorderBrush="Transparent">
@@ -72,20 +72,20 @@
         <Border Grid.Column="5" Grid.Row="0" Grid.RowSpan="2" BorderThickness="5" BorderBrush="Transparent">
             <Image Name="aiPile1" Source="{Binding AIFirstPileTop}" Margin="0,0,0,0" Visibility="Hidden"/>
         </Border>
-        <Rectangle Name="background" Fill="Black" Grid.Column="0" Grid.Row="0" Grid.RowSpan="6" Grid.ColumnSpan="7" Opacity="0.5" Visibility="Hidden"/>
-        <TextBlock Name="CountDown" Text="{Binding CountDown}" Grid.Column="3" Grid.Row="2" Grid.RowSpan="2" FontSize="256" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Hidden"/>
-        <TextBlock Name="DrawingText" Text="Drawing Cards in" Grid.Column="2" Grid.ColumnSpan="3" Grid.Row="1" FontSize="64" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Hidden"/>
-        <Button Name="Play" Grid.Column="1" Grid.Row="2" Content="Play" FontSize="72" Click="Play_Click" Grid.ColumnSpan="5" Margin="192,0,192,0"/>
-        <Button Name="Rules" Grid.Column="1" Grid.Row="3" Content="Rules" FontSize="72" Click="Rules_Click" Grid.ColumnSpan="5" Margin="192,0,192,0"/>
-        <Button Name="Exit" Grid.Column="1" Grid.Row="4" Content="Exit" FontSize="72" Click="Exit_Click" Grid.ColumnSpan="5" Margin="192,0,192,0"/>
-        <Button Name="AI" Grid.Column="2" Grid.Row="2" Content="Easy" FontSize="64" Click="AI_Click"  Visibility="Hidden" Grid.ColumnSpan="3" Margin="137,0,137,0"/>
-        <Button Name="Load" Grid.Column="1" Grid.Row="3" Content="Load" FontSize="72" Click="Load_Click" Grid.ColumnSpan="5" Margin="192,0,192,0"  Visibility="Hidden"/>
-        <Button Name="Back" Grid.Column="1" Grid.Row="4" Content="⮘ Back" FontSize="72" Click="Back_Click" Grid.ColumnSpan="5" Margin="192,0,192,0"  Visibility="Hidden"/>
-        <Button Name="Left" Grid.Column="1" Grid.Row="2" Content="⬶" FontSize="72" Margin="192,0,75,0" Click="Left_Click" Visibility="Hidden" Grid.ColumnSpan="2"/>
-        <Button Name="Right" Grid.Column="4" Grid.Row="2" Content="⤅" FontSize="72" Margin="75,0,192,0" Click="Right_Click" Visibility="Hidden" Grid.ColumnSpan="2"/>
-        <TextBlock Name ="AI_Difficulty" Grid.Column="2" HorizontalAlignment="Left" Grid.Row="1" Text="TextBlock" VerticalAlignment="Top" FontSize="36" Foreground="White" Grid.ColumnSpan="2" Visibility="Hidden"/>
-        <Button Name="Save" Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="3" Content="Save Game" FontSize="72" Click="SaveGame_Click" Visibility="Hidden"/>
-        <Button Name="Rules2" Grid.Column="2" Grid.Row="3" Grid.ColumnSpan="3" Content="Rules" FontSize="72" Click="Rules_Click" Visibility="Hidden"/>
-        <Button Name="ExitGame" Grid.Column="2" Grid.Row="4" Grid.ColumnSpan="3" Content="Exit Game" FontSize="72" Click="ExitGame_Click" Visibility="Hidden"/>
+        <Rectangle Name="background" Fill="Black" Grid.Column="0" Grid.Row="0" Grid.RowSpan="6" Grid.ColumnSpan="7" Opacity="0.5" Visibility="Hidden" Panel.ZIndex="53"/>
+        <TextBlock Name="CountDown" Text="{Binding CountDown}" Grid.Column="3" Grid.Row="2" Grid.RowSpan="2" FontSize="256" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Hidden" Panel.ZIndex="53"/>
+        <TextBlock Name="DrawingText" Text="Drawing Cards in" Grid.Column="2" Grid.ColumnSpan="3" Grid.Row="1" FontSize="64" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Hidden" Panel.ZIndex="53"/>
+        <Button Name="Play" Grid.Column="1" Grid.Row="2" Content="Play" FontSize="72" Click="Play_Click" Grid.ColumnSpan="5" Margin="192,0,192,0" Visibility="Visible" Panel.ZIndex="53"/>
+        <Button Name="Rules" Grid.Column="1" Grid.Row="3" Content="Rules" FontSize="72" Click="Rules_Click" Grid.ColumnSpan="5" Margin="192,0,192,0" Visibility="Visible" Panel.ZIndex="53"/>
+        <Button Name="Exit" Grid.Column="1" Grid.Row="4" Content="Exit" FontSize="72" Click="Exit_Click" Grid.ColumnSpan="5" Margin="192,0,192,0" Visibility="Visible" Panel.ZIndex="53"/>
+        <Button Name="AI" Grid.Column="2" Grid.Row="2" Content="Easy" FontSize="64" Click="AI_Click"  Visibility="Hidden" Grid.ColumnSpan="3" Margin="137,0,137,0" Panel.ZIndex="53"/>
+        <Button Name="Load" Grid.Column="1" Grid.Row="3" Content="Load" FontSize="72" Click="Load_Click" Grid.ColumnSpan="5" Margin="192,0,192,0"  Visibility="Hidden" Panel.ZIndex="53"/>
+        <Button Name="Back" Grid.Column="1" Grid.Row="4" Content="⮘ Back" FontSize="72" Click="Back_Click" Grid.ColumnSpan="5" Margin="192,0,192,0"  Visibility="Hidden" Panel.ZIndex="53"/>
+        <Button Name="Left" Grid.Column="1" Grid.Row="2" Content="⬶" FontSize="72" Margin="192,0,75,0" Click="Left_Click" Visibility="Hidden" Grid.ColumnSpan="2" Panel.ZIndex="53"/>
+        <Button Name="Right" Grid.Column="4" Grid.Row="2" Content="⤅" FontSize="72" Margin="75,0,192,0" Click="Right_Click" Visibility="Hidden" Grid.ColumnSpan="2" Panel.ZIndex="53"/>
+        <TextBlock Name ="AI_Difficulty" Grid.Column="2" HorizontalAlignment="Left" Grid.Row="1" Text="TextBlock" VerticalAlignment="Top" FontSize="36" Foreground="White" Grid.ColumnSpan="2" Visibility="Hidden" Panel.ZIndex="53"/>
+        <Button Name="Save" Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="3" Content="Save Game" FontSize="72" Click="SaveGame_Click" Visibility="Hidden" Panel.ZIndex="53"/>
+        <Button Name="Rules2" Grid.Column="2" Grid.Row="3" Grid.ColumnSpan="3" Content="Rules" FontSize="72" Click="Rules_Click" Visibility="Hidden" Panel.ZIndex="53"/>
+        <Button Name="ExitGame" Grid.Column="2" Grid.Row="4" Grid.ColumnSpan="3" Content="Exit Game" FontSize="72" Click="ExitGame_Click" Visibility="Hidden" Panel.ZIndex="53"/>
     </Grid>
 </Window>

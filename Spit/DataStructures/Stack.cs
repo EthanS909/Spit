@@ -20,13 +20,13 @@ namespace Spit.DataStructures
 
         public Card Pop()
         {
-            Card card = stack.RemoveAt(stack.Count());
+            Card card = stack.RemoveAt(stack.Count() - 1);
             return card;
         }
 
         public Card Peek()
         {
-            return stack.GetData(stack.Count());
+            return stack.GetData(stack.Count() - 1);
         }
 
         public bool IsEmpty() { return stack.IsEmpty(); }
