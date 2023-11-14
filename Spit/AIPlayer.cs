@@ -20,8 +20,8 @@ namespace Spit
 
         // Number of moves the AI looks ahead to choose the best card to place
         private int depth;
-
         private int bestMove;
+        private int difficulty;
 
         private int target1;
         private int target2;
@@ -39,6 +39,8 @@ namespace Spit
 
         public AIPlayer(Game game, int difficulty)
         {
+            this.difficulty = difficulty;
+
             if(difficulty == 0 )
             {
                 delay = 1500;
@@ -66,6 +68,11 @@ namespace Spit
         public override int GetDelay()
         {
             return delay;
+        }
+
+        public override int GetDifficulty()
+        {
+            return difficulty;
         }
 
         public override async void Move()

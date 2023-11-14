@@ -204,6 +204,12 @@ namespace Spit
             database = new Database(this);
         }
 
+        public void CreatePlayers(int difficulty)
+        {
+            players[HUMAN] = new HumanPlayer();
+            players[AI] = new AIPlayer(this, difficulty);
+        }
+
         public void LoadGame()
         {
             database.LoadGameState();
@@ -250,8 +256,7 @@ namespace Spit
 
         public void Start(int difficulty)
         {
-            players[HUMAN] = new HumanPlayer();
-            players[AI] = new AIPlayer(this, difficulty);
+            CreatePlayers(difficulty);
 
             deck.Shuffle();
 

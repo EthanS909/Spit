@@ -43,15 +43,18 @@ namespace Spit
         {
             SQLiteCommand cmd = conn.CreateCommand();
 
-            string createHumanPlayerHandTableCmd = "DROP TABLE HumanPlayerHand";
-            string createAIPlayerHandTableCmd = "DROP TABLE AIPlayerHand";
-            string createPlacePilesTableCmd = "DROP TABLE PlacePile";
+            string dropHumanPlayerHandTableCmd = "DROP TABLE HumanPlayerHand";
+            string dropAIPlayerHandTableCmd = "DROP TABLE AIPlayerHand";
+            string dropPlacePilesTableCmd = "DROP TABLE PlacePile";
+            string dropAIDifficultyCmd = "DROP TABLE AIDifficulty";
 
-            cmd.CommandText = createHumanPlayerHandTableCmd;
+            cmd.CommandText = dropHumanPlayerHandTableCmd;
             cmd.ExecuteNonQuery();
-            cmd.CommandText = createAIPlayerHandTableCmd;
+            cmd.CommandText = dropAIPlayerHandTableCmd;
             cmd.ExecuteNonQuery();
-            cmd.CommandText = createPlacePilesTableCmd;
+            cmd.CommandText = dropPlacePilesTableCmd;
+            cmd.ExecuteNonQuery();
+            cmd.CommandText = dropAIDifficultyCmd;
             cmd.ExecuteNonQuery();
         }
 
@@ -62,12 +65,15 @@ namespace Spit
             string createHumanPlayerHandTableCmd = "CREATE TABLE HumanPlayerHand(Col1 INT, Col2 VARCHAR(7), Col3 INT)";
             string createAIPlayerHandTableCmd = "CREATE TABLE AIPlayerHand(Col1 INT, Col2 VARCHAR(7), Col3 INT)";
             string createPlacePilesTableCmd = "CREATE TABLE PlacePile(Col1 INT, Col2 VARCHAR(7), Col3 INT)";
+            string createAIDifficultyTableCmd = "CREATE TABLE AIDifficulty(Col1 INT)";
 
             cmd.CommandText = createHumanPlayerHandTableCmd;
             cmd.ExecuteNonQuery();
             cmd.CommandText = createAIPlayerHandTableCmd;
             cmd.ExecuteNonQuery();
             cmd.CommandText = createPlacePilesTableCmd;
+            cmd.ExecuteNonQuery();
+            cmd.CommandText = createAIDifficultyTableCmd;
             cmd.ExecuteNonQuery();
         }
 
@@ -115,6 +121,10 @@ namespace Spit
                 cmd.ExecuteNonQuery();
             }
 
+            //Stores AIs difficulty in database
+            cmd.CommandText = "INSERT INTO AIDifficulty(Col1) VALUES(" + game.players[Game.AI].GetDifficulty() + ")";
+            cmd.ExecuteNonQuery();
+
 
             for (int i = 0; i < game.pile1.pile.Length(); i++)
             {
@@ -135,9 +145,18 @@ namespace Spit
 
         private void ReadData(SQLiteConnection conn)
         {
-            Hand plHand = new Hand();
             SQLiteCommand cmd = conn.CreateCommand();
             SQLiteDataReader datareader;
+            cmd.CommandText = "SELECT * FROM AIDifficulty";
+            datareader = cmd.ExecuteReader();
+            datareader.Read();
+
+            int difficulty = datareader.GetInt32(0);
+            game.CreatePlayers(difficulty);
+
+            datareader.Close();
+
+            Hand plHand = new Hand();
             cmd.CommandText = "SELECT * FROM HumanPlayerHand";
             datareader = cmd.ExecuteReader();
             while (datareader.Read())
@@ -159,7 +178,7 @@ namespace Spit
             }
             game.players[Game.HUMAN].hand = plHand;
 
-
+            datareader.Close();
 
             Hand aiHand = new Hand();
             cmd.CommandText = "SELECT * FROM AIPlayerHand";
@@ -167,8 +186,8 @@ namespace Spit
             while (datareader.Read())
             {
                 string cardSuit = datareader.GetString(1);
-                int cardNum = Convert.ToInt32(datareader.GetString(0));
-                int pileNum = Convert.ToInt32(datareader.GetString(2));
+                int cardNum = datareader.GetInt32(0);
+                int pileNum = datareader.GetInt32(2);
 
                 Card card = new Card(cardSuit, cardNum);
 
@@ -183,22 +202,22 @@ namespace Spit
             }
             game.players[Game.AI].hand = aiHand;
 
-
+            datareader.Close();
 
             Pile pile = new Pile();
-            cmd.CommandText = "SELECT * FROM PlacePiles";
+            cmd.CommandText = "SELECT * FROM PlacePile";
             datareader = cmd.ExecuteReader();
             while (datareader.Read())
             {
                 string cardSuit = datareader.GetString(1);
-                int cardNum = Convert.ToInt32(datareader.GetString(0));
-                int pileNum = Convert.ToInt32(datareader.GetString(2));
+                int cardNum = datareader.GetInt32(0);
+                int pileNum = datareader.GetInt32(2);
 
                 Card card = new Card(cardSuit, cardNum);
 
                 game.placePiles[pileNum].pile.Push(card);
             }
-
+            datareader.Close();
 
             conn.Close();
         }

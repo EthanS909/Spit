@@ -27,7 +27,7 @@ namespace Spit
     public partial class MainWindow : Window
     {
         private int difficultyCount = 0;
-        private string[] difficulty = { "Beginer", "Intermediate", "Advanced" };
+        private string[] difficulty = { "Beginner", "Intermediate", "Advanced" };
         private int[] reactionTime = { 1500, 1200, 900};
         private int[] movesAhead = { 1, 2, 3};
 
@@ -158,7 +158,7 @@ namespace Spit
             SetDataContext();
             spit.LoadGame();
 
-            spit.Start(difficultyCount);
+            DisplayPlayUI(false);
             DisplayGameUI(true);
 
             aiTimer.Interval = TimeSpan.FromMilliseconds(spit.players[Game.AI].GetDelay());

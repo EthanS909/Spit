@@ -26,5 +26,10 @@ namespace Spit
         {
             return 0;
         }
+
+        public virtual int GetDifficulty()
+        {
+            return -1;
+        }
     }
 }
