@@ -506,6 +506,8 @@ namespace Spit
                         }
                     }*/
 
+                    wnd.Stalemate.Visibility = Visibility.Visible;
+
                     pickAPile = true;
                     StartTimer();
                 }
@@ -555,6 +557,7 @@ namespace Spit
             CollectPlayingCards();
             ShuffleCards();
             PlacePlayingCards();
+            wnd.Stalemate.Visibility = Visibility.Hidden;
             pickAPile = false;
             wnd.ResetExtraCardImages();
             wnd.updateTimer.Start();

@@ -429,13 +429,13 @@ namespace Spit
         int pile2ZIndex = 51;
         int[] pile1NextInts = { 10, 10, 200, 170 };
         Thickness pile1Next = new Thickness(10, 10, 200, 170);
-        int[] pile2NextInts = { -20, 10, 30, -10 };
-        Thickness pile2Next = new Thickness(-20, 10, 30, -10);
+        int[] pile2NextInts = { 0, 7, -5, -7 };
+        Thickness pile2Next = new Thickness(0, 7, -5, -7);
         int numOfCardsInPile1 = 0;
         int numOfCardsInPile2 = 0;
 
-        //-20,10,30,-10
-        //0,20,25,-30
+        //0, 7, -5, -7
+        //10,15,-10,-15
         public void GenerateExtraCardImages(int pileIndex, int player)
         {
             //10,10,190,170
@@ -483,10 +483,10 @@ namespace Spit
 
                     placePile2.Add(newCardImage);
 
-                    pile2NextInts[0] += 20;
-                    pile2NextInts[1] += 10;
+                    pile2NextInts[0] += 10;
+                    pile2NextInts[1] += 8;
                     pile2NextInts[2] -= 5;
-                    pile2NextInts[3] -= 20;
+                    pile2NextInts[3] -= 8;
                     pile2Next = new Thickness(pile2NextInts[0], pile2NextInts[1], pile2NextInts[2], pile2NextInts[3]);
                 }
                 numOfCardsInPile2 += i;
@@ -515,6 +515,20 @@ namespace Spit
             pile1NextInts[3] = 170;
             pile1Next = new Thickness(10, 10, 200, 170);
             numOfCardsInPile1 = 0;
+
+            for (int i = 0; i < placePile2.Count; i++)
+            {
+                screen.Children.Remove(placePile2[i]);
+            }
+            placePile2 = new List<Image>();
+
+            pile2ZIndex = 51;
+            pile2NextInts[0] = 0;
+            pile2NextInts[1] = 7;
+            pile2NextInts[2] = -5;
+            pile2NextInts[3] = -7;
+            pile2Next = new Thickness(0, 7, -5, -7);
+            numOfCardsInPile2 = 0;
         }
     }
 }
