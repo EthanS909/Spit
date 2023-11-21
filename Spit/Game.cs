@@ -22,7 +22,7 @@ namespace Spit
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        private Database database;
+        public Database database;
 
         MainWindow wnd = (MainWindow)Application.Current.MainWindow;
 
@@ -210,14 +210,14 @@ namespace Spit
             players[AI] = new AIPlayer(this, difficulty);
         }
 
-        public void LoadGame()
+        public void LoadGame(int gameIndex)
         {
-            database.LoadGameState();
+            database.LoadGameState(gameIndex);
         }
 
-        public void SaveGame()
+        public void SaveGame(int gameIndex)
         {
-            database.SaveGameState();
+            database.OverrideSavedGame(gameIndex);
         }
 
         private void Tick(object sender, EventArgs e)
@@ -262,6 +262,7 @@ namespace Spit
 
             SplitCards();
             PlacePlayingCards();
+            FlipOverPile();
         }
 
         protected void OnPropertyChanged(string propertyName)
@@ -329,18 +330,26 @@ namespace Spit
                     players[AI].hand.fifthPile.pile.Push(players[AI].hand.pickUpPile.pile.Pop());
                 }
             }
-
-            if (players[HUMAN].hand.pickUpPile.pile.Length() != 0) pile2.pile.Push(players[HUMAN].hand.pickUpPile.pile.Pop());
-            if (players[AI].hand.pickUpPile.pile.Length() != 0) pile1.pile.Push(players[AI].hand.pickUpPile.pile.Pop());
         }
 
         public void CanPlay()
         {
             // Create targets
-            int target1 = pile1.pile.Peek().GetNumber();
-            int target2 = pile1.pile.Peek().GetNumber();
-            int target3 = pile2.pile.Peek().GetNumber();
-            int target4 = pile2.pile.Peek().GetNumber();
+            int target1 = 0;
+            int target2 = 0;
+            int target3 = 0;
+            int target4 = 0;
+
+            if (!pile1.pile.IsEmpty())
+            {
+                target1 = pile1.pile.Peek().GetNumber();
+                target2 = pile1.pile.Peek().GetNumber();
+            }
+            if (!pile2.pile.IsEmpty())
+            {
+                target3 = pile2.pile.Peek().GetNumber();
+                target4 = pile2.pile.Peek().GetNumber();
+            }
 
             if (target1 == 1) { target1 = 13; }
             else { target1 -= 1; }
@@ -409,22 +418,7 @@ namespace Spit
                         wnd.background.Visibility = Visibility.Hidden;
                         wnd.DrawingText.Visibility = Visibility.Hidden;
 
-                        if (players[AI].hand.pickUpPile.pile.Length() != 0)
-                        {
-                            pile1.pile.Push(players[AI].hand.pickUpPile.pile.Pop());
-                        }
-                        else
-                        {
-                            wnd.aiStack.Visibility = Visibility.Hidden;
-                        }
-                        if (players[HUMAN].hand.pickUpPile.pile.Length() != 0)
-                        {
-                            pile2.pile.Push(players[HUMAN].hand.pickUpPile.pile.Pop());
-                        }
-                        else
-                        {
-                            wnd.plStack.Visibility = Visibility.Hidden;
-                        }
+                        FlipOverPile();
                         wnd.aiTimer.Start();
                     }
                 }
@@ -514,6 +508,26 @@ namespace Spit
             }
         }
 
+        public void FlipOverPile()
+        {
+            if (players[AI].hand.pickUpPile.pile.Length() != 0)
+            {
+                pile1.pile.Push(players[AI].hand.pickUpPile.pile.Pop());
+            }
+            else
+            {
+                wnd.aiStack.Visibility = Visibility.Hidden;
+            }
+            if (players[HUMAN].hand.pickUpPile.pile.Length() != 0)
+            {
+                pile2.pile.Push(players[HUMAN].hand.pickUpPile.pile.Pop());
+            }
+            else
+            {
+                wnd.plStack.Visibility = Visibility.Hidden;
+            }
+        }
+
         public void StartTimer()
         {
             AIwait.Interval = TimeSpan.FromSeconds(1);
@@ -557,6 +571,7 @@ namespace Spit
             CollectPlayingCards();
             ShuffleCards();
             PlacePlayingCards();
+            FlipOverPile();
             wnd.Stalemate.Visibility = Visibility.Hidden;
             pickAPile = false;
             wnd.ResetExtraCardImages();
@@ -703,6 +718,23 @@ namespace Spit
             if (!pile2.pile.IsEmpty())
             {
                 wnd.placePiles[1].Visibility = Visibility.Visible;
+            }
+
+            if (players[HUMAN].hand.pickUpPile.pile.IsEmpty())
+            {
+                wnd.plStack.Visibility = Visibility.Hidden;
+            }
+            else
+            {
+                wnd.plStack.Visibility = Visibility.Visible;
+            }
+            if (players[AI].hand.pickUpPile.pile.IsEmpty())
+            {
+                wnd.aiStack.Visibility = Visibility.Hidden;
+            }
+            else
+            {
+                wnd.aiStack.Visibility = Visibility.Visible;
             }
 
             CountDown = 3 - tick;

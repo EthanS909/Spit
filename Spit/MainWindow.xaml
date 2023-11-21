@@ -80,12 +80,12 @@
         <Button Name="Rules" Grid.Column="1" Grid.Row="3" Content="Rules" FontSize="72" Click="Rules_Click" Grid.ColumnSpan="5" Margin="192,0,192,0" Visibility="Visible" Panel.ZIndex="53"/>
         <Button Name="Exit" Grid.Column="1" Grid.Row="4" Content="Exit" FontSize="72" Click="Exit_Click" Grid.ColumnSpan="5" Margin="192,0,192,0" Visibility="Visible" Panel.ZIndex="53"/>
         <Button Name="AI" Grid.Column="2" Grid.Row="2" Content="Easy" FontSize="64" Click="AI_Click"  Visibility="Hidden" Grid.ColumnSpan="3" Margin="137,0,137,0" Panel.ZIndex="53"/>
-        <Button Name="Load" Grid.Column="1" Grid.Row="3" Content="Load" FontSize="72" Click="Load_Click" Grid.ColumnSpan="5" Margin="192,0,192,0"  Visibility="Hidden" Panel.ZIndex="53"/>
+        <Button Name="Load" Grid.Column="1" Grid.Row="3" Content="Load" FontSize="72" Click="DisplayLoadUI" Grid.ColumnSpan="5" Margin="192,0,192,0"  Visibility="Hidden" Panel.ZIndex="53"/>
         <Button Name="Back" Grid.Column="1" Grid.Row="4" Content="⮘ Back" FontSize="72" Click="Back_Click" Grid.ColumnSpan="5" Margin="192,0,192,0"  Visibility="Hidden" Panel.ZIndex="53"/>
         <Button Name="Left" Grid.Column="1" Grid.Row="2" Content="⬶" FontSize="72" Margin="192,0,75,0" Click="Left_Click" Visibility="Hidden" Grid.ColumnSpan="2" Panel.ZIndex="53"/>
         <Button Name="Right" Grid.Column="4" Grid.Row="2" Content="⤅" FontSize="72" Margin="75,0,192,0" Click="Right_Click" Visibility="Hidden" Grid.ColumnSpan="2" Panel.ZIndex="53"/>
         <TextBlock Name ="AI_Difficulty" Grid.Column="2" HorizontalAlignment="Left" Grid.Row="1" Text="TextBlock" VerticalAlignment="Top" FontSize="36" Foreground="White" Grid.ColumnSpan="2" Visibility="Hidden" Panel.ZIndex="53"/>
-        <Button Name="Save" Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="3" Content="Save Game" FontSize="72" Click="SaveGame_Click" Visibility="Hidden" Panel.ZIndex="53"/>
+        <Button Name="Save" Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="3" Content="Save Game" FontSize="72" Click="DisplaySaveUI" Visibility="Hidden" Panel.ZIndex="53"/>
         <Button Name="Rules2" Grid.Column="2" Grid.Row="3" Grid.ColumnSpan="3" Content="Rules" FontSize="72" Click="Rules_Click" Visibility="Hidden" Panel.ZIndex="53"/>
         <Button Name="ExitGame" Grid.Column="2" Grid.Row="4" Grid.ColumnSpan="3" Content="Exit Game" FontSize="72" Click="ExitGame_Click" Visibility="Hidden" Panel.ZIndex="53"/>
         <Grid Name="LoadScreen" Grid.Column="2" Grid.ColumnSpan="3" Grid.Row="2" Grid.RowSpan="3" Visibility="Hidden">
@@ -99,10 +99,10 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Button Name="Load1" Content="Save 1" Grid.Column="0" Grid.Row="0"/>
-            <Button Name="Load2" Content="Save 2" Grid.Column="2" Grid.Row="0"/>
-            <Button Name="Load3" Content="Save 3" Grid.Column="0" Grid.Row="2"/>
-            <Button Name="Load4" Content="Save 4" Grid.Column="2" Grid.Row="2"/>
+            <Button Name="Load1" Content="Save 1" Grid.Column="0" Grid.Row="0" Click="Load_Click"/>
+            <Button Name="Load2" Content="Save 2" Grid.Column="2" Grid.Row="0" Click="Load_Click"/>
+            <Button Name="Load3" Content="Save 3" Grid.Column="0" Grid.Row="2" Click="Load_Click"/>
+            <Button Name="Load4" Content="Save 4" Grid.Column="2" Grid.Row="2" Click="Load_Click"/>
         </Grid>
         <Grid Name="SaveScreen" Grid.Column="2" Grid.ColumnSpan="3" Grid.Row="2" Grid.RowSpan="3" Visibility="Hidden">
             <Grid.ColumnDefinitions>
@@ -115,10 +115,10 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Button Name="Save1" Content="Save 1" Grid.Column="0" Grid.Row="0"/>
-            <Button Name="Save2" Content="Save 2" Grid.Column="2" Grid.Row="0"/>
-            <Button Name="Save3" Content="Save 3" Grid.Column="0" Grid.Row="2"/>
-            <Button Name="Save4" Content="Save 4" Grid.Column="2" Grid.Row="2"/>
+            <Button Name="Save1" Content="Save 1" Grid.Column="0" Grid.Row="0" Click="SaveGame_Click"/>
+            <Button Name="Save2" Content="Save 2" Grid.Column="2" Grid.Row="0" Click="SaveGame_Click"/>
+            <Button Name="Save3" Content="Save 3" Grid.Column="0" Grid.Row="2" Click="SaveGame_Click"/>
+            <Button Name="Save4" Content="Save 4" Grid.Column="2" Grid.Row="2" Click="SaveGame_Click"/>
         </Grid>
     </Grid>
 </Window>

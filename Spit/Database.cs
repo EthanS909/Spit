@@ -9,7 +9,7 @@ namespace Spit
 {
     class Database
     {
-        SQLiteConnection sqlite_conn;
+        public SQLiteConnection sqlite_conn;
 
         const int PICK_UP_PILE = -1;
 
@@ -21,7 +21,7 @@ namespace Spit
 
             //DeleteTables(sqlite_conn);
 
-            //CreateTable(sqlite_conn);
+            //CreateTables(sqlite_conn);
         }
 
         private SQLiteConnection CreateConnection()
@@ -34,19 +34,19 @@ namespace Spit
             }
             catch (Exception e)
             {
-                Console.WriteLine("Failed to create a connect to the database.");
+                Console.WriteLine("Failed to create a connection to the database.");
             }
             return conn;
         }
 
-        private static void CreateTable(SQLiteConnection conn)
+        public void CreateTables(SQLiteConnection conn)
         {
             SQLiteCommand cmd = conn.CreateCommand();
 
-            string createHumanPlayerHandTableCmd = "CREATE TABLE HumanPlayerHand(cardNum INT, cardSuit VARCHAR(7), pileNum INT)";
-            string createAIPlayerHandTableCmd = "CREATE TABLE AIPlayerHand(cardNum INT, cardSuit VARCHAR(7), pileNum INT)";
-            string createPlacePilesTableCmd = "CREATE TABLE PlacePile(cardNum INT, cardSuit VARCHAR(7), pileNum INT)";
-            string createAIDifficultyTableCmd = "CREATE TABLE AIDifficulty(cardNum INT)";
+            string createHumanPlayerHandTableCmd = "CREATE TABLE HumanPlayerHand(cardNum INT, cardSuit VARCHAR(7), pileNum INT, gameIndex INT)";
+            string createAIPlayerHandTableCmd = "CREATE TABLE AIPlayerHand(cardNum INT, cardSuit VARCHAR(7), pileNum INT, gameIndex INT)";
+            string createPlacePilesTableCmd = "CREATE TABLE PlacePile(cardNum INT, cardSuit VARCHAR(7), pileNum INT, gameIndex INT)";
+            string createAIDifficultyTableCmd = "CREATE TABLE AIDifficulty(difficultyLevel INT, gameIndex INT)";
 
             cmd.CommandText = createHumanPlayerHandTableCmd;
             cmd.ExecuteNonQuery();
@@ -57,7 +57,7 @@ namespace Spit
             cmd.CommandText = createAIDifficultyTableCmd;
             cmd.ExecuteNonQuery();
         }
-        private static void DeleteTables(SQLiteConnection conn)
+        public void DeleteTables(SQLiteConnection conn)
         {
             SQLiteCommand cmd = conn.CreateCommand();
 
@@ -76,34 +76,32 @@ namespace Spit
             cmd.ExecuteNonQuery();
         }
 
-        private void InsertData(SQLiteConnection conn)
+        private void InsertData(SQLiteConnection conn, int gameIndex)
         {
-            SavePlayerHand(conn);
-            SaveAI(conn);
-            SavePlacePiles(conn);
+            SavePlayerHand(conn, gameIndex);
+            SaveAI(conn, gameIndex);
+            SavePlacePiles(conn, gameIndex);
         }
 
-        private void ReadData(SQLiteConnection conn)
+        private void ReadData(SQLiteConnection conn, int gameIndex)
         {
-            CreatePlayers(conn);
-            ExtractPlayerHand(conn);
-            ExtractAIHand(conn);
-            ExtractPlacePiles(conn);            
-
-            conn.Close();
+            CreatePlayers(conn, gameIndex);
+            ExtractPlayerHand(conn, gameIndex);
+            ExtractAIHand(conn, gameIndex);
+            ExtractPlacePiles(conn, gameIndex);            
         }
 
-        public void SaveGameState()
+        public void SaveGameState(int gameIndex)
         {
-            InsertData(sqlite_conn);
+            InsertData(sqlite_conn, gameIndex);
         }
 
-        public void LoadGameState()
+        public void LoadGameState(int gameIndex)
         {
-            ReadData(sqlite_conn);
+            ReadData(sqlite_conn, gameIndex);
         }
 
-        public void CreatePlayers(SQLiteConnection conn)
+        private void CreatePlayers(SQLiteConnection conn, int gameIndex)
         {
             SQLiteCommand cmd = conn.CreateCommand();
             SQLiteDataReader datareader;
@@ -113,9 +111,10 @@ namespace Spit
 
             int difficulty = datareader.GetInt32(0);
             game.CreatePlayers(difficulty);
+            datareader.Close();
         }
 
-        public void ExtractPlayerHand(SQLiteConnection conn)
+        private void ExtractPlayerHand(SQLiteConnection conn, int gameIndex)
         {
             SQLiteCommand cmd = conn.CreateCommand();
             SQLiteDataReader datareader;
@@ -144,7 +143,7 @@ namespace Spit
 
             datareader.Close();
         }
-        public void ExtractAIHand(SQLiteConnection conn)
+        private void ExtractAIHand(SQLiteConnection conn, int gameIndex)
         {
             SQLiteCommand cmd = conn.CreateCommand();
             SQLiteDataReader datareader;
@@ -171,10 +170,13 @@ namespace Spit
             }
             game.players[Game.AI].hand = hand;
         }
-        public void ExtractPlacePiles(SQLiteConnection conn)
+        private void ExtractPlacePiles(SQLiteConnection conn, int gameIndex)
         {
             SQLiteCommand cmd = conn.CreateCommand();
             SQLiteDataReader datareader;
+
+            Pile pile1 = new Pile();
+            Pile pile2 = new Pile();
 
             cmd.CommandText = "SELECT * FROM PlacePile";
             datareader = cmd.ExecuteReader();
@@ -186,12 +188,21 @@ namespace Spit
 
                 Card card = new Card(cardSuit, cardNum);
 
-                game.placePiles[pileNum].pile.Push(card);
+                if(pileNum == 1)
+                {
+                    pile1.pile.Push(card);
+                }
+                else if (pileNum == 2)
+                {
+                    pile2.pile.Push(card);
+                }
+                game.placePiles[0] = pile1;
+                game.placePiles[1] = pile2;
             }
             datareader.Close();
         }
 
-        public void SavePlayerHand(SQLiteConnection conn)
+        private void SavePlayerHand(SQLiteConnection conn, int gameIndex)
         {
             SQLiteCommand cmd = conn.CreateCommand();
 
@@ -202,7 +213,7 @@ namespace Spit
                 {
                     Card data = game.players[Game.HUMAN].hand.piles[i].pile.Pop();
 
-                    string test = "INSERT INTO HumanPlayerHand(cardNum, cardSuit, pileNum) VALUES(" + data.GetNumber() + ", '" + data.GetSuit() + "', " + i + ")";
+                    string test = "INSERT INTO HumanPlayerHand(cardNum, cardSuit, pileNum, gameIndex) VALUES(" + data.GetNumber() + ", '" + data.GetSuit() + "', " + i + "," + gameIndex + ")";
 
                     cmd.CommandText = test;
                     cmd.ExecuteNonQuery();
@@ -212,15 +223,11 @@ namespace Spit
             {
                 Card data = game.players[Game.HUMAN].hand.pickUpPile.pile.Pop();
 
-                cmd.CommandText = "INSERT INTO HumanPlayerHand(cardNum, cardSuit, pileNum) VALUES(" + data.GetNumber() + ", '" + data.GetSuit() + "', " + PICK_UP_PILE + ")";
+                cmd.CommandText = "INSERT INTO HumanPlayerHand(cardNum, cardSuit, pileNum, gameIndex) VALUES(" + data.GetNumber() + ", '" + data.GetSuit() + "', " + PICK_UP_PILE + "," + gameIndex + ")";
                 cmd.ExecuteNonQuery();
             }
-
-            //Saves AIs difficulty level
-            cmd.CommandText = "INSERT INTO AIDifficulty(cardNum) VALUES(" + game.players[Game.AI].GetDifficulty() + ")";
-            cmd.ExecuteNonQuery();
         }
-        public void SaveAI(SQLiteConnection conn)
+        private void SaveAI(SQLiteConnection conn, int gameIndex)
         {
             SQLiteCommand cmd = conn.CreateCommand();
 
@@ -231,7 +238,7 @@ namespace Spit
                 {
                     Card data = game.players[Game.AI].hand.piles[i].pile.Pop();
 
-                    cmd.CommandText = "INSERT INTO AIPlayerHand(cardNum, cardSuit, pileNum) VALUES(" + data.GetNumber() + ", '" + data.GetSuit() + "', " + i + ")";
+                    cmd.CommandText = "INSERT INTO AIPlayerHand(cardNum, cardSuit, pileNum, gameIndex) VALUES(" + data.GetNumber() + ", '" + data.GetSuit() + "', " + i + "," + gameIndex + ")";
                     cmd.ExecuteNonQuery();
                 }
             }
@@ -239,11 +246,15 @@ namespace Spit
             {
                 Card data = game.players[Game.AI].hand.pickUpPile.pile.Pop();
 
-                cmd.CommandText = "INSERT INTO AIPlayerHand(cardNum, cardSuit, pileNum) VALUES(" + data.GetNumber() + ", '" + data.GetSuit() + "', " + PICK_UP_PILE + ")";
+                cmd.CommandText = "INSERT INTO AIPlayerHand(cardNum, cardSuit, pileNum, gameIndex) VALUES(" + data.GetNumber() + ", '" + data.GetSuit() + "', " + PICK_UP_PILE + "," + gameIndex + ")";
                 cmd.ExecuteNonQuery();
             }
+
+            //Saves AIs difficulty level
+            cmd.CommandText = "INSERT INTO AIDifficulty(difficultyLevel, gameIndex) VALUES(" + game.players[Game.AI].GetDifficulty() + "," + gameIndex + ")";
+            cmd.ExecuteNonQuery();
         }
-        public void SavePlacePiles(SQLiteConnection conn)
+        private void SavePlacePiles(SQLiteConnection conn, int gameIndex)
         {
             SQLiteCommand cmd = conn.CreateCommand();
 
@@ -252,7 +263,7 @@ namespace Spit
             {
                 Card data = game.pile1.pile.Pop();
 
-                cmd.CommandText = "INSERT INTO PlacePile(cardNum, cardSuit, pileNum) VALUES(" + data.GetNumber() + ", '" + data.GetSuit() + "', " + 0 + ")";
+                cmd.CommandText = "INSERT INTO PlacePile(cardNum, cardSuit, pileNum, gameIndex) VALUES(" + data.GetNumber() + ", '" + data.GetSuit() + "', " + 0 + "," + gameIndex + ")";
                 cmd.ExecuteNonQuery();
             }
 
@@ -260,9 +271,30 @@ namespace Spit
             {
                 Card data = game.pile2.pile.Pop();
 
-                cmd.CommandText = "INSERT INTO PlacePile(cardNum, cardSuit, pileNum) VALUES(" + data.GetNumber() + ", '" + data.GetSuit() + "', " + 1 + ")";
+                cmd.CommandText = "INSERT INTO PlacePile(cardNum, cardSuit, pileNum, gameIndex) VALUES(" + data.GetNumber() + ", '" + data.GetSuit() + "', " + 1 + "," + gameIndex + ")";
                 cmd.ExecuteNonQuery();
             }
+        }
+
+        public void OverrideSavedGame(int gameIndex)
+        {
+            SQLiteCommand cmd = sqlite_conn.CreateCommand();
+            SQLiteDataReader datareader;
+            cmd.CommandText = "SELECT * FROM AIDifficulty WHERE gameIndex = " + gameIndex;
+            datareader = cmd.ExecuteReader();
+            if (datareader.Read() == true)
+            {
+                datareader.Close();
+                cmd.CommandText = "DELETE FROM HumanPlayerHand WHERE gameIndex = " + gameIndex;
+                cmd.ExecuteNonQuery();
+                cmd.CommandText = "DELETE FROM AIPlayerHand WHERE gameIndex = " + gameIndex;
+                cmd.ExecuteNonQuery();
+                cmd.CommandText = "DELETE FROM PlacePile WHERE gameIndex = " + gameIndex;
+                cmd.ExecuteNonQuery();
+                cmd.CommandText = "DELETE FROM AIDifficulty WHERE gameIndex = " + gameIndex;
+                cmd.ExecuteNonQuery();
+            }
+            SaveGameState(gameIndex);
         }
     }
 }

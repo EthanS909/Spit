@@ -152,23 +152,43 @@ namespace Spit
             updateTimer.Start();
         }
 
+        private void DisplayLoadUI(object sender, RoutedEventArgs e)
+        {
+            DisplayPlayUI(false);
+            LoadScreen.Visibility = Visibility.Visible;
+        }
+
         private void Load_Click(object sender, RoutedEventArgs e)
         {
+            Button button = (Button)sender;
+            int gameIndex = Convert.ToInt32(button.Name[4]) - 48;
+
             spit = new Game();
             SetDataContext();
-            spit.LoadGame();
+            spit.LoadGame(gameIndex);
 
             DisplayPlayUI(false);
             DisplayGameUI(true);
+            LoadScreen.Visibility = Visibility.Hidden;
 
             aiTimer.Interval = TimeSpan.FromMilliseconds(spit.players[Game.AI].GetDelay());
             aiTimer.Start();
             updateTimer.Start();
         }
 
+        private void DisplaySaveUI(object sender, RoutedEventArgs e)
+        {
+            DisplayGameUI(false);
+            DisplayPauseMenu(false);
+            SaveScreen.Visibility = Visibility.Visible;
+        }
+
         private void SaveGame_Click(object sender, RoutedEventArgs e)
         {
-            spit.SaveGame();
+            Button button = (Button)sender;
+            int gameIndex = Convert.ToInt32(button.Name[4]) - 48;
+
+            spit.SaveGame(gameIndex);
         }
 
         private void Back_Click(object sender, RoutedEventArgs e)
