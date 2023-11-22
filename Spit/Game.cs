@@ -340,15 +340,15 @@ namespace Spit
             int target3 = 0;
             int target4 = 0;
 
-            if (!pile1.pile.IsEmpty())
+            if (!placePiles[0].pile.IsEmpty())
             {
-                target1 = pile1.pile.Peek().GetNumber();
-                target2 = pile1.pile.Peek().GetNumber();
+                target1 = placePiles[0].pile.Peek().GetNumber();
+                target2 = placePiles[0].pile.Peek().GetNumber();
             }
-            if (!pile2.pile.IsEmpty())
+            if (!placePiles[1].pile.IsEmpty())
             {
-                target3 = pile2.pile.Peek().GetNumber();
-                target4 = pile2.pile.Peek().GetNumber();
+                target3 = placePiles[1].pile.Peek().GetNumber();
+                target4 = placePiles[1].pile.Peek().GetNumber();
             }
 
             if (target1 == 1) { target1 = 13; }
@@ -512,7 +512,7 @@ namespace Spit
         {
             if (players[AI].hand.pickUpPile.pile.Length() != 0)
             {
-                pile1.pile.Push(players[AI].hand.pickUpPile.pile.Pop());
+                placePiles[0].pile.Push(players[AI].hand.pickUpPile.pile.Pop());
             }
             else
             {
@@ -520,7 +520,7 @@ namespace Spit
             }
             if (players[HUMAN].hand.pickUpPile.pile.Length() != 0)
             {
-                pile2.pile.Push(players[HUMAN].hand.pickUpPile.pile.Pop());
+                placePiles[1].pile.Push(players[HUMAN].hand.pickUpPile.pile.Pop());
             }
             else
             {
@@ -667,8 +667,8 @@ namespace Spit
             if (!players[AI].hand.fourthPile.pile.IsEmpty()) { AIFourthPileTop = "CardImages/" + players[AI].hand.fourthPile.pile.Peek().GetNumber() + "_of_" + players[AI].hand.fourthPile.pile.Peek().GetSuit() + "s.png"; }
             if (!players[AI].hand.fifthPile.pile.IsEmpty()) { AIFifthPileTop = "CardImages/" + players[AI].hand.fifthPile.pile.Peek().GetNumber() + "_of_" + players[AI].hand.fifthPile.pile.Peek().GetSuit() + "s.png"; }
 
-            if (!pile1.pile.IsEmpty()) Pile1Top = "CardImages/" + pile1.pile.Peek().GetNumber() + "_of_" + pile1.pile.Peek().GetSuit() + "s.png";
-            if (!pile2.pile.IsEmpty()) Pile2Top = "CardImages/" + pile2.pile.Peek().GetNumber() + "_of_" + pile2.pile.Peek().GetSuit() + "s.png";
+            if (!placePiles[0].pile.IsEmpty()) Pile1Top = "CardImages/" + placePiles[0].pile.Peek().GetNumber() + "_of_" + placePiles[0].pile.Peek().GetSuit() + "s.png";
+            if (!placePiles[1].pile.IsEmpty()) Pile2Top = "CardImages/" + placePiles[1].pile.Peek().GetNumber() + "_of_" + placePiles[1].pile.Peek().GetSuit() + "s.png";
 
             for (int i = 0; i < AICardPiles.Length; i++)
             {
@@ -686,11 +686,11 @@ namespace Spit
                 }
             }
 
-            if(pile1.pile.IsEmpty())
+            if(placePiles[0].pile.IsEmpty())
             {
                 wnd.placePiles[0].Visibility = Visibility.Hidden;
             }
-            if (pile2.pile.IsEmpty())
+            if (placePiles[1].pile.IsEmpty())
             {
                 wnd.placePiles[1].Visibility = Visibility.Hidden;
             }
@@ -711,11 +711,11 @@ namespace Spit
                 }
             }
 
-            if (!pile1.pile.IsEmpty())
+            if (!placePiles[0].pile.IsEmpty())
             {
                 wnd.placePiles[0].Visibility = Visibility.Visible;
             }
-            if (!pile2.pile.IsEmpty())
+            if (!placePiles[1].pile.IsEmpty())
             {
                 wnd.placePiles[1].Visibility = Visibility.Visible;
             }

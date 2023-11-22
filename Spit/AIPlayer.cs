@@ -59,8 +59,8 @@ namespace Spit
 
             this.game = game;
 
-            tempPile1 = game.pile1;
-            tempPile2 = game.pile2;
+            tempPile1 = game.placePiles[0];
+            tempPile2 = game.placePiles[1];
 
             tempHand = hand;
         }
@@ -145,12 +145,12 @@ namespace Spit
                 {
                     if (hand.piles[x].pile.Peek().GetNumber() == target1 || hand.piles[x].pile.Peek().GetNumber() == target2)
                     {
-                        game.pile1.pile.Push(hand.piles[x].pile.Pop());
+                        game.placePiles[0].pile.Push(hand.piles[x].pile.Pop());
                         return Task.CompletedTask;
                     }
                     else if (hand.piles[x].pile.Peek().GetNumber() == target3 || hand.piles[x].pile.Peek().GetNumber() == target4)
                     {
-                        game.pile2.pile.Push(hand.piles[x].pile.Pop());
+                        game.placePiles[1].pile.Push(hand.piles[x].pile.Pop());
                         return Task.CompletedTask;
                     }
                 }
@@ -185,10 +185,16 @@ namespace Spit
 
         public void CalcTargets()
         {
-            target1 = game.pile1.pile.Peek().GetNumber();
-            target2 = game.pile1.pile.Peek().GetNumber();
-            target3 = game.pile2.pile.Peek().GetNumber();
-            target4 = game.pile2.pile.Peek().GetNumber();
+            if (!game.placePiles[0].pile.IsEmpty())
+            {
+                target1 = game.placePiles[0].pile.Peek().GetNumber();
+                target2 = game.placePiles[0].pile.Peek().GetNumber();
+            }
+            if (!game.placePiles[1].pile.IsEmpty())
+            {
+                target3 = game.placePiles[1].pile.Peek().GetNumber();
+                target4 = game.placePiles[1].pile.Peek().GetNumber();
+            }
 
             if (target1 == 1) { target1 = 13; }
             else { target1 -= 1; }

@@ -178,7 +178,7 @@ namespace Spit
             Pile pile1 = new Pile();
             Pile pile2 = new Pile();
 
-            cmd.CommandText = "SELECT * FROM PlacePile";
+            cmd.CommandText = "SELECT * FROM PlacePile WHERE gameIndex = " + gameIndex;
             datareader = cmd.ExecuteReader();
             while (datareader.Read())
             {
@@ -188,17 +188,18 @@ namespace Spit
 
                 Card card = new Card(cardSuit, cardNum);
 
-                if(pileNum == 1)
+                if(pileNum == 0)
                 {
                     pile1.pile.Push(card);
                 }
-                else if (pileNum == 2)
+                else if (pileNum == 1)
                 {
                     pile2.pile.Push(card);
                 }
-                game.placePiles[0] = pile1;
-                game.placePiles[1] = pile2;
             }
+            game.placePiles[0] = pile1;
+            game.placePiles[1] = pile2;
+
             datareader.Close();
         }
 
@@ -259,17 +260,17 @@ namespace Spit
             SQLiteCommand cmd = conn.CreateCommand();
 
             //Saves place piles
-            for (int i = 0; i < game.pile1.pile.Length(); i++)
+            for (int i = 0; i < game.placePiles[0].pile.Length(); i++)
             {
-                Card data = game.pile1.pile.Pop();
+                Card data = game.placePiles[0].pile.Pop();
 
                 cmd.CommandText = "INSERT INTO PlacePile(cardNum, cardSuit, pileNum, gameIndex) VALUES(" + data.GetNumber() + ", '" + data.GetSuit() + "', " + 0 + "," + gameIndex + ")";
                 cmd.ExecuteNonQuery();
             }
 
-            for (int i = 0; i < game.pile2.pile.Length(); i++)
+            for (int i = 0; i < game.placePiles[1].pile.Length(); i++)
             {
-                Card data = game.pile2.pile.Pop();
+                Card data = game.placePiles[1].pile.Pop();
 
                 cmd.CommandText = "INSERT INTO PlacePile(cardNum, cardSuit, pileNum, gameIndex) VALUES(" + data.GetNumber() + ", '" + data.GetSuit() + "', " + 1 + "," + gameIndex + ")";
                 cmd.ExecuteNonQuery();
