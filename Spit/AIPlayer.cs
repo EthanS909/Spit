@@ -185,6 +185,11 @@ namespace Spit
 
         public void CalcTargets()
         {
+            target1 = 0;
+            target2 = 0;
+            target3 = 0;
+            target4 = 0;
+
             if (!game.placePiles[0].pile.IsEmpty())
             {
                 target1 = game.placePiles[0].pile.Peek().GetNumber();

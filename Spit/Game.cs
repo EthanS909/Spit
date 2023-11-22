@@ -401,7 +401,7 @@ namespace Spit
             }
             else if(!humanCanPlay && !AICanPlay)
             {
-                if(players[HUMAN].hand.pickUpPile.pile.Length() != 0 && players[AI].hand.pickUpPile.pile.Length() != 0)
+                if(players[HUMAN].hand.pickUpPile.pile.Length() != 0 || players[AI].hand.pickUpPile.pile.Length() != 0)
                 {
                     wnd.aiTimer.Stop();
                     wnd.background.Visibility = Visibility.Visible;
