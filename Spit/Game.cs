@@ -530,7 +530,7 @@ namespace Spit
 
         public void StartTimer()
         {
-            AIwait.Interval = TimeSpan.FromSeconds(1);
+            AIwait.Interval = TimeSpan.FromMilliseconds(1500);
             AIwait.Tick += AIChoosePile;
             AIwait.Start();
             wnd.aiTimer.Stop();
@@ -670,7 +670,7 @@ namespace Spit
             if (!placePiles[0].pile.IsEmpty()) Pile1Top = "CardImages/" + placePiles[0].pile.Peek().GetNumber() + "_of_" + placePiles[0].pile.Peek().GetSuit() + "s.png";
             if (!placePiles[1].pile.IsEmpty()) Pile2Top = "CardImages/" + placePiles[1].pile.Peek().GetNumber() + "_of_" + placePiles[1].pile.Peek().GetSuit() + "s.png";
 
-            for (int i = 0; i < AICardPiles.Length; i++)
+            for (int i = 0; i < players[AI].hand.piles.Length; i++)
             {
                 if (players[AI].hand.piles[i].pile.IsEmpty())
                 {
@@ -678,7 +678,7 @@ namespace Spit
                 }
             }
 
-            for (int i = 0; i < playerCardPiles.Length; i++)
+            for (int i = 0; i < players[HUMAN].hand.piles.Length; i++)
             {
                 if (players[HUMAN].hand.piles[i].pile.IsEmpty())
                 {
