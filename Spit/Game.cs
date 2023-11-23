@@ -289,45 +289,45 @@ namespace Spit
 
         public void PlacePlayingCards()
         {
-            players[HUMAN].hand.firstPile.pile.Push(players[HUMAN].hand.pickUpPile.pile.Pop());
+            players[HUMAN].hand.piles[0].pile.Push(players[HUMAN].hand.pickUpPile.pile.Pop());
             for (int i = 0; i < 5; i++)
             {
                 if (i < 2 && players[HUMAN].hand.pickUpPile.pile.Length() != 0)
                 {
-                    players[HUMAN].hand.secondPile.pile.Push(players[HUMAN].hand.pickUpPile.pile.Pop());
+                    players[HUMAN].hand.piles[1].pile.Push(players[HUMAN].hand.pickUpPile.pile.Pop());
                 }
                 if (i < 3 && players[HUMAN].hand.pickUpPile.pile.Length() != 0)
                 {
-                    players[HUMAN].hand.thirdPile.pile.Push(players[HUMAN].hand.pickUpPile.pile.Pop());
+                    players[HUMAN].hand.piles[2].pile.Push(players[HUMAN].hand.pickUpPile.pile.Pop());
                 }
                 if (i < 4 && players[HUMAN].hand.pickUpPile.pile.Length() != 0)
                 {
-                    players[HUMAN].hand.fourthPile.pile.Push(players[HUMAN].hand.pickUpPile.pile.Pop());
+                    players[HUMAN].hand.piles[3].pile.Push(players[HUMAN].hand.pickUpPile.pile.Pop());
                 }
                 if (i < 5 && players[HUMAN].hand.pickUpPile.pile.Length() != 0)
                 {
-                    players[HUMAN].hand.fifthPile.pile.Push(players[HUMAN].hand.pickUpPile.pile.Pop());
+                    players[HUMAN].hand.piles[4].pile.Push(players[HUMAN].hand.pickUpPile.pile.Pop());
                 }
             }
 
-            players[AI].hand.firstPile.pile.Push(players[AI].hand.pickUpPile.pile.Pop());
+            players[AI].hand.piles[0].pile.Push(players[AI].hand.pickUpPile.pile.Pop());
             for (int i = 0; i < 5; i++)
             {
                 if (i < 2 && players[AI].hand.pickUpPile.pile.Length() != 0)
                 {
-                    players[AI].hand.secondPile.pile.Push(players[AI].hand.pickUpPile.pile.Pop());
+                    players[AI].hand.piles[1].pile.Push(players[AI].hand.pickUpPile.pile.Pop());
                 }
                 if (i < 3 && players[AI].hand.pickUpPile.pile.Length() != 0)
                 {
-                    players[AI].hand.thirdPile.pile.Push(players[AI].hand.pickUpPile.pile.Pop());
+                    players[AI].hand.piles[2].pile.Push(players[AI].hand.pickUpPile.pile.Pop());
                 }
                 if (i < 4 && players[AI].hand.pickUpPile.pile.Length() != 0)
                 {
-                    players[AI].hand.fourthPile.pile.Push(players[AI].hand.pickUpPile.pile.Pop());
+                    players[AI].hand.piles[3].pile.Push(players[AI].hand.pickUpPile.pile.Pop());
                 }
                 if (i < 5 && players[AI].hand.pickUpPile.pile.Length() != 0)
                 {
-                    players[AI].hand.fifthPile.pile.Push(players[AI].hand.pickUpPile.pile.Pop());
+                    players[AI].hand.piles[4].pile.Push(players[AI].hand.pickUpPile.pile.Pop());
                 }
             }
         }
@@ -655,17 +655,17 @@ namespace Spit
 
         public void Update()
         {
-            if (!players[HUMAN].hand.firstPile.pile.IsEmpty()) { PlayerFirstPileTop = "CardImages/" + players[HUMAN].hand.firstPile.pile.Peek().GetNumber() + "_of_" + players[HUMAN].hand.firstPile.pile.Peek().GetSuit() + "s.png"; }
-            if (!players[HUMAN].hand.secondPile.pile.IsEmpty()) { PlayerSecondPileTop = "CardImages/" + players[HUMAN].hand.secondPile.pile.Peek().GetNumber() + "_of_" + players[HUMAN].hand.secondPile.pile.Peek().GetSuit() + "s.png"; }
-            if (!players[HUMAN].hand.thirdPile.pile.IsEmpty()) { PlayerThirdPileTop = "CardImages/" + players[HUMAN].hand.thirdPile.pile.Peek().GetNumber() + "_of_" + players[HUMAN].hand.thirdPile.pile.Peek().GetSuit() + "s.png"; }
-            if (!players[HUMAN].hand.fourthPile.pile.IsEmpty()) { PlayerFourthPileTop = "CardImages/" + players[HUMAN].hand.fourthPile.pile.Peek().GetNumber() + "_of_" + players[HUMAN].hand.fourthPile.pile.Peek().GetSuit() + "s.png"; }
-            if (!players[HUMAN].hand.fifthPile.pile.IsEmpty()) { PlayerFifthPileTop = "CardImages/" + players[HUMAN].hand.fifthPile.pile.Peek().GetNumber() + "_of_" + players[HUMAN].hand.fifthPile.pile.Peek().GetSuit() + "s.png"; }
+            if (!players[HUMAN].hand.piles[0].pile.IsEmpty()) { PlayerFirstPileTop = "CardImages/" + players[HUMAN].hand.piles[0].pile.Peek().GetNumber() + "_of_" + players[HUMAN].hand.piles[0].pile.Peek().GetSuit() + "s.png"; }
+            if (!players[HUMAN].hand.piles[1].pile.IsEmpty()) { PlayerSecondPileTop = "CardImages/" + players[HUMAN].hand.piles[1].pile.Peek().GetNumber() + "_of_" + players[HUMAN].hand.piles[1].pile.Peek().GetSuit() + "s.png"; }
+            if (!players[HUMAN].hand.piles[2].pile.IsEmpty()) { PlayerThirdPileTop = "CardImages/" + players[HUMAN].hand.piles[2].pile.Peek().GetNumber() + "_of_" + players[HUMAN].hand.piles[2].pile.Peek().GetSuit() + "s.png"; }
+            if (!players[HUMAN].hand.piles[3].pile.IsEmpty()) { PlayerFourthPileTop = "CardImages/" + players[HUMAN].hand.piles[3].pile.Peek().GetNumber() + "_of_" + players[HUMAN].hand.piles[3].pile.Peek().GetSuit() + "s.png"; }
+            if (!players[HUMAN].hand.piles[4].pile.IsEmpty()) { PlayerFifthPileTop = "CardImages/" + players[HUMAN].hand.piles[4].pile.Peek().GetNumber() + "_of_" + players[HUMAN].hand.piles[4].pile.Peek().GetSuit() + "s.png"; }
 
-            if (!players[AI].hand.firstPile.pile.IsEmpty()) { AIFirstPileTop = "CardImages/" + players[AI].hand.firstPile.pile.Peek().GetNumber() + "_of_" + players[AI].hand.firstPile.pile.Peek().GetSuit() + "s.png"; }
-            if (!players[AI].hand.secondPile.pile.IsEmpty()) { AISecondPileTop = "CardImages/" + players[AI].hand.secondPile.pile.Peek().GetNumber() + "_of_" + players[AI].hand.secondPile.pile.Peek().GetSuit() + "s.png"; }
-            if (!players[AI].hand.thirdPile.pile.IsEmpty()) { AIThirdPileTop = "CardImages/" + players[AI].hand.thirdPile.pile.Peek().GetNumber() + "_of_" + players[AI].hand.thirdPile.pile.Peek().GetSuit() + "s.png"; }
-            if (!players[AI].hand.fourthPile.pile.IsEmpty()) { AIFourthPileTop = "CardImages/" + players[AI].hand.fourthPile.pile.Peek().GetNumber() + "_of_" + players[AI].hand.fourthPile.pile.Peek().GetSuit() + "s.png"; }
-            if (!players[AI].hand.fifthPile.pile.IsEmpty()) { AIFifthPileTop = "CardImages/" + players[AI].hand.fifthPile.pile.Peek().GetNumber() + "_of_" + players[AI].hand.fifthPile.pile.Peek().GetSuit() + "s.png"; }
+            if (!players[AI].hand.piles[0].pile.IsEmpty()) { AIFirstPileTop = "CardImages/" + players[AI].hand.piles[0].pile.Peek().GetNumber() + "_of_" + players[AI].hand.piles[0].pile.Peek().GetSuit() + "s.png"; }
+            if (!players[AI].hand.piles[1].pile.IsEmpty()) { AISecondPileTop = "CardImages/" + players[AI].hand.piles[1].pile.Peek().GetNumber() + "_of_" + players[AI].hand.piles[1].pile.Peek().GetSuit() + "s.png"; }
+            if (!players[AI].hand.piles[2].pile.IsEmpty()) { AIThirdPileTop = "CardImages/" + players[AI].hand.piles[2].pile.Peek().GetNumber() + "_of_" + players[AI].hand.piles[2].pile.Peek().GetSuit() + "s.png"; }
+            if (!players[AI].hand.piles[3].pile.IsEmpty()) { AIFourthPileTop = "CardImages/" + players[AI].hand.piles[3].pile.Peek().GetNumber() + "_of_" + players[AI].hand.piles[3].pile.Peek().GetSuit() + "s.png"; }
+            if (!players[AI].hand.piles[4].pile.IsEmpty()) { AIFifthPileTop = "CardImages/" + players[AI].hand.piles[4].pile.Peek().GetNumber() + "_of_" + players[AI].hand.piles[4].pile.Peek().GetSuit() + "s.png"; }
 
             if (!placePiles[0].pile.IsEmpty()) Pile1Top = "CardImages/" + placePiles[0].pile.Peek().GetNumber() + "_of_" + placePiles[0].pile.Peek().GetSuit() + "s.png";
             if (!placePiles[1].pile.IsEmpty()) Pile2Top = "CardImages/" + placePiles[1].pile.Peek().GetNumber() + "_of_" + placePiles[1].pile.Peek().GetSuit() + "s.png";
@@ -695,7 +695,7 @@ namespace Spit
                 wnd.placePiles[1].Visibility = Visibility.Hidden;
             }
 
-            for (int i = 0; i < AICardPiles.Length; i++)
+            for (int i = 0; i < players[AI].hand.piles.Length; i++)
             {
                 if (!players[AI].hand.piles[i].pile.IsEmpty())
                 {
@@ -703,7 +703,7 @@ namespace Spit
                 }
             }
 
-            for (int i = 0; i < playerCardPiles.Length; i++)
+            for (int i = 0; i < players[HUMAN].hand.piles.Length; i++)
             {
                 if (!players[HUMAN].hand.piles[i].pile.IsEmpty())
                 {

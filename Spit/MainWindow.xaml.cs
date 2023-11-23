@@ -171,9 +171,10 @@ namespace Spit
             DisplayGameUI(true);
             LoadScreen.Visibility = Visibility.Hidden;
 
+            updateTimer.Start();
+
             aiTimer.Interval = TimeSpan.FromMilliseconds(spit.players[Game.AI].GetDelay());
             aiTimer.Start();
-            updateTimer.Start();
         }
 
         private void DisplaySaveUI(object sender, RoutedEventArgs e)
@@ -460,8 +461,8 @@ namespace Spit
         {
             //10,10,190,170
             //20,20,175,160
-            int pile1Length = spit.pile1.pile.Length();
-            int pile2Length = spit.pile2.pile.Length();
+            int pile1Length = spit.placePiles[0].pile.Length();
+            int pile2Length = spit.placePiles[1].pile.Length();
             int i = 0;
 
             if (player == -1)

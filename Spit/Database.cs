@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.SQLite;
+using Spit.DataStructures;
 
 namespace Spit
 {
@@ -120,6 +121,8 @@ namespace Spit
             SQLiteDataReader datareader;
 
             Hand hand = new Hand();
+            Stack[] tempPiles = { new Stack(), new Stack(), new Stack(), new Stack(), new Stack() };
+            Stack tempPickUp = new Stack();
             cmd.CommandText = "SELECT * FROM HumanPlayerHand";
             datareader = cmd.ExecuteReader();
             while (datareader.Read())
@@ -132,12 +135,23 @@ namespace Spit
 
                 if (pileNum != -1)
                 {
-                    hand.piles[pileNum].pile.Push(card);
+                    tempPiles[pileNum].Push(card);
                 }
                 else
                 {
-                    hand.pickUpPile.pile.Push(card);
+                    tempPickUp.Push(card);
                 }
+            }
+            for (int x = 0; x < tempPiles.Length; x++)
+            {
+                for (int i = 0; i < tempPiles[x].Length(); i++)
+                {
+                    hand.piles[x].pile.Push(tempPiles[x].Pop());
+                }
+            }
+            for (int i = 0; i < tempPickUp.Length(); i++)
+            {
+                hand.pickUpPile.pile.Push(tempPickUp.Pop());
             }
             game.players[Game.HUMAN].hand = hand;
 
@@ -149,6 +163,8 @@ namespace Spit
             SQLiteDataReader datareader;
 
             Hand hand = new Hand();
+            Stack[] tempPiles = { new Stack(), new Stack(), new Stack(), new Stack(), new Stack() };
+            Stack tempPickUp = new Stack();
             cmd.CommandText = "SELECT * FROM AIPlayerHand";
             datareader = cmd.ExecuteReader();
             while (datareader.Read())
@@ -161,12 +177,23 @@ namespace Spit
 
                 if (pileNum != -1)
                 {
-                    hand.piles[pileNum].pile.Push(card);
+                    tempPiles[pileNum].Push(card);
                 }
                 else
                 {
-                    hand.pickUpPile.pile.Push(card);
+                    tempPickUp.Push(card);
                 }
+            }
+            for (int x = 0; x < tempPiles.Length; x++)
+            {
+                for (int i = 0; i < tempPiles[x].Length(); i++)
+                {
+                    hand.piles[x].pile.Push(tempPiles[x].Pop());
+                }
+            }
+            for (int i = 0; i < tempPickUp.Length(); i++)
+            {
+                hand.pickUpPile.pile.Push(tempPickUp.Pop());
             }
             game.players[Game.AI].hand = hand;
         }
@@ -197,8 +224,21 @@ namespace Spit
                     pile2.pile.Push(card);
                 }
             }
-            game.placePiles[0] = pile1;
-            game.placePiles[1] = pile2;
+
+            Pile tempPile1 = new Pile();
+            Pile tempPile2 = new Pile();
+
+            for (int i = 0; i < pile1.pile.Length(); i++)
+            {
+                tempPile1.pile.Push(pile1.pile.Pop());
+            }
+            for (int i = 0; i < pile2.pile.Length(); i++)
+            {
+                tempPile2.pile.Push(pile2.pile.Pop());
+            }
+
+            game.placePiles[0] = tempPile1;
+            game.placePiles[1] = tempPile2;
 
             datareader.Close();
         }
