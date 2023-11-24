@@ -155,6 +155,7 @@ namespace Spit
         private void DisplayLoadUI(object sender, RoutedEventArgs e)
         {
             DisplayPlayUI(false);
+            Back.Visibility = Visibility.Visible;
             LoadScreen.Visibility = Visibility.Visible;
         }
 
@@ -167,20 +168,25 @@ namespace Spit
             SetDataContext();
             spit.LoadGame(gameIndex);
 
-            DisplayPlayUI(false);
-            DisplayGameUI(true);
-            LoadScreen.Visibility = Visibility.Hidden;
+            if(!spit.database.nothingSavedToShow)
+            {
+                DisplayPlayUI(false);
+                DisplayGameUI(true);
+                LoadScreen.Visibility = Visibility.Hidden;
 
-            updateTimer.Start();
+                updateTimer.Start();
 
-            aiTimer.Interval = TimeSpan.FromMilliseconds(spit.players[Game.AI].GetDelay());
-            aiTimer.Start();
+                aiTimer.Interval = TimeSpan.FromMilliseconds(spit.players[Game.AI].GetDelay());
+                aiTimer.Start();
+            }
+            spit.database.nothingSavedToShow = false;
         }
 
         private void DisplaySaveUI(object sender, RoutedEventArgs e)
         {
             DisplayGameUI(false);
             DisplayPauseMenu(false);
+            Back.Visibility = Visibility.Visible;
             SaveScreen.Visibility = Visibility.Visible;
         }
 

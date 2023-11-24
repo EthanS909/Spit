@@ -13,6 +13,7 @@ namespace Spit
         public SQLiteConnection sqlite_conn;
 
         const int PICK_UP_PILE = -1;
+        public bool nothingSavedToShow = false;
 
         Game game;
         public Database(Game game)
@@ -87,9 +88,10 @@ namespace Spit
         private void ReadData(SQLiteConnection conn, int gameIndex)
         {
             CreatePlayers(conn, gameIndex);
+            if (nothingSavedToShow) return;
             ExtractPlayerHand(conn, gameIndex);
             ExtractAIHand(conn, gameIndex);
-            ExtractPlacePiles(conn, gameIndex);            
+            ExtractPlacePiles(conn, gameIndex);
         }
 
         public void SaveGameState(int gameIndex)
@@ -104,15 +106,23 @@ namespace Spit
 
         private void CreatePlayers(SQLiteConnection conn, int gameIndex)
         {
-            SQLiteCommand cmd = conn.CreateCommand();
-            SQLiteDataReader datareader;
-            cmd.CommandText = "SELECT * FROM AIDifficulty";
-            datareader = cmd.ExecuteReader();
-            datareader.Read();
-
-            int difficulty = datareader.GetInt32(0);
-            game.CreatePlayers(difficulty);
-            datareader.Close();
+            try
+            {
+                SQLiteCommand cmd = conn.CreateCommand();
+                SQLiteDataReader datareader;
+                cmd.CommandText = "SELECT * FROM AIDifficulty WHERE gameIndex = " + gameIndex;
+                datareader = cmd.ExecuteReader();
+                datareader.Read();
+                int difficulty = datareader.GetInt32(0);
+                game.CreatePlayers(difficulty);
+                datareader.Close();
+            }
+            catch
+            {
+                NothingSavedPopup nothingSavedPopup = new NothingSavedPopup();
+                nothingSavedPopup.Show();
+                nothingSavedToShow = true;
+            }
         }
 
         private void ExtractPlayerHand(SQLiteConnection conn, int gameIndex)
@@ -123,7 +133,7 @@ namespace Spit
             Hand hand = new Hand();
             Stack[] tempPiles = { new Stack(), new Stack(), new Stack(), new Stack(), new Stack() };
             Stack tempPickUp = new Stack();
-            cmd.CommandText = "SELECT * FROM HumanPlayerHand";
+            cmd.CommandText = "SELECT * FROM HumanPlayerHand WHERE gameIndex = " + gameIndex;
             datareader = cmd.ExecuteReader();
             while (datareader.Read())
             {
@@ -144,12 +154,14 @@ namespace Spit
             }
             for (int x = 0; x < tempPiles.Length; x++)
             {
-                for (int i = 0; i < tempPiles[x].Length(); i++)
+                int length = tempPiles[x].Length();
+                for (int i = 0; i < length; i++)
                 {
                     hand.piles[x].pile.Push(tempPiles[x].Pop());
                 }
             }
-            for (int i = 0; i < tempPickUp.Length(); i++)
+            int pickUpLength = tempPickUp.Length();
+            for (int i = 0; i < pickUpLength; i++)
             {
                 hand.pickUpPile.pile.Push(tempPickUp.Pop());
             }
@@ -165,7 +177,7 @@ namespace Spit
             Hand hand = new Hand();
             Stack[] tempPiles = { new Stack(), new Stack(), new Stack(), new Stack(), new Stack() };
             Stack tempPickUp = new Stack();
-            cmd.CommandText = "SELECT * FROM AIPlayerHand";
+            cmd.CommandText = "SELECT * FROM AIPlayerHand WHERE gameIndex = " + gameIndex;
             datareader = cmd.ExecuteReader();
             while (datareader.Read())
             {
@@ -186,12 +198,14 @@ namespace Spit
             }
             for (int x = 0; x < tempPiles.Length; x++)
             {
-                for (int i = 0; i < tempPiles[x].Length(); i++)
+                int length = tempPiles[x].Length();
+                for (int i = 0; i < length; i++)
                 {
                     hand.piles[x].pile.Push(tempPiles[x].Pop());
                 }
             }
-            for (int i = 0; i < tempPickUp.Length(); i++)
+            int pickUpLength = tempPickUp.Length();
+            for (int i = 0; i < pickUpLength; i++)
             {
                 hand.pickUpPile.pile.Push(tempPickUp.Pop());
             }
@@ -250,7 +264,8 @@ namespace Spit
             //Saves players hand 
             for (int i = 0; i < game.players[Game.HUMAN].hand.piles.Length; i++)
             {
-                for (int x = 0; x < game.players[Game.HUMAN].hand.piles[i].pile.Length(); x++)
+                int pileILength = game.players[Game.HUMAN].hand.piles[i].pile.Length();
+                for (int x = 0; x < pileILength; x++)
                 {
                     Card data = game.players[Game.HUMAN].hand.piles[i].pile.Pop();
 
@@ -260,7 +275,8 @@ namespace Spit
                     cmd.ExecuteNonQuery();
                 }
             }
-            for (int i = 0; i < game.players[Game.HUMAN].hand.pickUpPile.pile.Length(); i++)
+            int pickUpPileLength = game.players[Game.HUMAN].hand.pickUpPile.pile.Length();
+            for (int i = 0; i < pickUpPileLength; i++)
             {
                 Card data = game.players[Game.HUMAN].hand.pickUpPile.pile.Pop();
 
@@ -275,7 +291,8 @@ namespace Spit
             //Saves AIs hand
             for (int i = 0; i < game.players[Game.AI].hand.piles.Length; i++)
             {
-                for (int x = 0; x < game.players[Game.AI].hand.piles[i].pile.Length(); x++)
+                int pileILength = game.players[Game.AI].hand.piles[i].pile.Length();
+                for (int x = 0; x < pileILength; x++)
                 {
                     Card data = game.players[Game.AI].hand.piles[i].pile.Pop();
 
@@ -283,7 +300,8 @@ namespace Spit
                     cmd.ExecuteNonQuery();
                 }
             }
-            for (int i = 0; i < game.players[Game.AI].hand.pickUpPile.pile.Length(); i++)
+            int pickUpPileLength = game.players[Game.AI].hand.pickUpPile.pile.Length();
+            for (int i = 0; i < pickUpPileLength; i++)
             {
                 Card data = game.players[Game.AI].hand.pickUpPile.pile.Pop();
 
