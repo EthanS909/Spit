@@ -136,7 +136,10 @@ namespace Spit
 
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
-            Close();
+            for (int intCounter = App.Current.Windows.Count - 1; intCounter >= 0; intCounter--)
+            {
+                App.Current.Windows[intCounter].Close();
+            }
         }
 
         private void AI_Click(object sender, RoutedEventArgs e)
@@ -186,7 +189,6 @@ namespace Spit
         {
             DisplayGameUI(false);
             DisplayPauseMenu(false);
-            Back.Visibility = Visibility.Visible;
             SaveScreen.Visibility = Visibility.Visible;
         }
 

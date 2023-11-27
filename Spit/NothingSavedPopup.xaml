@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Spit"
         mc:Ignorable="d"
-        Title="NothingSavedPopup" Height="450" Width="800">
+        Title="NothingSavedPopup" Height="300" Width="450">
     <Grid>
-        <TextBlock Text="Uh oh... you're an idiot. You didn't save any games yet. Stupid! "/>
+        <TextBlock Text="Uh oh... you're an idiot. You didn't save a game in this slot yet. Stupid! "/>
     </Grid>
 </Window>

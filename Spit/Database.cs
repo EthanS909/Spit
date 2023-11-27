@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data.SQLite;
 using Spit.DataStructures;
+using System.Windows;
 
 namespace Spit
 {
@@ -120,6 +121,8 @@ namespace Spit
             catch
             {
                 NothingSavedPopup nothingSavedPopup = new NothingSavedPopup();
+                nothingSavedPopup.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                nothingSavedPopup.Topmost = true;
                 nothingSavedPopup.Show();
                 nothingSavedToShow = true;
             }
