@@ -76,38 +76,56 @@ namespace Spit
 
             if (!e.Handled && e.Key == Key.Escape && Keyboard.Modifiers == ModifierKeys.None && Play.Visibility != Visibility.Visible)
             {
-                if (Back.Visibility == Visibility.Visible)
+                if (SaveScreen.Visibility != Visibility.Visible)
                 {
-                    if(background.Visibility == Visibility.Hidden)
+                    if (Back.Visibility == Visibility.Visible)
                     {
-                        DisplayPlayUI(false);
-                        DisplayStartUI(true);
+                        if (background.Visibility == Visibility.Hidden)
+                        {
+                            DisplayPlayUI(false);
+                            DisplayStartUI(true);
+                            DisplayPauseMenu(false);
+                        }
+                        else
+                        {
+                            DisplayRulesUI(false);
+                            DisplayPauseMenu(true);
+                        }
+                    }
+                    else if (ExitGame.Visibility == Visibility.Visible)
+                    {
                         DisplayPauseMenu(false);
+                        DrawingText.Visibility = Visibility.Visible;
+                        aiTimer.Start();
+                        updateTimer.Start();
+                        if (spit.tick > 0)
+                        {
+                            spit.countDownTimer.Start();
+                        }
                     }
                     else
                     {
-                        DisplayRulesUI(false);
                         DisplayPauseMenu(true);
-                    }
-                }
-                else if (ExitGame.Visibility == Visibility.Visible)
-                {
-                    DisplayPauseMenu(false);
-                    DrawingText.Visibility = Visibility.Visible;
-                    aiTimer.Start();
-                    updateTimer.Start();
-                    if(spit.tick > 0)
-                    {
-                        spit.countDownTimer.Start();
+                        DrawingText.Visibility = Visibility.Hidden;
+                        aiTimer.Stop();
+                        updateTimer.Stop();
+                        spit.countDownTimer.Stop();
                     }
                 }
                 else
                 {
+                    SaveScreen.Visibility = Visibility.Hidden;
+                    DisplayGameUI(true);
                     DisplayPauseMenu(true);
-                    DrawingText.Visibility = Visibility.Hidden;
-                    aiTimer.Stop();
-                    updateTimer.Stop();
-                    spit.countDownTimer.Stop();
+
+                    foreach (Image i in placePile1)
+                    {
+                        i.Visibility = Visibility.Hidden;
+                    }
+                    foreach (Image i in placePile2)
+                    {
+                        i.Visibility = Visibility.Hidden;
+                    }
                 }
             }
         }
@@ -190,6 +208,15 @@ namespace Spit
             DisplayGameUI(false);
             DisplayPauseMenu(false);
             SaveScreen.Visibility = Visibility.Visible;
+
+            foreach(Image i in placePile1)
+            {
+                i.Visibility = Visibility.Hidden;
+            }
+            foreach (Image i in placePile2)
+            {
+                i.Visibility = Visibility.Hidden;
+            }
         }
 
         private void SaveGame_Click(object sender, RoutedEventArgs e)
@@ -198,6 +225,22 @@ namespace Spit
             int gameIndex = Convert.ToInt32(button.Name[4]) - 48;
 
             spit.SaveGame(gameIndex);
+        }
+
+        private void SaveScreenExit_Click(object sender, RoutedEventArgs e)
+        {
+            DisplayPauseMenu(true);
+            DisplayGameUI(true);
+            SaveScreen.Visibility = Visibility.Hidden;
+
+            foreach (Image i in placePile1)
+            {
+                i.Visibility = Visibility.Visible;
+            }
+            foreach (Image i in placePile2)
+            {
+                i.Visibility = Visibility.Visible;
+            }
         }
 
         private void Back_Click(object sender, RoutedEventArgs e)

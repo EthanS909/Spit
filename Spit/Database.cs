@@ -11,7 +11,7 @@ namespace Spit
 {
     class Database
     {
-        public SQLiteConnection sqlite_conn;
+        private SQLiteConnection sqlite_conn;
 
         const int PICK_UP_PILE = -1;
         public bool nothingSavedToShow = false;

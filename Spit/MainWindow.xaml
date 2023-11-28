@@ -120,7 +120,7 @@
             <Button Name="Save2" Content="Save 2" Grid.Column="2" Grid.Row="0" Click="SaveGame_Click"/>
             <Button Name="Save3" Content="Save 3" Grid.Column="0" Grid.Row="2" Click="SaveGame_Click"/>
             <Button Name="Save4" Content="Save 4" Grid.Column="2" Grid.Row="2" Click="SaveGame_Click"/>
-            <Button Name="SaveScreenExit" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="3" Content="Back"/>
+            <Button Name="SaveScreenExit" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="3" Content="Back" Click="SaveScreenExit_Click"/>
         </Grid>
     </Grid>
 </Window>
