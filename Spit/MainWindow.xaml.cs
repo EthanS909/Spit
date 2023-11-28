@@ -260,9 +260,14 @@ namespace Spit
         }
 
         /*private void Back2_Click(object sender, RoutedEventArgs e)
-        /{
+        {
             DisplayPauseMenu(true);
         }*/
+
+        private void EmptyPile_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
 
         private void Left_Click(object sender, RoutedEventArgs e)
         {
