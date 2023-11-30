@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core.Mapping;
+using System.Data.Entity.ModelConfiguration.Configuration;
 using System.Linq;
 using System.Runtime.ExceptionServices;
 using System.Text;
@@ -26,6 +28,22 @@ namespace Spit
             piles[2] = thirdPile;
             piles[3] = fourthPile;
             piles[4] = fifthPile;
+        }
+
+        public int GetNumOfCards()
+        {
+            int numofCards = 0;
+
+            for (int x = 0; x < piles.Length; x++)
+            {
+                int length = piles[x].pile.Length();
+                for (int i = 0; i < length; i++)
+                {
+                    numofCards += 1;
+                }
+            }
+
+            return numofCards;
         }
     }
 }

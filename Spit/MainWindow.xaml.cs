@@ -43,6 +43,8 @@ namespace Spit
         public DispatcherTimer aiTimer = new DispatcherTimer();
         public DispatcherTimer updateTimer = new DispatcherTimer();
 
+        bool gameWon = false;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -266,12 +268,40 @@ namespace Spit
 
         private void EmptyPile_Click(object sender, RoutedEventArgs e)
         {
-            
+            if (spit.pickAPile)
+            {
+                if (sender.ToString() == "emptyPile1")
+                {
+                    spit.chosenPile = 0;
+                }
+                else if (sender.ToString() == "emptyPile2")
+                {
+                    spit.chosenPile = 1;
+                }
+                spit.ChoosePile();
+            }
+            if(spit.winningPlayer != null)
+            {
+                string winningPlayer;
+                if (spit.winningPlayer == "0") winningPlayer = "Human";
+                else winningPlayer = "AI";
+
+
+                background.Visibility = Visibility.Visible;
+                TextBlock winningMessage = new TextBlock();
+                winningMessage.Text = String.Format("{0} has won the game!", winningPlayer);
+                winningMessage.FontSize = 72;
+                Grid.SetColumn(winningMessage, 3);
+                Grid.SetRow(winningMessage, 3);
+                Grid.SetColumnSpan(winningMessage, 3);
+                Grid.SetZIndex(winningMessage, 0);
+                screen.Children.Add(winningMessage);
+            }
         }
 
         private void Left_Click(object sender, RoutedEventArgs e)
         {
-            if(AI.Content != difficulty[0])
+            if (AI.Content != difficulty[0])
             {
                 difficultyCount--;
                 AI.Content = difficulty[difficultyCount];
@@ -291,7 +321,7 @@ namespace Spit
 
         private void DisplayStartUI(bool enabled)
         {
-            if(enabled)
+            if (enabled)
             {
                 Play.Visibility = Visibility.Visible;
                 Rules.Visibility = Visibility.Visible;
@@ -307,7 +337,7 @@ namespace Spit
 
         private void DisplayPlayUI(bool enabled)
         {
-            if(enabled)
+            if (enabled)
             {
                 AI.Visibility = Visibility.Visible;
                 Load.Visibility = Visibility.Visible;
@@ -377,7 +407,7 @@ namespace Spit
 
             int index = 0;
 
-            for(int i = 0; i < plCardPiles.Count; i++)
+            for (int i = 0; i < plCardPiles.Count; i++)
             {
                 if (plCardPiles[i] == pile)
                 {
@@ -385,7 +415,7 @@ namespace Spit
                 }
             }
 
-            if(pile.BorderThickness != new Thickness(0))
+            if (pile.BorderThickness != new Thickness(0))
             {
                 SelectPile(pile, index);
             }
@@ -397,7 +427,7 @@ namespace Spit
 
         private void SelectPile(Button selected, int index)
         {
-            foreach(Button b in plCardPiles)
+            foreach (Button b in plCardPiles)
             {
                 b.BorderThickness = new Thickness(6);
             }
@@ -440,6 +470,22 @@ namespace Spit
                 bool placed = spit.Place(index);
 
                 if (placed) { DeselectPile(); }
+            }
+            if (spit.placePiles[0].pile.IsEmpty())
+            {
+                emptyPile1.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                emptyPile1.Visibility= Visibility.Hidden;
+            }
+            if (spit.placePiles[1].pile.IsEmpty())
+            {
+                emptyPile2.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                emptyPile2.Visibility = Visibility.Hidden;
             }
         }
 

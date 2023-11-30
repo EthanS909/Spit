@@ -37,6 +37,7 @@ namespace Spit
         const int maxPlayers = 2;
         public const int HUMAN = 0;
         public const int AI = 1;
+        public string winningPlayer;
 
         public Deck deck = new Deck();
 
@@ -548,6 +549,11 @@ namespace Spit
 
             if(chosenPile != -1)
             {
+                if (placePiles[chosenPile].pile.Length() == 0 && players[HUMAN].hand.GetNumOfCards() == 0)
+                {
+                    winningPlayer = Convert.ToString(HUMAN);
+                    return;
+                }
                 placePiles[chosenPile].Unload(players[HUMAN]);
                 placePiles[(chosenPile + 1) % 2].Unload(players[AI]);
             }
@@ -558,6 +564,11 @@ namespace Spit
 
                 if (pile0Len < pile1Len)
                 {
+                    if (placePiles[0].pile.Length() == 0 && players[AI].hand.GetNumOfCards() == 0)
+                    {
+                        winningPlayer = Convert.ToString(AI);
+                        return;
+                    }
                     placePiles[0].Unload(players[AI]);
                     placePiles[1].Unload(players[HUMAN]);
                 }
