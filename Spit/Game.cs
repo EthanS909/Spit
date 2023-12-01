@@ -336,10 +336,10 @@ namespace Spit
         public void CanPlay()
         {
             // Create targets
-            int target1 = 0;
-            int target2 = 0;
-            int target3 = 0;
-            int target4 = 0;
+            int target1 = -1;
+            int target2 = -1;
+            int target3 = -1;
+            int target4 = -1;
 
             if (!placePiles[0].pile.IsEmpty())
             {

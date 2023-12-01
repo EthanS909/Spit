@@ -97,12 +97,19 @@ namespace Spit
                     else if (ExitGame.Visibility == Visibility.Visible)
                     {
                         DisplayPauseMenu(false);
-                        DrawingText.Visibility = Visibility.Visible;
-                        aiTimer.Start();
-                        updateTimer.Start();
-                        if (spit.tick > 0)
+                        if(WinningText.Visibility == Visibility.Hidden)
                         {
-                            spit.countDownTimer.Start();
+                            DrawingText.Visibility = Visibility.Visible;
+                            aiTimer.Start();
+                            updateTimer.Start();
+                            if (spit.tick > 0)
+                            {
+                                spit.countDownTimer.Start();
+                            }
+                        }
+                        else
+                        {
+                            background.Visibility = Visibility.Visible;
                         }
                     }
                     else
@@ -288,14 +295,7 @@ namespace Spit
 
 
                 background.Visibility = Visibility.Visible;
-                TextBlock winningMessage = new TextBlock();
-                winningMessage.Text = String.Format("{0} has won the game!", winningPlayer);
-                winningMessage.FontSize = 72;
-                Grid.SetColumn(winningMessage, 3);
-                Grid.SetRow(winningMessage, 3);
-                Grid.SetColumnSpan(winningMessage, 3);
-                Grid.SetZIndex(winningMessage, 0);
-                screen.Children.Add(winningMessage);
+                WinningText.Text = String.Format("{0} has won the game!", winningPlayer);
             }
         }
 

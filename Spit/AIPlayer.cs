@@ -185,10 +185,10 @@ namespace Spit
 
         public void CalcTargets()
         {
-            target1 = 0;
-            target2 = 0;
-            target3 = 0;
-            target4 = 0;
+            target1 = -1;
+            target2 = -1;
+            target3 = -1;
+            target4 = -1;
 
             if (!game.placePiles[0].pile.IsEmpty())
             {
