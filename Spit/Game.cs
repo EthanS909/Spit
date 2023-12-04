@@ -552,6 +552,7 @@ namespace Spit
                 if (placePiles[chosenPile].pile.Length() == 0 && players[HUMAN].hand.GetNumOfCards() == 0)
                 {
                     winningPlayer = Convert.ToString(HUMAN);
+                    pickAPile = false;
                     return;
                 }
                 placePiles[chosenPile].Unload(players[HUMAN]);
@@ -567,6 +568,7 @@ namespace Spit
                     if (placePiles[0].pile.Length() == 0 && players[AI].hand.GetNumOfCards() == 0)
                     {
                         winningPlayer = Convert.ToString(AI);
+                        pickAPile = false;
                         return;
                     }
                     placePiles[0].Unload(players[AI]);
@@ -574,6 +576,12 @@ namespace Spit
                 }
                 else
                 {
+                    if (placePiles[1].pile.Length() == 0 && players[AI].hand.GetNumOfCards() == 0)
+                    {
+                        winningPlayer = Convert.ToString(AI);
+                        pickAPile = false;
+                        return;
+                    }
                     placePiles[1].Unload(players[AI]);
                     placePiles[0].Unload(players[HUMAN]);
                 }

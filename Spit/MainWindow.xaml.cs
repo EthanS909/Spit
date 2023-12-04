@@ -296,6 +296,7 @@ namespace Spit
 
                 background.Visibility = Visibility.Visible;
                 WinningText.Text = String.Format("{0} has won the game!", winningPlayer);
+                WinningText.Visibility = Visibility.Visible;
             }
         }
 

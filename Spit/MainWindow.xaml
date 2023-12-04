@@ -94,7 +94,7 @@
         <Button Name="Save" Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="3" Content="Save Game" FontSize="72" Click="DisplaySaveUI" Visibility="Hidden" Panel.ZIndex="53"/>
         <Button Name="Rules2" Grid.Column="2" Grid.Row="3" Grid.ColumnSpan="3" Content="Rules" FontSize="72" Click="Rules_Click" Visibility="Hidden" Panel.ZIndex="53"/>
         <Button Name="ExitGame" Grid.Column="2" Grid.Row="4" Grid.ColumnSpan="3" Content="Exit Game" FontSize="72" Click="ExitGame_Click" Visibility="Hidden" Panel.ZIndex="53"/>
-        <TextBlock Name="WinningText" Grid.Column="3" Grid.ColumnSpan="3" Grid.Row="3" Panel.ZIndex="53" Visibility="Hidden" FontSize="72"/>
+        <TextBlock Name="WinningText" Grid.Column="1" Grid.ColumnSpan="4" Grid.Row="3" Panel.ZIndex="53" Visibility="Hidden" FontSize="72"/>
         <Grid Name="LoadScreen" Grid.Column="2" Grid.ColumnSpan="3" Grid.Row="2" Grid.RowSpan="3" Visibility="Hidden">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
