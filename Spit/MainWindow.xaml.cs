@@ -109,16 +109,19 @@ namespace Spit
                         }
                         else
                         {
-                            background.Visibility = Visibility.Visible;
+                            ExitGame.Visibility = Visibility.Visible;
                         }
                     }
                     else
                     {
-                        DisplayPauseMenu(true);
-                        DrawingText.Visibility = Visibility.Hidden;
-                        aiTimer.Stop();
-                        updateTimer.Stop();
-                        spit.countDownTimer.Stop();
+                        if(WinningText.Visibility == Visibility.Hidden)
+                        {
+                            DisplayPauseMenu(true);
+                            DrawingText.Visibility = Visibility.Hidden;
+                            aiTimer.Stop();
+                            updateTimer.Stop();
+                            spit.countDownTimer.Stop();
+                        }
                     }
                 }
                 else
@@ -293,10 +296,21 @@ namespace Spit
                 if (spit.winningPlayer == "0") winningPlayer = "Human";
                 else winningPlayer = "AI";
 
-
-                background.Visibility = Visibility.Visible;
                 WinningText.Text = String.Format("{0} has won the game!", winningPlayer);
                 WinningText.Visibility = Visibility.Visible;
+                DisplayGameUI(false);
+                ExitGame.Visibility = Visibility.Visible;
+
+                foreach (Image i in placePile1)
+                {
+                    i.Visibility = Visibility.Hidden;
+                }
+                foreach (Image i in placePile2)
+                {
+                    i.Visibility = Visibility.Hidden;
+                }
+                emptyPile1.Visibility = Visibility.Hidden;
+                emptyPile2.Visibility = Visibility.Hidden;
             }
         }
 
