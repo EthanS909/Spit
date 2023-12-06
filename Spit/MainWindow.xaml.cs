@@ -508,6 +508,7 @@ namespace Spit
         {
             // Hides the Game UI
             DisplayGameUI(false);
+            WinningText.Visibility = Visibility.Hidden;
 
             // Displays the Start Screen UI so you can start a new game
             DisplayStartUI(true);
