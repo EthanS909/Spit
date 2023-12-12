@@ -278,19 +278,24 @@ namespace Spit
 
         private void EmptyPile_Click(object sender, RoutedEventArgs e)
         {
+            Button button = (Button)sender;
             if (spit.pickAPile)
             {
-                if (sender.ToString() == "emptyPile1")
+                if (button.Name == "emptyPile1")
                 {
                     spit.chosenPile = 0;
                 }
-                else if (sender.ToString() == "emptyPile2")
+                else if (button.Name == "emptyPile2")
                 {
                     spit.chosenPile = 1;
                 }
                 spit.ChoosePile();
             }
-            if(spit.winningPlayer != null)
+        }
+
+        public void WinCheck()
+        {
+            if (spit.winningPlayer != null)
             {
                 string winningPlayer;
                 if (spit.winningPlayer == "0") winningPlayer = "Human";
@@ -473,7 +478,7 @@ namespace Spit
                 }
             }
 
-            if (spit.pickAPile == true)
+            if (spit.pickAPile)
             {
                 spit.chosenPile = index;
                 spit.AIwait.Stop();
@@ -485,22 +490,6 @@ namespace Spit
                 bool placed = spit.Place(index);
 
                 if (placed) { DeselectPile(); }
-            }
-            if (spit.placePiles[0].pile.IsEmpty())
-            {
-                emptyPile1.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                emptyPile1.Visibility= Visibility.Hidden;
-            }
-            if (spit.placePiles[1].pile.IsEmpty())
-            {
-                emptyPile2.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                emptyPile2.Visibility = Visibility.Hidden;
             }
         }
 

@@ -549,10 +549,17 @@ namespace Spit
 
             if(chosenPile != -1)
             {
-                if (placePiles[chosenPile].pile.Length() == 0 && players[HUMAN].hand.GetNumOfCards() == 0)
+                if (placePiles[chosenPile].pile.Length() == 0 && players[HUMAN].hand.GetNumOfCards() == 0 && players[HUMAN].hand.pickUpPile.pile.Length() == 0)
                 {
                     winningPlayer = Convert.ToString(HUMAN);
                     pickAPile = false;
+                    wnd.WinCheck();
+                    return;
+                } else if(placePiles[(chosenPile + 1) % 2].pile.Length() == 0 && players[AI].hand.GetNumOfCards() == 0 && players[AI].hand.pickUpPile.pile.Length() == 0)
+                {
+                    winningPlayer = Convert.ToString(AI);
+                    pickAPile = false;
+                    wnd.WinCheck();
                     return;
                 }
                 placePiles[chosenPile].Unload(players[HUMAN]);
@@ -565,21 +572,26 @@ namespace Spit
 
                 if (pile0Len < pile1Len)
                 {
-                    if (placePiles[0].pile.Length() == 0 && players[AI].hand.GetNumOfCards() == 0)
+                    if (placePiles[0].pile.Length() == 0 && players[AI].hand.GetNumOfCards() == 0 && players[AI].hand.pickUpPile.pile.Length() == 0)
                     {
                         winningPlayer = Convert.ToString(AI);
                         pickAPile = false;
+                        wnd.WinCheck();
                         return;
                     }
-                    placePiles[0].Unload(players[AI]);
-                    placePiles[1].Unload(players[HUMAN]);
+                    else
+                    {
+                        placePiles[0].Unload(players[AI]);
+                        placePiles[1].Unload(players[HUMAN]);
+                    }
                 }
                 else
                 {
-                    if (placePiles[1].pile.Length() == 0 && players[AI].hand.GetNumOfCards() == 0)
+                    if (placePiles[1].pile.Length() == 0 && players[AI].hand.GetNumOfCards() == 0 && players[AI].hand.pickUpPile.pile.Length() == 0)
                     {
                         winningPlayer = Convert.ToString(AI);
                         pickAPile = false;
+                        wnd.WinCheck();
                         return;
                     }
                     placePiles[1].Unload(players[AI]);
@@ -593,7 +605,10 @@ namespace Spit
             FlipOverPile();
             wnd.Stalemate.Visibility = Visibility.Hidden;
             pickAPile = false;
+            chosenPile = -1;
             wnd.ResetExtraCardImages();
+            wnd.emptyPile1.Visibility = Visibility.Hidden;
+            wnd.emptyPile2.Visibility = Visibility.Hidden;
             wnd.updateTimer.Start();
             wnd.aiTimer.Start();
         }
@@ -761,6 +776,23 @@ namespace Spit
             if (!pickAPile)
             {
                 CanPlay();
+            }
+
+            if (placePiles[0].pile.IsEmpty())
+            {
+                wnd.emptyPile1.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                wnd.emptyPile1.Visibility = Visibility.Hidden;
+            }
+            if (placePiles[1].pile.IsEmpty())
+            {
+                wnd.emptyPile2.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                wnd.emptyPile2.Visibility = Visibility.Hidden;
             }
         }
     }
