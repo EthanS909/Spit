@@ -36,7 +36,7 @@
         </Grid.RowDefinitions>
         <Image Name="plStack" Source="CardImages/back_of_card.png" Grid.Column="6" Grid.Row="2" Grid.RowSpan="2" Margin="0,0,0,0" Visibility="Hidden" Panel.ZIndex="53"/>
         <Image Name="aiStack" Source="CardImages/back_of_card.png" Grid.Column="0" Grid.Row="2" Grid.RowSpan="2" Margin="0,0,0,0" Visibility="Hidden" Panel.ZIndex="53"/>
-        <Button Name="plPile1"  Click="Card_Click" Grid.Column="1" Grid.RowSpan="2" Margin="0,20,0,0" Background="Transparent" Grid.Row="4" Visibility="Hidden" BorderThickness="5" BorderBrush="Transparent" Panel.ZIndex="53">
+        <Button Name="plPile1"  Click="Card_Click" Grid.Column="1" Grid.RowSpan="2" Margin="0,20,0,0" Background="Transparent" Grid.Row="4" Visibility="Hidden" BorderThickness="5" BorderBrush="Transparent" Panel.ZIndex="53" Cursor="Hand">
             <Image Name="card1" Source="{Binding PlayerFirstPileTop}"/>
         </Button>
         <Button Name="plPile2"  Click="Card_Click" Grid.Column="2" Grid.RowSpan="2" Margin="0,20,0,0" Background="Transparent" Grid.Row="4" Visibility="Hidden" BorderThickness="5" BorderBrush="Transparent" Panel.ZIndex="53">
@@ -129,5 +129,53 @@
             <Button Name="Save4" Content="Save 4" Grid.Column="2" Grid.Row="2" Click="SaveGame_Click"/>
             <Button Name="SaveScreenExit" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="3" Content="Back" Click="SaveScreenExit_Click"/>
         </Grid>
+        <Button Click="Button_Click"/>
+        <ScrollViewer Name="RulesText" Visibility="Hidden" Grid.Row="1" Grid.Column="1" Panel.ZIndex="54" Grid.ColumnSpan="5" Grid.RowSpan="3">
+            <StackPanel>
+                <TextBlock FontSize="32" TextWrapping="Wrap">
+•	Each player is dealt 26 cards
+                           <LineBreak/>
+•	Each player takes 15 of their cards and arranges them in 5 stock piles
+                    <LineBreak/>
+•	Each stock pile has an increasing number of cards from 1 to 5 with only the top card being visible.
+                    <LineBreak/>
+    o	This is done by dealing 1 card face up and dealing the following 4 face down in front of them.
+                    <LineBreak/>
+    o	Beginning again, a player deals a card face up onto the second pile and deals the following 3 face down.
+                    <LineBreak/>
+    o	Continuing on, players finish the pattern with the final card face up on the fifth pile.
+                    <LineBreak/>
+    o	These are visible to both players at all times.
+                    <LineBreak/>
+•	The remaining 11 cards are kept in a downwards facing pile to the right of the two centre piles where you play your cards.
+                    <LineBreak/>
+•	After both players are ready, both players will count down from three. They will say, “Three, Two, One, Spit!”
+                    <LineBreak/>
+•	From their spit pile (the stack of 11) they will each place a card face up between their stock piles as in the above image.
+                    <LineBreak/>
+•	The players simultaneously play by placing a card numerically above or below the card shown in the centre spit pile from any of their stock piles. There are no individual turns.
+                    <LineBreak/>
+•	Each player plays (places down a card) as quickly as they can on whatever they can.
+                    <LineBreak/>
+•	When the top faced up card is used from stock piles, players will turn over the next.
+                    <LineBreak/>
+•	If any stock pile is completely used, a stock pile card may be placed in its spot.
+                    <LineBreak/>
+•	Only 5 stock piles are allowed at the most.
+                    <LineBreak/>
+•	The first player to deplete all stock piles will yell ‘Spit’ and slap the centre spit pile in which they feel contains the least amount of cards.
+                    <LineBreak/>
+•	All cards leftover from a player’s spit stack and the chosen spit piles are shuffled by each respective player.
+                    <LineBreak/>
+•	The beginning lay-out is formed again.
+                    <LineBreak/>
+•	If a player does not have enough cards (15) to complete a lay-out, they complete it the furthest they can.
+                    <LineBreak/>
+•	If only one player has a spit stack, then only one player will place a spit card into the centre.
+                    <LineBreak/>
+•	Play then loops until one player can yell ‘Spit’ and slap the empty ‘missing’ pile, thus ‘getting rid’ of all of their cards.
+                </TextBlock>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Window>

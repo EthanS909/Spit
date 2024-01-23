@@ -31,5 +31,10 @@ namespace Spit
         {
             return -1;
         }
+
+        public virtual void MinMax()
+        {
+
+        }
     }
 }

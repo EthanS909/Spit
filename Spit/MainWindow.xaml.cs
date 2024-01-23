@@ -257,9 +257,9 @@ namespace Spit
 
         private void Back_Click(object sender, RoutedEventArgs e)
         {
-            if(background.Visibility == Visibility.Visible)
+            DisplayRulesUI(false);
+            if (background.Visibility == Visibility.Visible)
             {
-                DisplayRulesUI(false);
                 DisplayPauseMenu(true);
             } else
             {
@@ -530,10 +530,12 @@ namespace Spit
             if (enabled)
             {
                 Back.Visibility = Visibility.Visible;
+                RulesText.Visibility = Visibility.Visible;
             }
             else
             {
                 Back.Visibility = Visibility.Hidden;
+                RulesText.Visibility = Visibility.Hidden;
             }
         }
 
@@ -657,6 +659,11 @@ namespace Spit
             pile2NextInts[3] = -7;
             pile2Next = new Thickness(0, 7, -5, -7);
             numOfCardsInPile2 = 0;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            spit.players[1].MinMax();
         }
     }
 }

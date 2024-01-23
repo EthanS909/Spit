@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="back.png" />
     <None Remove="CardImages\10_of_clubs.png" />
     <None Remove="CardImages\10_of_diamonds.png" />
     <None Remove="CardImages\10_of_hearts.png" />
@@ -126,6 +127,7 @@
     <Resource Include="CardImages\back.png" />
     <Resource Include="CardImages\back_of_card.png" />
     <Resource Include="CardImages\card_outline.png" />
+    <Resource Include="back.png" />
   </ItemGroup>
 
 </Project>
