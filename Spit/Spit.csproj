@@ -64,6 +64,9 @@
     <None Remove="CardImages\back.png" />
     <None Remove="CardImages\back_of_card.png" />
     <None Remove="CardImages\card_outline.png" />
+    <None Remove="empty_file.png" />
+    <None Remove="full_file.png" />
+    <None Remove="full_file1.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -72,6 +75,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="full_file1.png" />
+    <Resource Include="full_file.png" />
+    <Resource Include="empty_file.png" />
     <Resource Include="CardImages\10_of_clubs.png" />
     <Resource Include="CardImages\10_of_diamonds.png" />
     <Resource Include="CardImages\10_of_hearts.png" />

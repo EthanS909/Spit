@@ -358,5 +358,21 @@ namespace Spit
             }
             SaveGameState(gameIndex);
         }
+
+        public int CheckSavedGame(int gameIndex)
+        {
+            SQLiteCommand cmd = sqlite_conn.CreateCommand();
+            SQLiteDataReader datareader;
+            cmd.CommandText = "SELECT * FROM AIDifficulty WHERE gameIndex = " + gameIndex;
+            datareader = cmd.ExecuteReader();
+            if (datareader.Read() == true)
+            {
+                return 1;
+            }
+            else
+            {
+                return 0;
+            }
+        }
     }
 }

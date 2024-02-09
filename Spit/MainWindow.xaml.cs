@@ -43,8 +43,6 @@ namespace Spit
         public DispatcherTimer aiTimer = new DispatcherTimer();
         public DispatcherTimer updateTimer = new DispatcherTimer();
 
-        bool gameWon = false;
-
         public MainWindow()
         {
             InitializeComponent();
@@ -187,8 +185,8 @@ namespace Spit
 
         private void DisplayLoadUI(object sender, RoutedEventArgs e)
         {
+            DisplaySavedGameState();
             DisplayPlayUI(false);
-            Back.Visibility = Visibility.Visible;
             LoadScreen.Visibility = Visibility.Visible;
         }
 
@@ -237,6 +235,13 @@ namespace Spit
             int gameIndex = Convert.ToInt32(button.Name[4]) - 48;
 
             spit.SaveGame(gameIndex);
+        }
+
+        private void LoadScreenExit_Click(object sender, RoutedEventArgs e)
+        {
+            DisplayPlayUI(true);
+            LoadScreen.Visibility = Visibility.Hidden;
+            LoadScreenExit.Visibility = Visibility.Hidden;
         }
 
         private void SaveScreenExit_Click(object sender, RoutedEventArgs e)
@@ -498,6 +503,8 @@ namespace Spit
             // Hides the Game UI
             DisplayGameUI(false);
             WinningText.Visibility = Visibility.Hidden;
+            CountDown.Visibility = Visibility.Hidden;
+            DrawingText.Visibility = Visibility.Hidden;
 
             // Displays the Start Screen UI so you can start a new game
             DisplayStartUI(true);
@@ -572,6 +579,7 @@ namespace Spit
             //20,20,175,160
             int pile1Length = spit.placePiles[0].pile.Length();
             int pile2Length = spit.placePiles[1].pile.Length();
+            //int humanPileLength = spit.players[0].hand.piles.firstPile.Length();
             int i = 0;
 
             if (player == -1)
@@ -623,6 +631,27 @@ namespace Spit
             }
             else if (player == Game.HUMAN)
             {
+                /*for (i = 0; i < (pile2Length / 3) - numOfCardsInPile2; i++)
+                {
+                    Image newCardImage = new Image();
+                    newCardImage.Margin = pile2Next;
+                    newCardImage.Source = plStack.Source;
+                    Grid.SetColumn(newCardImage, 4);
+                    Grid.SetRow(newCardImage, 2);
+                    Grid.SetRowSpan(newCardImage, 2);
+                    Grid.SetZIndex(newCardImage, pile2ZIndex);
+                    humanPileZIndex -= 1;
+                    screen.Children.Add(newCardImage);
+
+                    placePile2.Add(newCardImage);
+
+                    pile2NextInts[0] += 10;
+                    pile2NextInts[1] += 8;
+                    pile2NextInts[2] -= 5;
+                    pile2NextInts[3] -= 8;
+                    pile2Next = new Thickness(pile2NextInts[0], pile2NextInts[1], pile2NextInts[2], pile2NextInts[3]);
+                }
+                numOfCardsInHumanPile += i;*/
 
             } else if (player == Game.AI)
             {
@@ -664,6 +693,44 @@ namespace Spit
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             spit.players[1].MinMax();
+        }
+
+        public void DisplaySavedGameState()
+        {
+            Database database = new Database(null);
+
+            if (database.CheckSavedGame(1) == 1)
+            {
+                Load1Image.Source = new BitmapImage(new Uri("full_file1.png", UriKind.Relative));
+            }
+            else
+            {
+                Load1Image.Source = new BitmapImage(new Uri("empty_file.png", UriKind.Relative));
+            }
+            if (database.CheckSavedGame(2) == 1)
+            {
+                Load2Image.Source = new BitmapImage(new Uri("full_file1.png", UriKind.Relative));
+            }
+            else
+            {
+                Load2Image.Source = new BitmapImage(new Uri("empty_file.png", UriKind.Relative));
+            }
+            if (database.CheckSavedGame(3) == 1)
+            {
+                Load3Image.Source = new BitmapImage(new Uri("full_file1.png", UriKind.Relative));
+            }
+            else
+            {
+                Load3Image.Source = new BitmapImage(new Uri("empty_file.png", UriKind.Relative));
+            }
+            if (database.CheckSavedGame(4) == 1)
+            {
+                Load4Image.Source = new BitmapImage(new Uri("full_file1.png", UriKind.Relative));
+            }
+            else
+            {
+                Load4Image.Source = new BitmapImage(new Uri("empty_file.png", UriKind.Relative));
+            }
         }
     }
 }
