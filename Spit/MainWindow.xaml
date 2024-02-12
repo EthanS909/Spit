@@ -7,7 +7,8 @@
         mc:Ignorable="d"
         Title="Spit" Height="1080" Width="1920"
         WindowState="Maximized"
-        WindowStyle="None">
+        WindowStyle="None"
+        Name="window">
     <Window.Background>
         <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
             <GradientStop Color="DarkGreen" Offset="0.0"/>
@@ -34,6 +35,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+        <Image Name="pre" Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Grid.ColumnSpan="3"/>
         <Image Name="plStack" Source="CardImages/back_of_card.png" Grid.Column="6" Grid.Row="2" Grid.RowSpan="2" Margin="0,0,0,0" Visibility="Hidden" Panel.ZIndex="53"/>
         <Image Name="aiStack" Source="CardImages/back_of_card.png" Grid.Column="0" Grid.Row="2" Grid.RowSpan="2" Margin="0,0,0,0" Visibility="Hidden" Panel.ZIndex="53"/>
         <Button Name="plPile1"  Click="Card_Click" Grid.Column="1" Grid.RowSpan="2" Margin="0,20,0,0" Background="Transparent" Grid.Row="4" Visibility="Hidden" BorderThickness="5" BorderBrush="Transparent" Panel.ZIndex="53" Cursor="Hand">
@@ -107,16 +109,16 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Button Name="Load1" Grid.Column="0" Grid.Row="0" Click="Load_Click" FontSize="72">
+            <Button Name="Load1" Grid.Column="0" Grid.Row="0" Click="Load_Click" FontSize="72" MouseEnter="ShowGamePreview" MouseLeave="HideGamePreview">
                 <Image Name="Load1Image" Source="empty_file.png"/>
             </Button>
-            <Button Name="Load2" Grid.Column="2" Grid.Row="0" Click="Load_Click" FontSize="72">
+            <Button Name="Load2" Grid.Column="2" Grid.Row="0" Click="Load_Click" FontSize="72" MouseEnter="ShowGamePreview" MouseLeave="HideGamePreview">
                 <Image Name="Load2Image" Source="empty_file.png"/>
             </Button>
-            <Button Name="Load3" Grid.Column="0" Grid.Row="2" Click="Load_Click" FontSize="72">
+            <Button Name="Load3" Grid.Column="0" Grid.Row="2" Click="Load_Click" FontSize="72" MouseEnter="ShowGamePreview" MouseLeave="HideGamePreview">
                 <Image Name="Load3Image" Source="empty_file.png"/>
             </Button>
-            <Button Name="Load4" Grid.Column="2" Grid.Row="2" Click="Load_Click" FontSize="72">
+            <Button Name="Load4" Grid.Column="2" Grid.Row="2" Click="Load_Click" FontSize="72" MouseEnter="ShowGamePreview" MouseLeave="HideGamePreview">
                 <Image Name="Load4Image" Source="empty_file.png"/>
             </Button>
             <Button Name="LoadScreenExit" Content="Back" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="3" Click="LoadScreenExit_Click" FontSize="72"/>
@@ -147,7 +149,7 @@
             </Button>
             <Button Name="SaveScreenExit" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="3" Content="Back" Click="SaveScreenExit_Click" FontSize="72"/>
         </Grid>
-        <Button Click="Button_Click"/>
+        <Button Click="Button_Click" Visibility="Hidden"/>
         <ScrollViewer Name="RulesText" Visibility="Hidden" Grid.Row="1" Grid.Column="1" Panel.ZIndex="54" Grid.ColumnSpan="5" Grid.RowSpan="3">
             <StackPanel>
                 <TextBlock FontSize="32" TextWrapping="Wrap">

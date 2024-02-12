@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.Eventing.Reader;
+using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -233,6 +236,8 @@ namespace Spit
         {
             Button button = (Button)sender;
             int gameIndex = Convert.ToInt32(button.Name[4]) - 48;
+
+            SaveGamePreview(gameIndex);
 
             spit.SaveGame(gameIndex);
             DisplaySavedGameState();
@@ -740,6 +745,78 @@ namespace Spit
                 Load4Image.Source = new BitmapImage(new Uri("empty_file.png", UriKind.Relative));
                 Save4Image.Source = new BitmapImage(new Uri("empty_file.png", UriKind.Relative));
             }
+        }
+
+        public void SaveGamePreview(int gameIndex)
+        {
+            DisplayGameUI(true);
+            SaveScreen.Visibility = Visibility.Hidden;
+
+            UIElement source = screen as UIElement;
+            string path = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            string[] game = { "gameSave1", "gameSave2", "gameSave3", "gameSave4" };
+            Uri destination = new Uri(path + @"\\" + game[gameIndex - 1] + ".png");
+
+            try
+            {
+                double Height, renderHeight, Width, renderWidth;
+
+                Height = renderHeight = source.RenderSize.Height;
+                Width = renderWidth = source.RenderSize.Width;
+
+                //Specification for target bitmap like width/height pixel etc.
+                RenderTargetBitmap renderTarget = new RenderTargetBitmap((int)renderWidth, (int)renderHeight, 96, 96, PixelFormats.Pbgra32);
+                //creates Visual Brush of UIElement
+                VisualBrush visualBrush = new VisualBrush(source);
+
+                DrawingVisual drawingVisual = new DrawingVisual();
+                using (DrawingContext drawingContext = drawingVisual.RenderOpen())
+                {
+                    //draws image of element
+                    drawingContext.DrawRectangle(visualBrush, null, new Rect(new Point(0, 0), new Point(Width, Height)));
+                }
+                //renders image
+                renderTarget.Render(drawingVisual);
+
+                //PNG encoder for creating PNG file
+                PngBitmapEncoder encoder = new PngBitmapEncoder();
+                encoder.Frames.Add(BitmapFrame.Create(renderTarget));
+                using (FileStream stream = new FileStream(destination.LocalPath, FileMode.Create, FileAccess.Write))
+                {
+                    encoder.Save(stream);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+            DisplayGameUI(false);
+            SaveScreen.Visibility = Visibility.Visible;
+        }
+
+        public void ShowGamePreview(object sender, RoutedEventArgs e)
+        {
+            int gameIndex = 0;
+
+            Button button = (Button)sender;
+            string temp = button.Name;
+            string[] parts = temp.Split("Load");
+            gameIndex = Convert.ToInt32(parts[1]) - 1;
+
+            string[] game = { "gameSave1", "gameSave2", "gameSave3", "gameSave4" };
+            string path = String.Format(System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\\" + game[gameIndex] + ".png");
+
+            BitmapImage bitmap = new BitmapImage();
+            bitmap.BeginInit();
+            bitmap.UriSource = new Uri(path);
+            bitmap.EndInit();
+
+            pre.Source = bitmap;
+            pre.Visibility = Visibility.Visible;
+        }
+        public void HideGamePreview(object sender, RoutedEventArgs e)
+        {
+            pre.Visibility = Visibility.Hidden;
         }
     }
 }
