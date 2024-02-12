@@ -109,7 +109,7 @@ namespace Spit
                         {
                             ExitGame.Visibility = Visibility.Visible;
                         }
-                    }
+                    } 
                     else
                     {
                         if(WinningText.Visibility == Visibility.Hidden)
@@ -235,6 +235,7 @@ namespace Spit
             int gameIndex = Convert.ToInt32(button.Name[4]) - 48;
 
             spit.SaveGame(gameIndex);
+            DisplaySavedGameState();
         }
 
         private void LoadScreenExit_Click(object sender, RoutedEventArgs e)
@@ -702,34 +703,42 @@ namespace Spit
             if (database.CheckSavedGame(1) == 1)
             {
                 Load1Image.Source = new BitmapImage(new Uri("full_file1.png", UriKind.Relative));
+                Save1Image.Source = new BitmapImage(new Uri("full_file1.png", UriKind.Relative));
             }
             else
             {
                 Load1Image.Source = new BitmapImage(new Uri("empty_file.png", UriKind.Relative));
+                Save1Image.Source = new BitmapImage(new Uri("empty_file.png", UriKind.Relative));
             }
             if (database.CheckSavedGame(2) == 1)
             {
                 Load2Image.Source = new BitmapImage(new Uri("full_file1.png", UriKind.Relative));
+                Save2Image.Source = new BitmapImage(new Uri("full_file1.png", UriKind.Relative));
             }
             else
             {
                 Load2Image.Source = new BitmapImage(new Uri("empty_file.png", UriKind.Relative));
+                Save2Image.Source = new BitmapImage(new Uri("empty_file.png", UriKind.Relative));
             }
             if (database.CheckSavedGame(3) == 1)
             {
                 Load3Image.Source = new BitmapImage(new Uri("full_file1.png", UriKind.Relative));
+                Save3Image.Source = new BitmapImage(new Uri("full_file1.png", UriKind.Relative));
             }
             else
             {
                 Load3Image.Source = new BitmapImage(new Uri("empty_file.png", UriKind.Relative));
+                Save3Image.Source = new BitmapImage(new Uri("empty_file.png", UriKind.Relative));
             }
             if (database.CheckSavedGame(4) == 1)
             {
                 Load4Image.Source = new BitmapImage(new Uri("full_file1.png", UriKind.Relative));
+                Save4Image.Source = new BitmapImage(new Uri("full_file1.png", UriKind.Relative));
             }
             else
             {
                 Load4Image.Source = new BitmapImage(new Uri("empty_file.png", UriKind.Relative));
+                Save4Image.Source = new BitmapImage(new Uri("empty_file.png", UriKind.Relative));
             }
         }
     }
