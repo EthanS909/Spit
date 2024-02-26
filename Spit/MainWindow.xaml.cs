@@ -145,6 +145,7 @@ namespace Spit
 
         private void Play_Click(object sender, RoutedEventArgs e)
         {
+            DisplaySavedGameState();
             //Hide Start Screen UI
             DisplayStartUI(false);
 
@@ -188,13 +189,14 @@ namespace Spit
 
         private void DisplayLoadUI(object sender, RoutedEventArgs e)
         {
-            DisplaySavedGameState();
             DisplayPlayUI(false);
             LoadScreen.Visibility = Visibility.Visible;
         }
 
         private void Load_Click(object sender, RoutedEventArgs e)
         {
+            pre.Visibility = Visibility.Hidden;
+
             Button button = (Button)sender;
             int gameIndex = Convert.ToInt32(button.Name[4]) - 48;
 
@@ -390,6 +392,8 @@ namespace Spit
 
         private void DisplayGameUI(bool enabled)
         {
+            pre.Source = null;
+
             if (enabled)
             {
                 plPile1.Visibility = Visibility.Visible;
@@ -707,8 +711,8 @@ namespace Spit
 
             if (database.CheckSavedGame(1) == 1)
             {
-                Load1Image.Source = new BitmapImage(new Uri("full_file1.png", UriKind.Relative));
-                Save1Image.Source = new BitmapImage(new Uri("full_file1.png", UriKind.Relative));
+                Load1Image.Source = new BitmapImage(new Uri("full_file.png", UriKind.Relative));
+                Save1Image.Source = new BitmapImage(new Uri("full_file.png", UriKind.Relative));
             }
             else
             {
@@ -717,8 +721,8 @@ namespace Spit
             }
             if (database.CheckSavedGame(2) == 1)
             {
-                Load2Image.Source = new BitmapImage(new Uri("full_file1.png", UriKind.Relative));
-                Save2Image.Source = new BitmapImage(new Uri("full_file1.png", UriKind.Relative));
+                Load2Image.Source = new BitmapImage(new Uri("full_file.png", UriKind.Relative));
+                Save2Image.Source = new BitmapImage(new Uri("full_file.png", UriKind.Relative));
             }
             else
             {
@@ -727,8 +731,8 @@ namespace Spit
             }
             if (database.CheckSavedGame(3) == 1)
             {
-                Load3Image.Source = new BitmapImage(new Uri("full_file1.png", UriKind.Relative));
-                Save3Image.Source = new BitmapImage(new Uri("full_file1.png", UriKind.Relative));
+                Load3Image.Source = new BitmapImage(new Uri("full_file.png", UriKind.Relative));
+                Save3Image.Source = new BitmapImage(new Uri("full_file.png", UriKind.Relative));
             }
             else
             {
@@ -737,8 +741,8 @@ namespace Spit
             }
             if (database.CheckSavedGame(4) == 1)
             {
-                Load4Image.Source = new BitmapImage(new Uri("full_file1.png", UriKind.Relative));
-                Save4Image.Source = new BitmapImage(new Uri("full_file1.png", UriKind.Relative));
+                Load4Image.Source = new BitmapImage(new Uri("full_file.png", UriKind.Relative));
+                Save4Image.Source = new BitmapImage(new Uri("full_file.png", UriKind.Relative));
             }
             else
             {
@@ -796,23 +800,29 @@ namespace Spit
 
         public void ShowGamePreview(object sender, RoutedEventArgs e)
         {
-            int gameIndex = 0;
+            try
+            {
+                int gameIndex = 0;
 
-            Button button = (Button)sender;
-            string temp = button.Name;
-            string[] parts = temp.Split("Load");
-            gameIndex = Convert.ToInt32(parts[1]) - 1;
+                Button button = (Button)sender;
+                string temp = button.Name;
+                string[] parts = temp.Split("Load");
+                gameIndex = Convert.ToInt32(parts[1]) - 1;
 
-            string[] game = { "gameSave1", "gameSave2", "gameSave3", "gameSave4" };
-            string path = String.Format(System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\\" + game[gameIndex] + ".png");
+                string[] game = { "gameSave1", "gameSave2", "gameSave3", "gameSave4" };
+                string path = String.Format(System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\\" + game[gameIndex] + ".png");
 
-            BitmapImage bitmap = new BitmapImage();
-            bitmap.BeginInit();
-            bitmap.UriSource = new Uri(path);
-            bitmap.EndInit();
+                BitmapImage bitmap = new BitmapImage();
+                bitmap.BeginInit();
+                bitmap.UriSource = new Uri(path);
+                bitmap.EndInit();
 
-            pre.Source = bitmap;
-            pre.Visibility = Visibility.Visible;
+                pre.Source = bitmap;
+                pre.Visibility = Visibility.Visible;
+            } catch (Exception ex)
+            {
+                Debug.WriteLine("Game not saved in this slot!");
+            }
         }
         public void HideGamePreview(object sender, RoutedEventArgs e)
         {
