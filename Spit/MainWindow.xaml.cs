@@ -222,6 +222,7 @@ namespace Spit
         {
             DisplayGameUI(false);
             DisplayPauseMenu(false);
+            CountDown.Visibility = Visibility.Hidden;
             SaveScreen.Visibility = Visibility.Visible;
 
             foreach(Image i in placePile1)
