@@ -757,33 +757,26 @@ namespace Spit
             DisplayGameUI(true);
             SaveScreen.Visibility = Visibility.Hidden;
 
-            UIElement source = screen as UIElement;
+            UIElement gameScreen = screen as UIElement;
             string path = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             string[] game = { "gameSave1", "gameSave2", "gameSave3", "gameSave4" };
             Uri destination = new Uri(path + @"\\" + game[gameIndex - 1] + ".png");
 
             try
             {
-                double Height, renderHeight, Width, renderWidth;
+                double screenHeight = gameScreen.RenderSize.Height;
+                double screenWidth = gameScreen.RenderSize.Width;
 
-                Height = renderHeight = source.RenderSize.Height;
-                Width = renderWidth = source.RenderSize.Width;
-
-                //Specification for target bitmap like width/height pixel etc.
-                RenderTargetBitmap renderTarget = new RenderTargetBitmap((int)renderWidth, (int)renderHeight, 96, 96, PixelFormats.Pbgra32);
-                //creates Visual Brush of UIElement
-                VisualBrush visualBrush = new VisualBrush(source);
+                RenderTargetBitmap renderTarget = new RenderTargetBitmap((int)screenWidth, (int)screenHeight, 96, 96, PixelFormats.Pbgra32);
+                VisualBrush visualBrush = new VisualBrush(gameScreen);
 
                 DrawingVisual drawingVisual = new DrawingVisual();
                 using (DrawingContext drawingContext = drawingVisual.RenderOpen())
                 {
-                    //draws image of element
-                    drawingContext.DrawRectangle(visualBrush, null, new Rect(new Point(0, 0), new Point(Width, Height)));
+                    drawingContext.DrawRectangle(visualBrush, null, new Rect(new Point(0, 0), new Point(screenWidth, screenHeight)));
                 }
-                //renders image
                 renderTarget.Render(drawingVisual);
 
-                //PNG encoder for creating PNG file
                 PngBitmapEncoder encoder = new PngBitmapEncoder();
                 encoder.Frames.Add(BitmapFrame.Create(renderTarget));
                 using (FileStream stream = new FileStream(destination.LocalPath, FileMode.Create, FileAccess.Write))
