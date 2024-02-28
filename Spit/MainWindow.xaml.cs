@@ -38,6 +38,8 @@ namespace Spit
         public List<Image> aiCardPiles = new List<Image>();
         public List<Button> placePiles = new List<Button>();
 
+        public List<Button> emptyPiles = new List<Button>();
+
         List<Image> placePile1 = new List<Image>();
         List<Image> placePile2 = new List<Image>();
 
@@ -505,7 +507,7 @@ namespace Spit
             {
                 bool placed = spit.Place(index);
 
-                if (placed) { DeselectPile(); }
+                if (placed) { PlayingCardsEmptyPiles(spit.selectedPile); DeselectPile(); }
             }
         }
 
@@ -821,6 +823,25 @@ namespace Spit
         public void HideGamePreview(object sender, RoutedEventArgs e)
         {
             pre.Visibility = Visibility.Hidden;
+        }
+
+        public void PlayingCardsEmptyPiles(int index)
+        {
+            if (spit.players[0].hand.piles[index].pile.IsEmpty())
+            {
+                Button emptyPile = new Button();
+                Image image = new Image();
+                image.Source = new BitmapImage(new Uri("CardImages/card_outline.png", UriKind.Relative));
+                emptyPile.Margin = plCardPiles[index].Margin;
+                emptyPile.Content = image;
+                emptyPile.Background = Brushes.Transparent;
+                emptyPile.BorderBrush = Brushes.Transparent;
+                Grid.SetColumn(emptyPile, index + 1);
+                Grid.SetRow(emptyPile, 4);
+                Grid.SetRowSpan(emptyPile, 2);
+                emptyPiles.Add(emptyPile);
+                screen.Children.Add(emptyPile);
+            }
         }
     }
 }
