@@ -97,33 +97,48 @@ namespace Spit.DataStructures
 
         public Card RemoveAt(int i)
         {
-            ListNode tmp = head;
+            //checks bounds before proceeding
+            if (i < 0 || i > this.Count() || head == null) { throw new ArgumentOutOfRangeException(); }
             Card ret = default;
+            ListNode tmp = head;
+            //needs to be handled differently if index is 0
             if (i == 0)
             {
-                if (tmp == null) { throw new ArgumentOutOfRangeException(); }
-                //funny :)
                 ret = head.data;
-                head = tmp.next;
+                if (head.next != null)
+                {
+                    head.next.previous = null;
+                    head = head.next;
+                }
+                else
+                {
+                    //happens if head.next == null
+                    head = null;
+                }
             }
             else
             {
-                i--;
-                //RETRIEVES THE LIST ITEM BEFORE THE ONE TO REMOVE
+                //moves down list to index
                 while (i > 0)
                 {
-                    //if tmp is empty that means index is out of bounds
-                    if (tmp == null) { throw new ArgumentOutOfRangeException(); }
                     tmp = tmp.next;
                     i--;
-                    //funny >:)
-                    if (tmp.next == null) { throw new ArgumentOutOfRangeException(); }
                 }
-                //less funny (dereferences next node and sets reference to next node over)
-                ret = tmp.next.data;
-                tmp.next = tmp.next.next;
-            }
 
+                ret = tmp.data;
+                //handles differently if at end of list (tmp.next == null)
+                if (tmp.next == null)
+                {
+                    //simply dereference tmp
+                    tmp.previous.next = null;
+                }
+                else
+                {
+                    //more complicated dereferencing
+                    tmp.previous.next = tmp.next;
+                    tmp.next.previous = tmp.previous;
+                }
+            }
             return ret;
         }
 

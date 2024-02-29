@@ -21,6 +21,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using static System.Net.WebRequestMethods;
 
 namespace Spit
 {
@@ -453,6 +454,15 @@ namespace Spit
                 }
             }
 
+            if (spit.selectedPile != -1)
+            {
+                if (spit.players[0].hand.piles[index].pile.Peek().GetNumber() == spit.players[0].hand.piles[spit.selectedPile].pile.Peek().GetNumber())
+                {
+                    spit.players[0].hand.piles[index].pile.Push(spit.players[0].hand.piles[spit.selectedPile].pile.Pop());
+                    PlayingCardsEmptyPiles(spit.selectedPile);
+                }
+            }
+
             if (pile.BorderThickness != new Thickness(0))
             {
                 SelectPile(pile, index);
@@ -836,6 +846,7 @@ namespace Spit
                 emptyPile.Content = image;
                 emptyPile.Background = Brushes.Transparent;
                 emptyPile.BorderBrush = Brushes.Transparent;
+                emptyPile.Click += PlayingEmptyPile_Click;
                 Grid.SetColumn(emptyPile, index + 1);
                 Grid.SetRow(emptyPile, 4);
                 Grid.SetRowSpan(emptyPile, 2);
@@ -843,5 +854,32 @@ namespace Spit
                 screen.Children.Add(emptyPile);
             }
         }
+
+        public void PlayingEmptyPile_Click(object sender, RoutedEventArgs e)
+        {
+            int index = 0;
+
+            for (int i = 0; i < emptyPiles.Count; i++)
+            {
+                if (emptyPiles[i] == (Button)sender)
+                {
+                    index = i;
+                }
+            }
+
+            if (spit.players[0].hand.piles[index].pile.IsEmpty())
+            {
+                spit.players[0].hand.piles[index].pile.Push(spit.players[0].hand.piles[spit.selectedPile].pile.Pop());
+
+                screen.Children.Remove(emptyPiles[index]);
+                emptyPiles.Remove(emptyPiles[index]);
+
+                plCardPiles[index].Visibility = Visibility.Visible;
+
+                PlayingCardsEmptyPiles(spit.selectedPile);
+            }
+        }
+
+        //spit.players[0].hand.piles[index].pile.Peek().GetNumber() == spit.players[0].hand.piles[spit.selectedPile].pile.Peek().GetNumber()
     }
 }
