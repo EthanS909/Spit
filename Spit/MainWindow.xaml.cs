@@ -852,6 +852,8 @@ namespace Spit
                 Grid.SetRowSpan(emptyPile, 2);
                 emptyPiles.Add(emptyPile);
                 screen.Children.Add(emptyPile);
+
+                DeselectPile();
             }
         }
 
