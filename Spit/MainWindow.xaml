@@ -149,7 +149,7 @@
             </Button>
             <Button Name="SaveScreenExit" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="3" Content="Back" Click="SaveScreenExit_Click" FontSize="72"/>
         </Grid>
-        <Button Click="Button_Click" Visibility="Hidden"/>
+        <Button Click="Button_Click" Visibility="Visible"/>
         <ScrollViewer Name="RulesText" Visibility="Hidden" Grid.Row="1" Grid.Column="1" Panel.ZIndex="54" Grid.ColumnSpan="5" Grid.RowSpan="3">
             <StackPanel>
                 <TextBlock FontSize="32" TextWrapping="Wrap">

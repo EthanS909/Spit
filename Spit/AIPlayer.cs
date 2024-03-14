@@ -31,6 +31,8 @@ namespace Spit
         
         private Hand tempHand = new Hand();
 
+        List<int[]> previousOrders = new List<int[]>();
+
 
 
         public AIPlayer(Game game, int difficulty)
@@ -102,6 +104,8 @@ namespace Spit
 
             CalcTargets();
 
+            bool cardPlaced = false;
+
             for (int x = 0; x < hand.piles.Length; x++)
             {
                 /*for (int i = 0; i < tempPiles.Count; i++)
@@ -142,11 +146,13 @@ namespace Spit
                     if (hand.piles[x].pile.Peek().GetNumber() == target1 || hand.piles[x].pile.Peek().GetNumber() == target2)
                     {
                         game.placePiles[0].pile.Push(hand.piles[x].pile.Pop());
+                        cardPlaced = true;
                         return Task.CompletedTask;
                     }
                     else if (hand.piles[x].pile.Peek().GetNumber() == target3 || hand.piles[x].pile.Peek().GetNumber() == target4)
                     {
                         game.placePiles[1].pile.Push(hand.piles[x].pile.Pop());
+                        cardPlaced = true;
                         return Task.CompletedTask;
                     }
                 }
@@ -173,10 +179,38 @@ namespace Spit
                 game.pile2.Push(cardsToPlace.Last());
             }*/
 
+            if (!cardPlaced)
+            {
+                MoveCardsBetweenPiles();
+            }
 
             
 
             return Task.CompletedTask;
+        }
+
+        public void MoveCardsBetweenPiles()
+        {
+            List<Pile> emptyPiles = new List<Pile>();
+
+            int numOfEmptyPiles = 0;
+            for (int i = 0; i < hand.piles.Length; i++)
+            {
+                if (hand.piles[i].pile.IsEmpty())
+                {
+                    emptyPiles.Add(hand.piles[i]);
+                    numOfEmptyPiles++;
+                }
+            }
+
+            if (hand.GetNumOfCards() > 5)
+            {
+                if (numOfEmptyPiles != 0)
+                {
+                    emptyPiles[0].pile.Push(hand.piles[hand.LongestPile()].pile.Pop());
+                    MoveCardsBetweenPiles();
+                }
+            }
         }
 
         public void CalcTargets()
@@ -270,14 +304,17 @@ namespace Spit
                 for (int i = 0; i < tempHand.piles.Length; i++)
                 {
                     cardToPlace = null;
-                    int cardNum = tempHand.piles[i].pile.Peek().GetNumber();
-                    if (!tempHand.piles[i].pile.IsEmpty() && (cardNum == targets[0] || cardNum == targets[1] || cardNum == targets[2] || cardNum == targets[3]))
+                    if (!tempHand.piles[i].pile.IsEmpty())
                     {
-                        cardToPlace = tempHand.piles[i].pile.Peek();
-                        Place(i, targets);
-                        order[currentDepth] = i;
-                        currentDepth++;
-                        break;
+                        int cardNum = tempHand.piles[i].pile.Peek().GetNumber();
+                        if (!tempHand.piles[i].pile.IsEmpty() && (cardNum == targets[0] || cardNum == targets[1] || cardNum == targets[2] || cardNum == targets[3]))
+                        {
+                            cardToPlace = tempHand.piles[i].pile.Peek();
+                            PlaceTemp(i, targets);
+                            order[currentDepth] = i;
+                            currentDepth++;
+                            break;
+                        }
                     }
                 }
                 if(cardToPlace == null || currentDepth == depth && currentDepth != 0)
@@ -292,6 +329,10 @@ namespace Spit
             }
 
 
+            if (bestScore != 0)
+            {
+                Place(bestScoreOrder[0], targets);
+            }
 
 
 
@@ -366,7 +407,7 @@ namespace Spit
             }*/
         }
 
-        public void Place(int pileIndex, int[] targets)
+        public void PlaceTemp(int pileIndex, int[] targets)
         {
             if (pileIndex == -1)
             {
@@ -395,6 +436,23 @@ namespace Spit
             {
                 game.placePiles[1].pile.Push(hand.piles[pileIndex].pile.Pop());
             }*/
+        }
+
+        public void Place(int pileIndex, int[] target)
+        {
+            if (pileIndex == -1)
+            {
+                return;
+            }
+            CalcTargets();
+            if (hand.piles[pileIndex].pile.Peek().GetNumber() == target1 || hand.piles[pileIndex].pile.Peek().GetNumber() == target2)
+            {
+                game.placePiles[0].pile.Push(hand.piles[pileIndex].pile.Pop());
+            }
+            else if (hand.piles[pileIndex].pile.Peek().GetNumber() == target3 || hand.piles[pileIndex].pile.Peek().GetNumber() == target4)
+            {
+                game.placePiles[1].pile.Push(hand.piles[pileIndex].pile.Pop());
+            }
         }
     }
 }

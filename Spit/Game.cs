@@ -37,7 +37,10 @@ namespace Spit
         const int maxPlayers = 2;
         public const int HUMAN = 0;
         public const int AI = 1;
-        public string winningPlayer;
+        public int winningPlayer;
+
+        public bool humanCanPlay = false;
+        public bool AICanPlay = false;
 
         public Deck deck = new Deck();
 
@@ -47,7 +50,7 @@ namespace Spit
         public Pile pile1 = new Pile();
         public Pile pile2 = new Pile();
 
-        public int selectedPile = -1;
+        public int selectedPile;
         public Stack[] playerCardPiles = new Stack[5];
         public Stack[] AICardPiles = new Stack[5];
         public Pile[] placePiles = new Pile[2];
@@ -192,17 +195,47 @@ namespace Spit
 
         public Game()
         {
+            selectedPile = -1;
+
             deck.CreateDeck();
 
             placePiles[0] = pile1;
             placePiles[1] = pile2;
 
-
-
             countDownTimer.Tick += Tick;
             countDownTimer.Interval = TimeSpan.FromSeconds(1);
 
             database = new Database(this);
+        }
+
+        public void SetUpPlayerHands()
+        {
+            players[AI].hand.piles[0] = new Pile();
+            players[AI].hand.piles[1] = new Pile();
+            players[AI].hand.piles[2] = new Pile();
+            players[AI].hand.piles[3] = new Pile();
+            players[AI].hand.piles[4] = new Pile();
+
+            players[AI].hand.piles[0].pile.Push(new Card("heart", 1));
+
+            players[AI].hand.piles[1].pile.Push(new Card("spade", 13));
+            players[AI].hand.piles[1].pile.Push(new Card("diamond", 5));
+
+            players[AI].hand.piles[2].pile.Push(new Card("club", 7));
+            players[AI].hand.piles[2].pile.Push(new Card("spade", 8));
+            players[AI].hand.piles[2].pile.Push(new Card("heart", 3));
+
+            players[AI].hand.piles[3].pile.Push(new Card("diamond", 6));
+            players[AI].hand.piles[3].pile.Push(new Card("heart", 9));
+            players[AI].hand.piles[3].pile.Push(new Card("spade", 1));
+            players[AI].hand.piles[3].pile.Push(new Card("club", 10));
+
+            players[AI].hand.piles[4].pile.Push(new Card("heart", 11));
+            players[AI].hand.piles[4].pile.Push(new Card("diamond", 2));
+            players[AI].hand.piles[4].pile.Push(new Card("diamond", 12));
+            players[AI].hand.piles[4].pile.Push(new Card("spade", 4));
+            players[AI].hand.piles[4].pile.Push(new Card("club", 8));
+
         }
 
         public void CreatePlayers(int difficulty)
@@ -260,6 +293,8 @@ namespace Spit
             CreatePlayers(difficulty);
 
             deck.Shuffle();
+
+            SetUpPlayerHands();
 
             SplitCards();
             PlacePlayingCards();
@@ -362,7 +397,7 @@ namespace Spit
             else { target4 += 1; }
 
             // Check if human can play
-            bool humanCanPlay = false;
+            humanCanPlay = false;
             int hEmptyPiles = 0;
             foreach(Pile pile in players[HUMAN].hand.piles)
             {
@@ -379,7 +414,7 @@ namespace Spit
             }
 
             // Check if AI can play
-            bool AICanPlay = false;
+            AICanPlay = false;
             int AIEmptyPiles = 0;
             foreach (Pile pile in players[AI].hand.piles)
             {
@@ -551,13 +586,13 @@ namespace Spit
             {
                 if (placePiles[chosenPile].pile.Length() == 0 && players[HUMAN].hand.GetNumOfCards() == 0 && players[HUMAN].hand.pickUpPile.pile.Length() == 0)
                 {
-                    winningPlayer = Convert.ToString(HUMAN);
+                    winningPlayer = HUMAN;
                     pickAPile = false;
                     wnd.WinCheck();
                     return;
                 } else if(placePiles[(chosenPile + 1) % 2].pile.Length() == 0 && players[AI].hand.GetNumOfCards() == 0 && players[AI].hand.pickUpPile.pile.Length() == 0)
                 {
-                    winningPlayer = Convert.ToString(AI);
+                    winningPlayer = AI;
                     pickAPile = false;
                     wnd.WinCheck();
                     return;
@@ -574,7 +609,7 @@ namespace Spit
                 {
                     if (placePiles[0].pile.Length() == 0 && players[AI].hand.GetNumOfCards() == 0 && players[AI].hand.pickUpPile.pile.Length() == 0)
                     {
-                        winningPlayer = Convert.ToString(AI);
+                        winningPlayer = AI;
                         pickAPile = false;
                         wnd.WinCheck();
                         return;
@@ -589,7 +624,7 @@ namespace Spit
                 {
                     if (placePiles[1].pile.Length() == 0 && players[AI].hand.GetNumOfCards() == 0 && players[AI].hand.pickUpPile.pile.Length() == 0)
                     {
-                        winningPlayer = Convert.ToString(AI);
+                        winningPlayer = AI;
                         pickAPile = false;
                         wnd.WinCheck();
                         return;
@@ -794,6 +829,97 @@ namespace Spit
             {
                 wnd.emptyPile2.Visibility = Visibility.Hidden;
             }
+        }
+
+
+        //Returns true if the Human player or AI players has a pile that a card can be moved to if they have more than 5 cards
+        public bool CheckPlayersPiles()
+        {
+
+            ///HUMAN///
+
+            bool human = true;
+
+            int emptyPileNumHuman = 0;
+            for (int i = 0; i < players[HUMAN].hand.piles.Length; i++)
+            {
+                if (players[HUMAN].hand.piles[i].pile.IsEmpty())
+                {
+                    emptyPileNumHuman++;
+                }
+            }
+
+            if (emptyPileNumHuman == 0)
+            {
+                human = false;
+            }
+
+            if (!human)
+            {
+                for (int i = 0; i < players[HUMAN].hand.piles.Length; i++)
+                {
+                    int topCardNum = players[HUMAN].hand.piles[i].pile.Peek().GetNumber();
+                    for (int x = 0; x < players[HUMAN].hand.piles.Length; x++)
+                    {
+                        if (x != i)
+                        {
+                            if (players[HUMAN].hand.piles[x].pile.Peek().GetNumber() == topCardNum)
+                            {
+                                human = true;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (players[HUMAN].hand.GetNumOfCards() <= 5)
+            {
+                human = false;
+            }
+
+
+            ///AI///
+
+            bool ai = true;
+
+            int emptyPileNumAI = 0;
+            for (int i = 0; i < players[HUMAN].hand.piles.Length; i++)
+            {
+                if (players[HUMAN].hand.piles[i].pile.IsEmpty())
+                {
+                    emptyPileNumAI++;
+                }
+            }
+
+            if (emptyPileNumAI == 0)
+            {
+                ai = false;
+            }
+
+            if (!ai)
+            {
+                for (int i = 0; i < players[AI].hand.piles.Length; i++)
+                {
+                    int topCardNum = players[AI].hand.piles[i].pile.Peek().GetNumber();
+                    for (int x = 0; x < players[AI].hand.piles.Length; x++)
+                    {
+                        if (x != i)
+                        {
+                            if (players[AI].hand.piles[x].pile.Peek().GetNumber() == topCardNum)
+                            {
+                                ai = true;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (players[AI].hand.GetNumOfCards() <= 5)
+            {
+                ai = false;
+            }
+
+            return human && ai;
         }
     }
 }

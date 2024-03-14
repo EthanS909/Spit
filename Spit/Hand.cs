@@ -101,5 +101,20 @@ namespace Spit
 
             return numofCards;
         }
+
+        public int LongestPile()
+        {
+            int longestPile = 0;
+
+            for (int i = 0; i < piles.Length; i++)
+            {
+                if(piles[longestPile].pile.Length() < piles[i].pile.Length())
+                {
+                    longestPile = i;
+                }
+            }
+
+            return longestPile;
+        }
     }
 }

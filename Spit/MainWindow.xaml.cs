@@ -103,7 +103,10 @@ namespace Spit
                         DisplayPauseMenu(false);
                         if(WinningText.Visibility == Visibility.Hidden)
                         {
-                            DrawingText.Visibility = Visibility.Visible;
+                            if(!spit.humanCanPlay && !spit.AICanPlay)
+                            {
+                                DrawingText.Visibility = Visibility.Visible;
+                            }
                             aiTimer.Start();
                             updateTimer.Start();
                             if (spit.tick > 0)
@@ -136,12 +139,14 @@ namespace Spit
 
                     foreach (Image i in placePile1)
                     {
-                        i.Visibility = Visibility.Hidden;
+                        i.Visibility = Visibility.Visible;
                     }
                     foreach (Image i in placePile2)
                     {
-                        i.Visibility = Visibility.Hidden;
+                        i.Visibility = Visibility.Visible;
                     }
+
+                    ShowEmptyPiles();
                 }
             }
         }
@@ -236,6 +241,8 @@ namespace Spit
             {
                 i.Visibility = Visibility.Hidden;
             }
+
+            HideEmptyPiles();
         }
 
         private void SaveGame_Click(object sender, RoutedEventArgs e)
@@ -314,10 +321,7 @@ namespace Spit
         {
             if (spit.winningPlayer != null)
             {
-                string winningPlayer;
-                if (spit.winningPlayer == "0") winningPlayer = "Human";
-                else winningPlayer = "AI";
-
+                string winningPlayer = spit.winningPlayer == 0 ? "Human" : "AI";
                 WinningText.Text = String.Format("{0} has won the game!", winningPlayer);
                 WinningText.Visibility = Visibility.Visible;
                 DisplayGameUI(false);
@@ -333,6 +337,7 @@ namespace Spit
                 }
                 emptyPile1.Visibility = Visibility.Hidden;
                 emptyPile2.Visibility = Visibility.Hidden;
+                HideEmptyPiles();
             }
         }
 
@@ -454,33 +459,35 @@ namespace Spit
                 }
             }
 
-            if (spit.selectedPile != -1)
+            if (spit.selectedPile != -1 && spit.selectedPile != index)
             {
                 if (spit.players[0].hand.piles[index].pile.Peek().GetNumber() == spit.players[0].hand.piles[spit.selectedPile].pile.Peek().GetNumber())
                 {
                     spit.players[0].hand.piles[index].pile.Push(spit.players[0].hand.piles[spit.selectedPile].pile.Pop());
                     PlayingCardsEmptyPiles(spit.selectedPile);
+                    DeselectPile();
+                    return;
                 }
             }
 
-            if (pile.BorderThickness != new Thickness(0))
+            SelectPile(pile, index);
+        }
+
+        private void SelectPile(Button selected, int index)
+        {
+            if(spit.selectedPile != index)
             {
-                SelectPile(pile, index);
+                foreach (Button b in plCardPiles)
+                {
+                    b.BorderThickness = new Thickness(6);
+                }
+                selected.BorderThickness = new Thickness(0);
+                spit.selectedPile = index;
             }
             else
             {
                 DeselectPile();
             }
-        }
-
-        private void SelectPile(Button selected, int index)
-        {
-            foreach (Button b in plCardPiles)
-            {
-                b.BorderThickness = new Thickness(6);
-            }
-            selected.BorderThickness = new Thickness(0);
-            spit.selectedPile = index;
         }
 
         private void DeselectPile()
@@ -535,6 +542,8 @@ namespace Spit
             DisplayPauseMenu(false);
 
             ResetExtraCardImages();
+            
+            RemoveEmptyPiles();
         }
 
         private void DisplayPauseMenu(bool enabled)
@@ -715,7 +724,7 @@ namespace Spit
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            spit.players[1].MinMax();
+            //spit.players[1].MinMax();
         }
 
         public void DisplaySavedGameState()
@@ -835,6 +844,7 @@ namespace Spit
             pre.Visibility = Visibility.Hidden;
         }
 
+        public Dictionary<Button, int> emptyPilesDict = new Dictionary<Button, int>();
         public void PlayingCardsEmptyPiles(int index)
         {
             if (spit.players[0].hand.piles[index].pile.IsEmpty())
@@ -850,6 +860,7 @@ namespace Spit
                 Grid.SetColumn(emptyPile, index + 1);
                 Grid.SetRow(emptyPile, 4);
                 Grid.SetRowSpan(emptyPile, 2);
+                emptyPilesDict.Add(emptyPile, index);
                 emptyPiles.Add(emptyPile);
                 screen.Children.Add(emptyPile);
 
@@ -859,26 +870,58 @@ namespace Spit
 
         public void PlayingEmptyPile_Click(object sender, RoutedEventArgs e)
         {
+            if (spit.selectedPile == -1)
+            {
+                return;
+            }
+
+            Button button = (Button)sender;
+
             int index = 0;
 
             for (int i = 0; i < emptyPiles.Count; i++)
             {
-                if (emptyPiles[i] == (Button)sender)
+                if (emptyPiles[i] == button)
                 {
                     index = i;
                 }
             }
 
-            if (spit.players[0].hand.piles[index].pile.IsEmpty())
+            if (spit.players[Game.HUMAN].hand.piles[emptyPilesDict[emptyPiles[index]]].pile.IsEmpty())
             {
-                spit.players[0].hand.piles[index].pile.Push(spit.players[0].hand.piles[spit.selectedPile].pile.Pop());
+                spit.players[Game.HUMAN].hand.piles[emptyPilesDict[emptyPiles[index]]].pile.Push(spit.players[0].hand.piles[spit.selectedPile].pile.Pop());
 
+                plCardPiles[emptyPilesDict[emptyPiles[index]]].Visibility = Visibility.Visible;
                 screen.Children.Remove(emptyPiles[index]);
                 emptyPiles.Remove(emptyPiles[index]);
 
-                plCardPiles[index].Visibility = Visibility.Visible;
-
                 PlayingCardsEmptyPiles(spit.selectedPile);
+                DeselectPile();
+            }
+        }
+
+        public void RemoveEmptyPiles()
+        {
+            for (int i = 0; i < emptyPiles.Count; i++)
+            {
+                screen.Children.Remove(emptyPiles[i]);
+            }
+            emptyPiles = new List<Button>();
+            emptyPilesDict = new Dictionary<Button, int>();
+        }
+
+        public void HideEmptyPiles()
+        {
+            for (int i = 0; i < emptyPiles.Count; i++)
+            {
+                emptyPiles[i].Visibility = Visibility.Hidden;
+            }
+        }
+        public void ShowEmptyPiles()
+        {
+            for (int i = 0; i < emptyPiles.Count; i++)
+            {
+                emptyPiles[i].Visibility = Visibility.Visible;
             }
         }
 

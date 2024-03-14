@@ -33,19 +33,8 @@ namespace Spit
                     {
                         deck.Push(new Card("spade", i + 1));
                     }
-
                 }
             }
-        }
-
-        public Card GetTopCard()
-        {
-            return deck.Peek();
-        }
-
-        public Stack GetCards()
-        {
-            return deck;
         }
 
         public void Shuffle()
