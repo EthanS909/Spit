@@ -35,7 +35,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <TextBlock Text="SPIT" Grid.Row="0" Grid.RowSpan="2" Grid.Column="2" Grid.ColumnSpan="3" FontSize="256" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <TextBlock Name="title" Text="SPIT" Grid.Row="0" Grid.RowSpan="2" Grid.Column="2" Grid.ColumnSpan="3" FontSize="256" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         <Image Name="pre" Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Grid.ColumnSpan="3"/>
         <Image Name="plStack" Source="CardImages/back_of_card.png" Grid.Column="6" Grid.Row="2" Grid.RowSpan="2" Margin="0,0,0,0" Visibility="Hidden" Panel.ZIndex="53"/>
         <Image Name="aiStack" Source="CardImages/back_of_card.png" Grid.Column="0" Grid.Row="2" Grid.RowSpan="2" Margin="0,0,0,0" Visibility="Hidden" Panel.ZIndex="53"/>

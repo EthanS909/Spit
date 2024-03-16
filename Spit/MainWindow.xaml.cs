@@ -365,12 +365,14 @@ namespace Spit
         {
             if (enabled)
             {
+                title.Visibility = Visibility.Visible;
                 Play.Visibility = Visibility.Visible;
                 Rules.Visibility = Visibility.Visible;
                 Exit.Visibility = Visibility.Visible;
             }
             else
             {
+                title.Visibility = Visibility.Hidden;
                 Play.Visibility = Visibility.Hidden;
                 Rules.Visibility = Visibility.Hidden;
                 Exit.Visibility = Visibility.Hidden;
