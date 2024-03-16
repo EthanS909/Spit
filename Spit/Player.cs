@@ -36,5 +36,10 @@ namespace Spit
         {
 
         }
+
+        public virtual void Reset()
+        {
+
+        }
     }
 }

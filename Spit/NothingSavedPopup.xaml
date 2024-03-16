@@ -7,6 +7,6 @@
         mc:Ignorable="d"
         Title="NothingSavedPopup" Height="300" Width="450">
     <Grid>
-        <TextBlock Text="Uh oh... you're an idiot. You didn't save a game in this slot yet. Stupid! "/>
+        <TextBlock Text="No game saved in this location!" FontSize="31"/>
     </Grid>
 </Window>

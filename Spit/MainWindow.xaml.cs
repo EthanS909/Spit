@@ -33,7 +33,7 @@ namespace Spit
         private int difficultyCount = 0;
         private string[] difficulty = { "Beginner", "Intermediate", "Advanced" };
         private int[] reactionTime = { 1500, 1200, 900};
-        private int[] movesAhead = { 1, 2, 3};
+        private int[] movesAhead = { 1, 3, 5};
 
         public List<Button> plCardPiles = new List<Button>();
         public List<Image> aiCardPiles = new List<Image>();
@@ -585,7 +585,7 @@ namespace Spit
 
         public void AiPlay(object sender, EventArgs e)
         {
-            spit.players[1].Move();
+            spit.players[Game.AI].Move();
         }
 
         public void Update(object sender, EventArgs e)
@@ -722,14 +722,16 @@ namespace Spit
             numOfCardsInPile2 = 0;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            //spit.players[1].MinMax();
-        }
-
         public void DisplaySavedGameState()
         {
             Database database = new Database(null);
+
+            string path = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            string[] game = { "gameSave1", "gameSave2", "gameSave3", "gameSave4" };
+            string destination1 = new string(path + @"\\" + game[0] + ".png");
+            string destination2 = new string(path + @"\\" + game[1] + ".png");
+            string destination3 = new string(path + @"\\" + game[2] + ".png");
+            string destination4 = new string(path + @"\\" + game[3] + ".png");
 
             if (database.CheckSavedGame(1) == 1)
             {
@@ -740,6 +742,10 @@ namespace Spit
             {
                 Load1Image.Source = new BitmapImage(new Uri("empty_file.png", UriKind.Relative));
                 Save1Image.Source = new BitmapImage(new Uri("empty_file.png", UriKind.Relative));
+                if(System.IO.File.Exists(destination1))
+                {
+                    System.IO.File.Delete(destination1);
+                }
             }
             if (database.CheckSavedGame(2) == 1)
             {
@@ -750,6 +756,10 @@ namespace Spit
             {
                 Load2Image.Source = new BitmapImage(new Uri("empty_file.png", UriKind.Relative));
                 Save2Image.Source = new BitmapImage(new Uri("empty_file.png", UriKind.Relative));
+                if (System.IO.File.Exists(destination2))
+                {
+                    System.IO.File.Delete(destination2);
+                }
             }
             if (database.CheckSavedGame(3) == 1)
             {
@@ -760,6 +770,10 @@ namespace Spit
             {
                 Load3Image.Source = new BitmapImage(new Uri("empty_file.png", UriKind.Relative));
                 Save3Image.Source = new BitmapImage(new Uri("empty_file.png", UriKind.Relative));
+                if (System.IO.File.Exists(destination3))
+                {
+                    System.IO.File.Delete(destination3);
+                }
             }
             if (database.CheckSavedGame(4) == 1)
             {
@@ -770,6 +784,10 @@ namespace Spit
             {
                 Load4Image.Source = new BitmapImage(new Uri("empty_file.png", UriKind.Relative));
                 Save4Image.Source = new BitmapImage(new Uri("empty_file.png", UriKind.Relative));
+                if (System.IO.File.Exists(destination4))
+                {
+                    System.IO.File.Delete(destination4);
+                }
             }
         }
 

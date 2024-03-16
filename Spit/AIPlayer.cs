@@ -17,8 +17,7 @@ namespace Spit
         private int delay;
 
         // Number of moves the AI looks ahead to choose the best card to place
-        private int depth;
-        private int bestMove;
+        private int depth = 1;
         private int difficulty;
 
         private int target1;
@@ -31,7 +30,7 @@ namespace Spit
         
         private Hand tempHand = new Hand();
 
-        List<int[]> previousOrders = new List<int[]>();
+        bool placed;
 
 
 
@@ -47,12 +46,12 @@ namespace Spit
             if (difficulty == 1)
             {
                 delay = 1200;
-                depth = 2;
+                depth = 3;
             }
             if (difficulty == 2)
             {
                 delay = 900;
-                depth = 3;
+                depth = 5;
             }
 
             this.game = game;
@@ -75,118 +74,8 @@ namespace Spit
 
         public override async void Move()
         {
+            Reset();
             await CalcBestMove();
-        }
-
-        public  Task CalcBestMove()
-        {
-            bestMove = 0;
-
-            int bestScore = 0;
-            int score = 0;
-
-            List pile1 = new List();
-            List pile2 = new List();
-            List pile3 = new List();
-            List pile4 = new List();
-            List pile5 = new List();
-
-            List<List> piles = new List<List>
-            {
-                pile1,
-                pile2,
-                pile3,
-                pile4,
-                pile5
-            };
-
-            List<int> order = new List<int>();
-
-            CalcTargets();
-
-            bool cardPlaced = false;
-
-            for (int x = 0; x < hand.piles.Length; x++)
-            {
-                /*for (int i = 0; i < tempPiles.Count; i++)
-                {
-                    if (tempPiles[i].Peek().GetNumber() == target1 || tempPiles[i].Peek().GetNumber() == target2)
-                    {
-                        target1 = tempPiles[i].Peek().GetNumber() + 1;
-                        if (target1 > 13) target1 = 1;
-
-                        target2 = tempPiles[i].Peek().GetNumber() - 1;
-                        if (target2 < 1) target2 = 13;
-
-                        piles[i].AddLast(tempPiles[i].Pop());
-
-                        order.Add(i);
-
-                        score++;
-                    }
-
-                    else if (tempPiles[i].Peek().GetNumber() == target3 || tempPiles[i].Peek().GetNumber() == target4)
-                    {
-                        target3 = tempPiles[i].Peek().GetNumber() + 1;
-                        if (target3 > 13) target3 = 1;
-
-                        target4 = tempPiles[i].Peek().GetNumber() - 1;
-                        if (target4 < 1) target4 = 13;
-
-                        piles[i].AddLast(tempPiles[i].Pop());
-
-                        order.Add(i);
-
-                        score++;
-                    }
-                }*/
-
-                if (!hand.piles[x].pile.IsEmpty())
-                {
-                    if (hand.piles[x].pile.Peek().GetNumber() == target1 || hand.piles[x].pile.Peek().GetNumber() == target2)
-                    {
-                        game.placePiles[0].pile.Push(hand.piles[x].pile.Pop());
-                        cardPlaced = true;
-                        return Task.CompletedTask;
-                    }
-                    else if (hand.piles[x].pile.Peek().GetNumber() == target3 || hand.piles[x].pile.Peek().GetNumber() == target4)
-                    {
-                        game.placePiles[1].pile.Push(hand.piles[x].pile.Pop());
-                        cardPlaced = true;
-                        return Task.CompletedTask;
-                    }
-                }
-            }
-
-            /*List<Card> cardsToPlace = new List<Card>();
-
-
-            if (order.Count == 0)
-            {
-                for (int i = 0; i < order.Count; i++)
-                {
-                    cardsToPlace.Add(piles[order.Last()].RemoveAt(piles[order.Last()].Count()));
-                }
-            }
-
-            CalcTargets();
-
-            if(cardsToPlace.Last().GetNumber() == target1 || cardsToPlace.Last().GetNumber() == target2)
-            {
-                game.pile1.Push(cardsToPlace.Last());
-            } else if(cardsToPlace.Last().GetNumber() == target3 || cardsToPlace.Last().GetNumber() == target4)
-            {
-                game.pile2.Push(cardsToPlace.Last());
-            }*/
-
-            if (!cardPlaced)
-            {
-                MoveCardsBetweenPiles();
-            }
-
-            
-
-            return Task.CompletedTask;
         }
 
         public void MoveCardsBetweenPiles()
@@ -268,23 +157,31 @@ namespace Spit
             return targets;
         }
 
-        public override void MinMax()
+        // Resets all information relating to the last Best Move
+        public override void Reset()
         {
-            bestMove = 0;
-
-            int bestScore = 0;
-            int score = 0;
-
-            int[] bestScoreOrder = new int[depth];
+            startingCardIndex = 0;
+            bestScore = 0;
+            bestScoreOrder = new int[depth];
             for (int i = 0; i < bestScoreOrder.Length; i++)
             {
                 bestScoreOrder[i] = -1;
             }
+        }
+
+
+        // Calculates the best move for the AI depending on the difficulty set by the player
+        int startingCardIndex = 0;
+        int[] bestScoreOrder;
+        int bestScore = 0;
+        public Task CalcBestMove()
+        {
+            placed = false;
 
             tempHand = new Hand(hand);
 
-            tempPile1 = new Pile(game.pile1);
-            tempPile2 = new Pile(game.pile2);
+            tempPile1 = new Pile(game.placePiles[0]);
+            tempPile2 = new Pile(game.placePiles[1]);
 
             int[] targets = CalcTempTargets();
 
@@ -295,13 +192,14 @@ namespace Spit
             }
 
             int currentDepth = 0;
+            int lastDepth = 0;
 
             Card cardToPlace = null;
 
             while (currentDepth < depth)
             {
                 targets = CalcTempTargets();
-                for (int i = 0; i < tempHand.piles.Length; i++)
+                for (int i = startingCardIndex; i < tempHand.piles.Length; i++)
                 {
                     cardToPlace = null;
                     if (!tempHand.piles[i].pile.IsEmpty())
@@ -312,9 +210,14 @@ namespace Spit
                             cardToPlace = tempHand.piles[i].pile.Peek();
                             PlaceTemp(i, targets);
                             order[currentDepth] = i;
+                            lastDepth = currentDepth;
                             currentDepth++;
                             break;
                         }
+                    }
+                    if(lastDepth != currentDepth && cardToPlace != null)
+                    {
+                        i = 0;
                     }
                 }
                 if(cardToPlace == null || currentDepth == depth && currentDepth != 0)
@@ -328,83 +231,33 @@ namespace Spit
                 }
             }
 
+            if (bestScoreOrder[0] < 4)
+            {
+                if(startingCardIndex < 4)
+                {
+                    if(startingCardIndex >= bestScoreOrder[0])
+                    {
+                        startingCardIndex++;
+                    }
+                    else
+                    {
+                        startingCardIndex = bestScoreOrder[0] + 1;
+                    }
+                    CalcBestMove();
+                }
+            }
 
-            if (bestScore != 0)
+            if (bestScore != 0 && !placed)
             {
                 Place(bestScoreOrder[0], targets);
             }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            /*for (int x = 0; x < hand.piles.Length; x++)
+            if(!placed)
             {
-                for (int i = 0; i < tempHand.piles.Length; i++)
-                {
-                    if (tempHand.piles[i].pile.Peek().GetNumber() == target1 || tempHand.piles[i].pile.Peek().GetNumber() == target2)
-                    {
-                        target1 = tempHand.piles[i].pile.Peek().GetNumber() + 1;
-                        if (target1 > 13) target1 = 1;
-
-                        target2 = tempHand.piles[i].pile.Peek().GetNumber() - 1;
-                        if (target2 < 1) target2 = 13;
-
-                        piles[i].AddLast(tempHand.piles[i].pile.Pop());
-
-                        order.Add(i);
-
-                        score++;
-                    }
-
-                    else if (tempHand.piles[i].pile.Peek().GetNumber() == target3 || tempHand.piles[i].pile.Peek().GetNumber() == target4)
-                    {
-                        target3 = tempHand.piles[i].pile.Peek().GetNumber() + 1;
-                        if (target3 > 13) target3 = 1;
-
-                        target4 = tempHand.piles[i].pile.Peek().GetNumber() - 1;
-                        if (target4 < 1) target4 = 13;
-
-                        piles[i].AddLast(tempHand.piles[i].pile.Pop());
-
-                        order.Add(i);
-
-                        score++;
-                    }
-                }
+                MoveCardsBetweenPiles();
             }
 
-            List<Card> cardsToPlace = new List<Card>();
-
-
-            if (order.Count == 0)
-            {
-                for (int i = 0; i < order.Count; i++)
-                {
-                    cardsToPlace.Add(piles[order.Last()].RemoveAt(piles[order.Last()].Count()));
-                }
-            }
-
-            CalcTargets();*/
-
-            /*if(cardsToPlace.Last().GetNumber() == target1 || cardsToPlace.Last().GetNumber() == target2)
-            {
-                game.pile1.Push(cardsToPlace.Last());
-            } else if(cardsToPlace.Last().GetNumber() == target3 || cardsToPlace.Last().GetNumber() == target4)
-            {
-                game.pile2.Push(cardsToPlace.Last());
-            }*/
+            return Task.CompletedTask;
         }
 
         public void PlaceTemp(int pileIndex, int[] targets)
@@ -421,21 +274,6 @@ namespace Spit
             {
                 tempPile2.pile.Push(tempHand.piles[pileIndex].pile.Pop());
             }
-
-
-
-            /*if (pileIndex == -1)
-            {
-                return;
-            }
-            if (hand.piles[pileIndex].pile.Peek().GetNumber() == target1 || hand.piles[pileIndex].pile.Peek().GetNumber() == target2)
-            {
-                game.placePiles[0].pile.Push(hand.piles[pileIndex].pile.Pop());
-            }
-            else if (hand.piles[pileIndex].pile.Peek().GetNumber() == target3 || hand.piles[pileIndex].pile.Peek().GetNumber() == target4)
-            {
-                game.placePiles[1].pile.Push(hand.piles[pileIndex].pile.Pop());
-            }*/
         }
 
         public void Place(int pileIndex, int[] target)
@@ -448,10 +286,12 @@ namespace Spit
             if (hand.piles[pileIndex].pile.Peek().GetNumber() == target1 || hand.piles[pileIndex].pile.Peek().GetNumber() == target2)
             {
                 game.placePiles[0].pile.Push(hand.piles[pileIndex].pile.Pop());
+                placed = true;
             }
             else if (hand.piles[pileIndex].pile.Peek().GetNumber() == target3 || hand.piles[pileIndex].pile.Peek().GetNumber() == target4)
             {
                 game.placePiles[1].pile.Push(hand.piles[pileIndex].pile.Pop());
+                placed = true;
             }
         }
     }

@@ -208,36 +208,6 @@ namespace Spit
             database = new Database(this);
         }
 
-        public void SetUpPlayerHands()
-        {
-            players[AI].hand.piles[0] = new Pile();
-            players[AI].hand.piles[1] = new Pile();
-            players[AI].hand.piles[2] = new Pile();
-            players[AI].hand.piles[3] = new Pile();
-            players[AI].hand.piles[4] = new Pile();
-
-            players[AI].hand.piles[0].pile.Push(new Card("heart", 1));
-
-            players[AI].hand.piles[1].pile.Push(new Card("spade", 13));
-            players[AI].hand.piles[1].pile.Push(new Card("diamond", 5));
-
-            players[AI].hand.piles[2].pile.Push(new Card("club", 7));
-            players[AI].hand.piles[2].pile.Push(new Card("spade", 8));
-            players[AI].hand.piles[2].pile.Push(new Card("heart", 3));
-
-            players[AI].hand.piles[3].pile.Push(new Card("diamond", 6));
-            players[AI].hand.piles[3].pile.Push(new Card("heart", 9));
-            players[AI].hand.piles[3].pile.Push(new Card("spade", 1));
-            players[AI].hand.piles[3].pile.Push(new Card("club", 10));
-
-            players[AI].hand.piles[4].pile.Push(new Card("heart", 11));
-            players[AI].hand.piles[4].pile.Push(new Card("diamond", 2));
-            players[AI].hand.piles[4].pile.Push(new Card("diamond", 12));
-            players[AI].hand.piles[4].pile.Push(new Card("spade", 4));
-            players[AI].hand.piles[4].pile.Push(new Card("club", 8));
-
-        }
-
         public void CreatePlayers(int difficulty)
         {
             players[HUMAN] = new HumanPlayer();
@@ -288,13 +258,12 @@ namespace Spit
             return placed;
         }
 
+        // Sets up the players, cards and orders them for the game to start
         public void Start(int difficulty)
         {
             CreatePlayers(difficulty);
 
             deck.Shuffle();
-
-            SetUpPlayerHands();
 
             SplitCards();
             PlacePlayingCards();
@@ -309,6 +278,7 @@ namespace Spit
             }
         }
 
+        // Splits the deck at the start of the game so each player starts with the same number of cards
         public void SplitCards()
         {
             int length = deck.deck.Length();
@@ -323,6 +293,7 @@ namespace Spit
             }
         }
 
+        // Places the players cards in the correct cofiguration as set by the rules of the game
         public void PlacePlayingCards()
         {
             players[HUMAN].hand.piles[0].pile.Push(players[HUMAN].hand.pickUpPile.pile.Pop());
@@ -370,7 +341,7 @@ namespace Spit
 
         public void CanPlay()
         {
-            // Create targets
+            // Create target numbers to check whether the cards trying to be placed can be placed
             int target1 = -1;
             int target2 = -1;
             int target3 = -1;
@@ -430,11 +401,14 @@ namespace Spit
                 else { AIEmptyPiles++; }
             }
 
+            // If either player has no cards left it starts the timer to select a place pile
             if(hEmptyPiles == 5 || AIEmptyPiles == 5)
             {
                 StartTimer();
                 pickAPile = true;
             }
+
+            // If neither player can play it flips over a card from each players pick up pile if there are any left
             else if(!humanCanPlay && !AICanPlay)
             {
                 if(players[HUMAN].hand.pickUpPile.pile.Length() != 0 || players[AI].hand.pickUpPile.pile.Length() != 0)
@@ -458,84 +432,9 @@ namespace Spit
                         wnd.aiTimer.Start();
                     }
                 }
+                // If neither player can play and they both have empty pick up piles then it starts the timer for the players to pick a pile
                 else
-                {
-                    /*int pile1Length = pile1.pile.Length();
-                    int pile2Length = pile2.pile.Length();
-
-                    int numOfCardToRemove = 0;
-
-                    Stack pile1Reversed = new Stack();
-                    Stack pile2Reversed = new Stack();
-
-                    Stack pickup = new Stack();
-
-                    if (pile1Length < pile2Length)
-                    { 
-                        numOfCardToRemove = pile1Length - 1;
-                    }
-                    else if (pile2Length < pile1Length)
-                    {
-                        numOfCardToRemove = pile2Length - 1;
-                    }
-                    else if (pile1Length == pile2Length)
-                    {
-                        numOfCardToRemove = pile1Length - 1;
-                    }
-
-                    for (int i = 0; i < pile1Length; i++)
-                    {
-                        pile1Reversed.Push(pile1.pile.Pop());
-                    }
-                    for (int i = 0; i < pile2Length; i++)
-                    {
-                        pile2Reversed.Push(pile2.pile.Pop());
-                    }
-
-                    for (int i = 0; i < numOfCardToRemove; i++)
-                    {
-                        pickup.Push(pile1Reversed.Pop());
-                        pickup.Push(pile2Reversed.Pop());
-                    }
-
-                    for (int i = 0; i < pile1Reversed.Length(); i++)
-                    {
-                        pile1.pile.Push(pile1Reversed.Pop());
-                    }
-                    for (int i = 0; i < pile2Reversed.Length(); i++)
-                    {
-                        pile2.pile.Push(pile2Reversed.Pop());
-                    }
-
-                    Card[] shuffledPickup = new Card[numOfCardToRemove * 2];
-                    Random rnd = new Random();
-                    while (!pickup.IsEmpty())
-                    {
-                        int randomSpace = rnd.Next(0, (numOfCardToRemove * 2) - 1);
-                        while (shuffledPickup[randomSpace] != null)
-                        {
-                            randomSpace = (randomSpace + 1) % shuffledPickup.Length;
-                        }
-                        shuffledPickup[randomSpace] = pickup.Pop();
-                    }
-
-                    for (int x = 0; x < shuffledPickup.Length; x++)
-                    {
-                        pickup.Push(shuffledPickup[x]);
-                    }
-
-                    for (int i = 0; i < numOfCardToRemove * 2; i++)
-                    {
-                        if(i <= numOfCardToRemove)
-                        {
-                            players[HUMAN].hand.pickUpPile.pile.Push(pickup.Pop());
-                        }
-                        else
-                        {
-                            players[AI].hand.pickUpPile.pile.Push(pickup.Pop());
-                        }
-                    }*/
-
+                { 
                     wnd.Stalemate.Visibility = Visibility.Visible;
 
                     pickAPile = true;
@@ -544,6 +443,7 @@ namespace Spit
             }
         }
 
+        // Flips over a card from each players pick up pile
         public void FlipOverPile()
         {
             if (players[AI].hand.pickUpPile.pile.Length() != 0)
@@ -573,6 +473,7 @@ namespace Spit
             wnd.updateTimer.Stop();
         }
 
+        // AI chooses which ever pile has the least number of cards in
         public void AIChoosePile(object sender, EventArgs e)
         {
             ChoosePile();
@@ -634,6 +535,8 @@ namespace Spit
                 }
             }
 
+            // Once a pile has been chosen, the cards are collected into the players hands
+            // The cards are then shuffled before being placed into their starting positions
             CollectPlayingCards();
             ShuffleCards();
             PlacePlayingCards();
@@ -647,7 +550,6 @@ namespace Spit
             wnd.updateTimer.Start();
             wnd.aiTimer.Start();
         }
-
         public void CollectPlayingCards()
         {
             foreach (Pile pile in players[HUMAN].hand.piles)
@@ -722,6 +624,7 @@ namespace Spit
             }
         }
 
+        // Updates the binding information for the UI and displays other objects if certain conditions are true
         public void Update()
         {
             if (!players[HUMAN].hand.piles[0].pile.IsEmpty()) { PlayerFirstPileTop = "CardImages/" + players[HUMAN].hand.piles[0].pile.Peek().GetNumber() + "_of_" + players[HUMAN].hand.piles[0].pile.Peek().GetSuit() + "s.png"; }
