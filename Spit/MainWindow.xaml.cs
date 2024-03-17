@@ -1,27 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Diagnostics.Eventing.Reader;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Automation.Provider;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
-using static System.Net.WebRequestMethods;
 
 namespace Spit
 {
@@ -294,11 +281,6 @@ namespace Spit
                 DisplayPlayUI(false);
             }
         }
-
-        /*private void Back2_Click(object sender, RoutedEventArgs e)
-        {
-            DisplayPauseMenu(true);
-        }*/
 
         private void EmptyPile_Click(object sender, RoutedEventArgs e)
         {
@@ -593,7 +575,7 @@ namespace Spit
         public void Update(object sender, EventArgs e)
         {
             spit.Update();
-            GenerateExtraCardImages(0, -1);
+            GenerateExtraCardImages();
         }
 
         int pile1ZIndex = 51;
@@ -604,93 +586,55 @@ namespace Spit
         Thickness pile2Next = new Thickness(0, 7, -5, -7);
         int numOfCardsInPile1 = 0;
         int numOfCardsInPile2 = 0;
-
-        //0, 7, -5, -7
-        //10,15,-10,-15
-        public void GenerateExtraCardImages(int pileIndex, int player)
+        public void GenerateExtraCardImages()
         {
-            //10,10,190,170
-            //20,20,175,160
             int pile1Length = spit.placePiles[0].pile.Length();
             int pile2Length = spit.placePiles[1].pile.Length();
-            //int humanPileLength = spit.players[0].hand.piles.firstPile.Length();
             int i = 0;
-
-            if (player == -1)
+            for (i = 0; i < (pile1Length / 3) - numOfCardsInPile1; i++)
             {
-                for (i = 0; i < (pile1Length / 3) - numOfCardsInPile1; i++)
-                {
-                    Image newCardImage = new Image();
-                    newCardImage.Margin = pile1Next;
-                    newCardImage.Source = plStack.Source;
-                    Grid.SetColumn(newCardImage, 2);
-                    Grid.SetRow(newCardImage, 2);
-                    Grid.SetRowSpan(newCardImage, 3);
-                    Grid.SetColumnSpan(newCardImage, 2);
-                    Grid.SetZIndex(newCardImage, pile1ZIndex);
-                    pile1ZIndex -= 1;
-                    screen.Children.Add(newCardImage);
+                Image newCardImage = new Image();
+                newCardImage.Margin = pile1Next;
+                newCardImage.Source = plStack.Source;
+                Grid.SetColumn(newCardImage, 2);
+                Grid.SetRow(newCardImage, 2);
+                Grid.SetRowSpan(newCardImage, 3);
+                Grid.SetColumnSpan(newCardImage, 2);
+                Grid.SetZIndex(newCardImage, pile1ZIndex);
+                pile1ZIndex -= 1;
+                screen.Children.Add(newCardImage);
 
-                    placePile1.Add(newCardImage);
+                placePile1.Add(newCardImage);
 
-                    pile1NextInts[0] += 5;
-                    pile1NextInts[1] += 5;
-                    pile1NextInts[2] -= 7;
-                    pile1NextInts[3] -= 5;
-                    pile1Next = new Thickness(pile1NextInts[0], pile1NextInts[1], pile1NextInts[2], pile1NextInts[3]);
-                }
-                numOfCardsInPile1 += i;
-
-                for (i = 0; i < (pile2Length / 3) - numOfCardsInPile2; i++)
-                {
-                    Image newCardImage = new Image();
-                    newCardImage.Margin = pile2Next;
-                    newCardImage.Source = plStack.Source;
-                    Grid.SetColumn(newCardImage, 4);
-                    Grid.SetRow(newCardImage, 2);
-                    Grid.SetRowSpan(newCardImage, 2);
-                    Grid.SetZIndex(newCardImage, pile2ZIndex);
-                    pile2ZIndex -= 1;
-                    screen.Children.Add(newCardImage);
-
-                    placePile2.Add(newCardImage);
-
-                    pile2NextInts[0] += 10;
-                    pile2NextInts[1] += 8;
-                    pile2NextInts[2] -= 5;
-                    pile2NextInts[3] -= 8;
-                    pile2Next = new Thickness(pile2NextInts[0], pile2NextInts[1], pile2NextInts[2], pile2NextInts[3]);
-                }
-                numOfCardsInPile2 += i;
+                pile1NextInts[0] += 5;
+                pile1NextInts[1] += 5;
+                pile1NextInts[2] -= 7;
+                pile1NextInts[3] -= 5;
+                pile1Next = new Thickness(pile1NextInts[0], pile1NextInts[1], pile1NextInts[2], pile1NextInts[3]);
             }
-            else if (player == Game.HUMAN)
+            numOfCardsInPile1 += i;
+
+            for (i = 0; i < (pile2Length / 3) - numOfCardsInPile2; i++)
             {
-                /*for (i = 0; i < (pile2Length / 3) - numOfCardsInPile2; i++)
-                {
-                    Image newCardImage = new Image();
-                    newCardImage.Margin = pile2Next;
-                    newCardImage.Source = plStack.Source;
-                    Grid.SetColumn(newCardImage, 4);
-                    Grid.SetRow(newCardImage, 2);
-                    Grid.SetRowSpan(newCardImage, 2);
-                    Grid.SetZIndex(newCardImage, pile2ZIndex);
-                    humanPileZIndex -= 1;
-                    screen.Children.Add(newCardImage);
+                Image newCardImage = new Image();
+                newCardImage.Margin = pile2Next;
+                newCardImage.Source = plStack.Source;
+                Grid.SetColumn(newCardImage, 4);
+                Grid.SetRow(newCardImage, 2);
+                Grid.SetRowSpan(newCardImage, 2);
+                Grid.SetZIndex(newCardImage, pile2ZIndex);
+                pile2ZIndex -= 1;
+                screen.Children.Add(newCardImage);
 
-                    placePile2.Add(newCardImage);
+                placePile2.Add(newCardImage);
 
-                    pile2NextInts[0] += 10;
-                    pile2NextInts[1] += 8;
-                    pile2NextInts[2] -= 5;
-                    pile2NextInts[3] -= 8;
-                    pile2Next = new Thickness(pile2NextInts[0], pile2NextInts[1], pile2NextInts[2], pile2NextInts[3]);
-                }
-                numOfCardsInHumanPile += i;*/
-
-            } else if (player == Game.AI)
-            {
-
+                pile2NextInts[0] += 10;
+                pile2NextInts[1] += 8;
+                pile2NextInts[2] -= 5;
+                pile2NextInts[3] -= 8;
+                pile2Next = new Thickness(pile2NextInts[0], pile2NextInts[1], pile2NextInts[2], pile2NextInts[3]);
             }
+            numOfCardsInPile2 += i;
         }
 
         public void ResetExtraCardImages()
@@ -944,7 +888,5 @@ namespace Spit
                 emptyPiles[i].Visibility = Visibility.Visible;
             }
         }
-
-        //spit.players[0].hand.piles[index].pile.Peek().GetNumber() == spit.players[0].hand.piles[spit.selectedPile].pile.Peek().GetNumber()
     }
 }
